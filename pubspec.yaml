@@ -17,7 +17,8 @@ dependencies:
   rxdart: ^0.22.6
 
   # library for showing a color picker
-  flutter_colorpicker: ^0.2.6
+  flutter_material_color_picker: ^1.0.5
+
 
   #library to access storage directories
   path_provider: ^1.4.4

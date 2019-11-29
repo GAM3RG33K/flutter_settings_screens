@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:flutter_settings_screens_example/app_settings_page.dart';
@@ -50,12 +51,12 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Center(
             child: Column(
-          children: <Widget>[
-            _buildThemeSwitch(context),
-            _buildPreferenceSwitch(context),
-            AppBody(),
-          ],
-        )),
+              children: <Widget>[
+                _buildThemeSwitch(context),
+                _buildPreferenceSwitch(context),
+                AppBody(),
+              ],
+            )),
       ),
     );
   }
@@ -84,6 +85,9 @@ class _MyHomePageState extends State<MyHomePage> {
         Switch(
             value: _isUsingHive,
             onChanged: (newVal) {
+              if (kIsWeb) {
+                return;
+              }
               _isUsingHive = newVal;
               setState(() {
                 initSettings();

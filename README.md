@@ -302,29 +302,6 @@ TextFieldModalSettingsTile(
 );
 ```
 
-#### SimpleColorPickerSettingsTile
-A tile that launches a modal dialog where the user can pick any color.
-The following example shows how you can create a tile that launches a modal dialog with a color picker:
-```dart
-SimpleColorPickerSettingsTile(
-    settingKey: 'key-of-your-setting',
-    title: 'Color Picker',
-);
-```
-In this example, we create the same tile but using more of its parameter:
-```dart
-SimpleColorPickerSettingsTile(
-    settingKey: 'key-of-your-setting',
-    title: 'Color Picker',
-    cancelCaption: 'Keep the old value',
-    okCaption: 'Select new',
-    confirmText: 'Are you sure want to modify the previously selected color?',
-    confirmModalTitle: 'Are you sure?',
-    confirmModalCancelCaption: 'Keep the old one',
-    confirmModalConfirmCaption: 'Yes, I am sure',
-);
-```
-
 #### MaterialColorPickerSettingsTile
 A tile that launches a modal dialog where the user can pick any Material color.
 The following example shows how you can create a tile that launches a modal dialog with a Material color picker:

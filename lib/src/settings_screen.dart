@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/block_picker.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
 import 'settings.dart';
 
@@ -788,6 +786,7 @@ class _CheckboxSettingsTileState extends State<CheckboxSettingsTile>
               visibleIfKey: widget.visibleIfKey,
               enabledIfKey: widget.enabledIfKey,
               visibleByDefault: widget.visibleByDefault,
+              onTap: () => _onChanged(!value),
               widget: _SettingsCheckbox(
                 value: value,
                 onChanged: _onChanged,
@@ -1257,6 +1256,7 @@ class _SimpleRadioSettingsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return _SettingsTile(
       title: title,
+      onTap: () => onChanged(this.value),
       widget: _SettingsRadio(
         groupValue: groupValue,
         value: value,
@@ -1436,14 +1436,6 @@ class _SliderSettingsTileState extends State<SliderSettingsTile>
       confirmModalConfirmCaption: widget.confirmModalConfirmCaption,
       confirmModalCancelCaption: widget.confirmModalCancelCaption,
     );
-  }
-
-  String _getStringValue() {
-    int n = 0;
-    while (1 ~/ widget.step > math.pow(10, n)) {
-      n++;
-    }
-    return value.toStringAsFixed(n);
   }
 }
 
@@ -1987,130 +1979,6 @@ class _ColorPickerSettingsTile extends StatelessWidget with _ColorWidget {
   }
 }
 
-/// [SimpleColorPickerSettingsTile] is a tile that launches a modal dialog
-/// where the user can pick any color.
-///
-///
-/// * Parameters:
-///
-/// settingKey (required) - Key name for the tile value.
-/// title (required) - Title of the tile.
-/// defaultValue - Default color. Default: '0x00000000'. Please note,
-///   until the user does not change the value, retrieving it via [Settings]
-///   will return null.
-/// subtitle - The subtitle of the tile. If null, the selected color value
-///   will be shown.
-/// icon - Optional [Icon] on the left side. If null, the selected color will
-///   be visible.
-/// cancelCaption - Caption of the Cancel button. Default: Cancel.
-/// okCaption - Caption of the Ok button. Default: Ok.
-/// visibleIfKey - If not null, the tile will only be visible if the value
-///   of the given settings key is true.
-///   See more in the documentation: Conditional Logic.
-/// enabledIfKey - If not null, the tile will only be enabled if the value
-///   of the given settings key is true.
-///   See more in the documentation: Conditional Logic.
-/// visibleByDefault - If visibleIfKey is not null and the value of the given
-///   key is not saved yet then this value will be the default value.
-///   Default: true.
-/// confirmText - If not null, a confirmation dialog will appear with this
-///   text by enabling or disabling the checkbox.
-/// confirmModalTitle - Title of the confirmation dialog. Default: Confirmation.
-/// confirmModalCancelCaption - Caption of the cancel button in the confirmation
-///   dialog. Default: Cancel.
-/// confirmModalConfirmCaption - Caption of the confirm button in the
-///   confirmation dialog. Default: Confirm.
-///
-/// * Examples:
-///
-/// 1) The following example shows how you can create a tile that launches
-/// a modal dialog with a color picker.
-/// SimpleColorPickerSettingsTile(
-/// 	settingsKey: 'key-of-your-setting',
-/// 	title: 'Color Picker',
-/// );
-///
-/// 2) In this example, we create the same tile but using more of its parameter.
-/// SimpleColorPickerSettingsTile(
-/// 	settingsKey: 'key-of-your-setting',
-/// 	title: 'Color Picker',
-/// 	cancelCaption: 'Keep the old value',
-/// 	okCaption: 'Select new',
-/// 	confirmText: 'Are you sure want to modify the previously selected color?',
-/// 	confirmModalTitle: 'Are you sure?',
-/// 	confirmModalCancelCaption: 'Keep the old one',
-/// 	confirmModalConfirmCaption: 'Yes, I am sure',
-/// );
-class SimpleColorPickerSettingsTile extends StatelessWidget with _ColorWidget {
-  final String settingKey;
-  final String title;
-  final String subtitle;
-  final String defaultValue;
-  final Icon icon;
-  final String visibleIfKey;
-  final String enabledIfKey;
-  final bool visibleByDefault;
-  final String cancelCaption;
-  final String okCaption;
-  final String confirmText;
-  final String confirmModalTitle;
-  final String confirmModalCancelCaption;
-  final String confirmModalConfirmCaption;
-
-  SimpleColorPickerSettingsTile({
-    @required this.settingKey,
-    @required this.title,
-    this.defaultValue,
-    this.subtitle,
-    this.icon,
-    this.visibleIfKey,
-    this.enabledIfKey,
-    this.visibleByDefault = true,
-    this.cancelCaption = "Cancel",
-    this.okCaption = "Ok",
-    this.confirmText,
-    this.confirmModalTitle,
-    this.confirmModalCancelCaption,
-    this.confirmModalConfirmCaption,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Settings().onStringChanged(
-      settingKey: settingKey,
-      defaultValue: defaultValue,
-      childBuilder: (BuildContext context, String value) {
-        return _ColorPickerSettingsTile(
-          settingKey: settingKey,
-          title: title,
-          subtitle: subtitle,
-          defaultValue: getDefaultValue<String>(settingKey, value),
-          icon: icon,
-          visibleIfKey: visibleIfKey,
-          enabledIfKey: enabledIfKey,
-          visibleByDefault: visibleByDefault,
-          cancelCaption: cancelCaption,
-          okCaption: okCaption,
-          valueToTitle: (String key) => _valueToTitle(key),
-          childBuilder: (String value, Function onChanged) {
-            return ColorPicker(
-              pickerColor: _getColorByString(value),
-              onColorChanged: (Color color) => onChanged(color.toString()),
-              enableLabel: false,
-              pickerAreaHeightPercent: 1.0,
-              enableAlpha: true,
-            );
-          },
-          confirmText: confirmText,
-          confirmModalTitle: confirmModalTitle,
-          confirmModalConfirmCaption: confirmModalConfirmCaption,
-          confirmModalCancelCaption: confirmModalCancelCaption,
-        );
-      },
-    );
-  }
-}
-
 /// [MaterialColorPickerSettingsTile] is a tile that launches a modal dialog
 /// where the user can pick any Material color.
 ///
@@ -2218,12 +2086,14 @@ class MaterialColorPickerSettingsTile extends StatelessWidget
           okCaption: okCaption,
           valueToTitle: (String key) => _valueToTitle(key),
           childBuilder: (String value, Function onChanged) {
-            return BlockPicker(
-              pickerColor: _getColorByString(_valueToTitle(value)),
-              onColorChanged: (Color color) {
-                onChanged(color.toString());
-              },
-            );
+            return MaterialColorPicker(
+                onColorChange: (Color color) {
+                  onChanged(color.toString());
+                },
+                onMainColorChange: (ColorSwatch color) {
+                  // Handle main color changes
+                },
+                selectedColor: _getColorByString(_valueToTitle(value)));
           },
           confirmText: confirmText,
           confirmModalTitle: confirmModalTitle,

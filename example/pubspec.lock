@@ -69,13 +69,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_colorpicker:
+  flutter_material_color_picker:
     dependency: transitive
     description:
-      name: flutter_colorpicker
+      name: flutter_material_color_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.6"
+    version: "1.0.5"
   flutter_settings_screens:
     dependency: "direct dev"
     description:
