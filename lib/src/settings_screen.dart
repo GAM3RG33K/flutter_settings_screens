@@ -992,6 +992,7 @@ class _SwitchSettingsTileState extends State<SwitchSettingsTile>
               screen: widget.screen,
               visibleIfKey: widget.visibleIfKey,
               visibleByDefault: widget.visibleByDefault,
+              onTap: () => _onChanged(!value),
               widget: _SettingsSwitch(
                 value: value,
                 onChanged: _onChanged,
