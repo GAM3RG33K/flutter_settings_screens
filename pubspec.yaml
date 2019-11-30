@@ -1,10 +1,11 @@
+#author: Harshvardhan Joshi<hj2931996@gmail.com>
 name: flutter_settings_screens
 description: Settings Screen with Custom Shared Preference Interface
-author: Harshvardhan Joshi<hj2931996@gmail.com>
-repository: https://github.com/GAM3RG33K/app_settings
-documentation: https://github.com/GAM3RG33K/app_settings
-homepage: https://github.com/GAM3RG33K/app_settings
+repository: https://github.com/GAM3RG33K/flutter_settings_screens
+documentation: https://github.com/GAM3RG33K/flutter_settings_screens
+homepage: https://github.com/GAM3RG33K/flutter_settings_screens
 version: 0.0.1
+
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

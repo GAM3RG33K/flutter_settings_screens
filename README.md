@@ -1,5 +1,8 @@
 # flutter_settings_screens
 
+[![pub package](https://img.shields.io/pub/v/flutter_settings_screens.svg)](https://pub.dev/packages/flutter_settings_screens)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 A flutter plugin for easily creating app settings screens. The unique thing about this library is
 that it is not dependent upon any specific shared preference library used to store settings.
 
@@ -469,9 +472,3 @@ SimpleSettingsTile(
     defaultVisibility: true,
 );
 ```
-
-
-
-
-## License
-MIT License

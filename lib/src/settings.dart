@@ -163,19 +163,19 @@ class Settings {
   //
 
   Future<int> getInt(String key, int defaultValue) async {
-    return _cacheProvider.getInt(key) as int ?? defaultValue;
+    return _cacheProvider.getInt(key) ?? defaultValue;
   }
 
   Future<String> getString(String key, String defaultValue) async {
-    return _cacheProvider.getString(key) as String ?? defaultValue;
+    return _cacheProvider.getString(key) ?? defaultValue;
   }
 
   Future<double> getDouble(String key, double defaultValue) async {
-    return _cacheProvider.getDouble(key) as double ?? defaultValue;
+    return _cacheProvider.getDouble(key) ?? defaultValue;
   }
 
   Future<bool> getBool(String key, bool defaultValue) async {
-    return _cacheProvider.getBool(key) as bool ?? defaultValue;
+    return _cacheProvider.getBool(key) ?? defaultValue;
   }
 
   void pingString(String key, String defaultValue) async {
@@ -195,16 +195,16 @@ class Settings {
 
   void save(String key, dynamic value) async {
     if (value is int) {
-      await _cacheProvider.setInt(key, value);
+      _cacheProvider.setInt(key, value);
       _intChanged(key, value);
     } else if (value is String) {
-      await _cacheProvider.setString(key, value);
+      _cacheProvider.setString(key, value);
       _stringChanged(key, value);
     } else if (value is double) {
-      await _cacheProvider.setDouble(key, value);
+      _cacheProvider.setDouble(key, value);
       _doubleChanged(key, value);
     } else if (value is bool) {
-      await _cacheProvider.setBool(key, value);
+      _cacheProvider.setBool(key, value);
       _boolChanged(key, value);
     }
   }
