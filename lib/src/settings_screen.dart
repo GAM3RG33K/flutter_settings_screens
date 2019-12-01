@@ -1545,7 +1545,7 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile>
         ? widget.subtitle ??
             (!widget.obfuscateSubtitle
                 ? widget.valueToTitle(value)
-                : value.length > 0
+                : value.isNotEmpty
                     ? widget.valueToTitle('●' * value.length)
                     : "Not Set")
         : null;
@@ -1890,7 +1890,9 @@ class _ColorWidget {
     String color = "00000000";
     try {
       color = value.split('0x')[1].split(')')[0];
-    } catch (e) {}
+    } catch (e, s) {
+      print('_valueToTitle(): caught exception $e: $s');
+    }
     return "0x$color";
   }
 
@@ -1898,7 +1900,9 @@ class _ColorWidget {
     Color color = Colors.black;
     try {
       color = Color(int.parse(value.split('0x')[1].split(')')[0], radix: 16));
-    } catch (e) {}
+    } catch (e, s) {
+      print('_getColorByString(): caught exception $e: $s');
+    }
     return color;
   }
 }

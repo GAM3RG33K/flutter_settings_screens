@@ -77,7 +77,7 @@ class HiveCache extends CacheProvider {
   @override
   Future<void> remove(String key) async {
     if (containsKey(key)) {
-      _preferences.delete(key);
+      await _preferences.delete(key);
     }
   }
 
@@ -160,7 +160,7 @@ class SharePreferenceCache extends CacheProvider {
   @override
   Future<void> remove(String key) async {
     if (containsKey(key)) {
-      _preferences.remove(key);
+      await _preferences.remove(key);
     }
   }
 
