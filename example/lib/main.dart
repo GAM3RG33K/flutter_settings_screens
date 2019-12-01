@@ -51,12 +51,12 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Center(
             child: Column(
-              children: <Widget>[
-                _buildThemeSwitch(context),
-                _buildPreferenceSwitch(context),
-                AppBody(),
-              ],
-            )),
+          children: <Widget>[
+            _buildThemeSwitch(context),
+            _buildPreferenceSwitch(context),
+            AppBody(),
+          ],
+        )),
       ),
     );
   }

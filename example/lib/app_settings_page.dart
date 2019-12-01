@@ -134,7 +134,7 @@ class _AppSettingsState extends State<AppSettings> {
                 cancelCaption: 'Keep the old value',
                 okCaption: 'Select new',
                 confirmText:
-                'Are you sure want to modify the previously selected color?',
+                    'Are you sure want to modify the previously selected color?',
                 confirmModalTitle: 'Are you sure?',
                 confirmModalCancelCaption: 'Keep the old one',
                 confirmModalConfirmCaption: 'Yes, I am sure',

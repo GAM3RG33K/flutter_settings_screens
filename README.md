@@ -346,6 +346,49 @@ SettingsContainer(
 );
 ```
 
+## Implementing CacheProvider interface
+Cache Provider is an interface you'll need to implement in order to access the underlying caching storage.
+You can use your own choice of the preference library or implement one by your self.
+
+All you have to do is create a class as following:
+```dart
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+
+class CustomCacheProvider extends CacheProvider {
+    ///...
+    ///implment the methods as you want
+    ///...
+}
+```
+
+
+for example 
+
+```dart
+/// A cache access provider class for shared preferences using shared_preferences library
+class SharePreferenceCache extends CacheProvider {
+    ...
+}
+```
+
+OR 
+
+```dart
+/// A cache access provider class for shared preferences using Hive library
+class HiveCache extends CacheProvider {
+    ...
+}
+```
+once you implement the class, use an instance of this class to initialize the Settings class.
+The Settings class is used by this library internally.
+
+To initialize pass the class instance as following:
+
+```dart
+Settings.init(_customCacheProvider);
+```
+Now you're good to go.
+
 ## Retrieving data
 In this chapter, some StreamBuilder function will be introduced to show how you can retrieve data from Settings that will be rebuilt when the data changes.
 

@@ -1,10 +1,10 @@
-#author: Harshvardhan Joshi<hj2931996@gmail.com>
+author: Harshvardhan Joshi<hj2931996@gmail.com>
 name: flutter_settings_screens
-description: Settings Screen with Custom Shared Preference Interface
+description: Settings Screen with Custom Shared Preference Interface. This plugin allows you to implement settings UI screens for flutter. In addition to that this plugin also provides facility to use shared preferences, library of your choice.
 repository: https://github.com/GAM3RG33K/flutter_settings_screens
 documentation: https://github.com/GAM3RG33K/flutter_settings_screens
 homepage: https://github.com/GAM3RG33K/flutter_settings_screens
-version: 0.0.1
+version: 0.1.0
 
 
 environment:
