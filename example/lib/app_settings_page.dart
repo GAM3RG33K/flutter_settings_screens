@@ -73,7 +73,7 @@ class _AppSettingsState extends State<AppSettings> {
             ],
           ),
           SettingsTileGroup(
-            title: 'Radio Settings',
+            title: 'Selection Settings',
             children: <Widget>[
               RadioSettingsTile(
                 settingKey: 'key-radio',
@@ -95,6 +95,16 @@ class _AppSettingsState extends State<AppSettings> {
                   'd': 'Option D',
                 },
                 defaultKey: 'b',
+              ),
+              DropdownSettingsTile<int>(
+                title: 'Select number',
+                defaultValue: 2,
+                values: <int>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                settingKey: 'key-drop-down',
+                enabled: true,
+                widgetBuilder: (int val) {
+                  return Text('$val');
+                },
               ),
             ],
           ),

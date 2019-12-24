@@ -8,18 +8,14 @@ version: 0.1.0+0.2
 
 
 environment:
-  sdk: ">=2.0.0-dev <3.0.0"
+  sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  # library for RxDart functions
-  rxdart: ^0.22.6
-
   # library for showing a color picker
   flutter_material_color_picker: ^1.0.5
-
 
   #library to access storage directories
   path_provider: ^1.4.4

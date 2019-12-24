@@ -588,6 +588,7 @@ class SimpleSettingsTile extends StatelessWidget {
   final String visibleIfKey;
   final String enabledIfKey;
   final bool visibleByDefault;
+  final Function onTap;
 
   SimpleSettingsTile({
     @required this.title,
@@ -597,6 +598,7 @@ class SimpleSettingsTile extends StatelessWidget {
     this.visibleIfKey,
     this.enabledIfKey,
     this.visibleByDefault = true,
+    this.onTap,
   });
 
   @override
@@ -609,6 +611,7 @@ class SimpleSettingsTile extends StatelessWidget {
       visibleIfKey: visibleIfKey,
       enabledIfKey: enabledIfKey,
       visibleByDefault: visibleByDefault,
+      onTap: this.onTap,
     );
   }
 }
@@ -807,7 +810,7 @@ class _CheckboxSettingsTileState extends State<CheckboxSettingsTile>
       onConfirm: () {
         setState(() {
           value = newValue;
-          Settings().save(widget.settingKey, value);
+          Settings().save<bool>(widget.settingKey, value);
         });
       },
       confirmText: widget.confirmText,
@@ -1030,7 +1033,7 @@ class _SwitchSettingsTileState extends State<SwitchSettingsTile>
 
   void _change(bool newValue) {
     value = newValue;
-    Settings().save(widget.settingKey, value);
+    Settings().save<bool>(widget.settingKey, value);
   }
 }
 
@@ -1091,11 +1094,11 @@ class _SwitchSettingsTileState extends State<SwitchSettingsTile>
 /// 		'd': 'Option D',
 /// 	},
 /// );
-class RadioSettingsTile extends StatefulWidget {
+class RadioSettingsTile<T> extends StatefulWidget {
   final String settingKey;
   final String title;
-  final Map<String, String> values;
-  final defaultKey;
+  final Map<T, String> values;
+  final T defaultValue;
   final String subtitle;
   final String subtitleIfOff;
   final Icon icon;
@@ -1114,7 +1117,7 @@ class RadioSettingsTile extends StatefulWidget {
     @required this.settingKey,
     @required this.title,
     @required this.values,
-    this.defaultKey,
+    this.defaultValue,
     this.subtitle,
     this.subtitleIfOff,
     this.icon,
@@ -1131,20 +1134,20 @@ class RadioSettingsTile extends StatefulWidget {
   });
 
   @override
-  State<StatefulWidget> createState() => _RadioSettingsTileState();
+  State<StatefulWidget> createState() => _RadioSettingsTileState<T>();
 }
 
-class _RadioSettingsTileState extends State<RadioSettingsTile>
+class _RadioSettingsTileState<T> extends State<RadioSettingsTile>
     with _Confirmable, _Enableable {
-  String selectedKey;
+  T selectedKey;
   String selectedTitle;
 
   @override
   void initState() {
     super.initState();
-    selectedKey = widget.defaultKey;
+    selectedKey = widget.defaultValue;
     Future.delayed(Duration.zero, () {
-      Settings().pingString(widget.settingKey, widget.defaultKey);
+      Settings().pingObject<T>(widget.settingKey, widget.defaultValue);
     });
   }
 
@@ -1155,10 +1158,10 @@ class _RadioSettingsTileState extends State<RadioSettingsTile>
       enabledIfKey: widget.enabledIfKey,
       visibleByDefault: widget.visibleByDefault,
       childBuilder: (BuildContext context, bool enabled) {
-        return Settings().onStringChanged(
+        return Settings().onObjectChanged(
           settingKey: widget.settingKey,
-          defaultValue: getDefaultValue<String>(widget.settingKey, selectedKey),
-          childBuilder: (BuildContext context, String value) {
+          defaultValue: getDefaultValue(widget.settingKey, selectedKey),
+          childBuilder: (BuildContext context, T value) {
             _change(value);
             List<Widget> elements = List<Widget>();
             elements.add(_buildTile(value, enabled));
@@ -1174,7 +1177,7 @@ class _RadioSettingsTileState extends State<RadioSettingsTile>
     );
   }
 
-  Widget _buildTile(String groupValue, bool enabled) {
+  Widget _buildTile(T groupValue, bool enabled) {
     String subtitle = selectedTitle != null
         ? widget.subtitle ?? selectedTitle
         : widget.subtitleIfOff;
@@ -1197,10 +1200,10 @@ class _RadioSettingsTileState extends State<RadioSettingsTile>
           );
   }
 
-  List<Widget> _buildChildren(String groupValue, bool enabled) {
+  List<Widget> _buildChildren(T groupValue, bool enabled) {
     List<Widget> elements = List<Widget>();
     widget.values.forEach((optionKey, optionName) {
-      elements.add(_SimpleRadioSettingsTile(
+      elements.add(_SimpleRadioSettingsTile<T>(
         title: optionName,
         value: optionKey,
         groupValue: groupValue,
@@ -1211,10 +1214,10 @@ class _RadioSettingsTileState extends State<RadioSettingsTile>
     return elements;
   }
 
-  String _getNameByKey(String key) =>
+  String _getNameByKey(T key) =>
       widget.values.containsKey(key) ? widget.values[key] : null;
 
-  void _onChanged(String newKey) {
+  void _onChanged(T newKey) {
     confirm(
       context: context,
       oldValue: selectedKey,
@@ -1222,7 +1225,7 @@ class _RadioSettingsTileState extends State<RadioSettingsTile>
       onConfirm: () {
         setState(() {
           _change(newKey);
-          Settings().save(widget.settingKey, selectedKey);
+          Settings().save<T>(widget.settingKey, selectedKey);
         });
       },
       confirmText: widget.confirmText,
@@ -1232,17 +1235,17 @@ class _RadioSettingsTileState extends State<RadioSettingsTile>
     );
   }
 
-  void _change(String newKey) {
+  void _change(T newKey) {
     selectedKey = newKey;
     selectedTitle = _getNameByKey(selectedKey);
   }
 }
 
-class _SimpleRadioSettingsTile extends StatelessWidget {
+class _SimpleRadioSettingsTile<T> extends StatelessWidget {
   final String title;
-  final String value;
-  final String groupValue;
-  final ValueChanged<String> onChanged;
+  final T value;
+  final T groupValue;
+  final ValueChanged<T> onChanged;
   final bool enabled;
 
   _SimpleRadioSettingsTile({
@@ -1258,7 +1261,7 @@ class _SimpleRadioSettingsTile extends StatelessWidget {
     return _SettingsTile(
       title: title,
       onTap: () => onChanged(this.value),
-      widget: _SettingsRadio(
+      widget: _SettingsRadio<T>(
         groupValue: groupValue,
         value: value,
         onChanged: onChanged,
@@ -1427,7 +1430,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile>
       onConfirm: () {
         setState(() {
           value = newValue;
-          Settings().save(widget.settingKey, value);
+          Settings().save<double>(widget.settingKey, value);
         });
       },
       confirmText: widget.confirmText,
@@ -1440,9 +1443,9 @@ class _SliderSettingsTileState extends State<SliderSettingsTile>
   }
 }
 
-class _ModalSettingsTile extends StatefulWidget {
+class _ModalSettingsTile<T> extends StatefulWidget {
   final String settingKey;
-  final String defaultValue;
+  final T defaultValue;
   final String title;
   final String subtitle;
   final Icon icon;
@@ -1560,7 +1563,7 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile>
         setState(() {
           value =
               widget.valueMap != null ? widget.valueMap(newValue) : newValue;
-          Settings().save(widget.settingKey, value);
+          Settings().save<String>(widget.settingKey, value);
           widget.onChanged?.call(value);
         });
       },
@@ -1707,12 +1710,12 @@ class __SettingsModalState extends State<_SettingsModal> {
 /// 	},
 /// 	defaultKey: 'b',
 /// );
-class RadioPickerSettingsTile extends StatelessWidget {
+class RadioPickerSettingsTile<T> extends StatelessWidget {
   final String settingKey;
   final String title;
   final String subtitle;
-  final Map<String, String> values;
-  final String defaultKey;
+  final Map<T, String> values;
+  final T defaultKey;
   final Icon icon;
   final String cancelCaption;
   final String okCaption;
@@ -1741,12 +1744,12 @@ class RadioPickerSettingsTile extends StatelessWidget {
       title: title,
       subtitle: subtitle,
       icon: icon,
-      defaultValue: getDefaultValue<String>(settingKey, defaultKey),
+      defaultValue: getDefaultValue<T>(settingKey, defaultKey),
       valueToTitle: (String key) => values[key],
       visibleIfKey: visibleIfKey,
       enabledIfKey: enabledIfKey,
       visibleByDefault: visibleByDefault,
-      buildChild: (String value, Function onChanged) {
+      buildChild: (T value, Function onChanged) {
         // TODO: Scroll to the selected value.
         return Container(
           width: double.maxFinite,
@@ -1755,7 +1758,7 @@ class RadioPickerSettingsTile extends StatelessWidget {
             //controller: scrollController,
             itemCount: values.length,
             itemBuilder: (BuildContext context, int index) {
-              String key = values.keys.toList()[index];
+              T key = values.keys.toList()[index];
               return _SimpleRadioSettingsTile(
                 title: values[key],
                 value: key,
@@ -2221,10 +2224,10 @@ class _SettingsSwitch extends StatelessWidget {
   }
 }
 
-class _SettingsRadio extends StatelessWidget {
-  final String groupValue;
-  final String value;
-  final ValueChanged<String> onChanged;
+class _SettingsRadio<T> extends StatelessWidget {
+  final T groupValue;
+  final T value;
+  final ValueChanged<T> onChanged;
   final bool enabled;
 
   _SettingsRadio({
@@ -2236,7 +2239,7 @@ class _SettingsRadio extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Radio(
+    return Radio<T>(
       groupValue: groupValue,
       value: value,
       onChanged: enabled ? onChanged : null,
@@ -2281,6 +2284,207 @@ class _SettingsSlider extends StatelessWidget {
         ),
         trailing,
       ],
+    );
+  }
+}
+
+class DropdownSettingsTile<T> extends StatefulWidget {
+  final String settingKey;
+  final T defaultValue;
+  final bool enabled;
+  final List<T> values;
+  final Widget Function(T) widgetBuilder;
+  final String title;
+  final String subtitle;
+  final String subtitleIfOff;
+  final Icon icon;
+  final Widget screen;
+  final String visibleIfKey;
+  final String enabledIfKey;
+  final bool visibleByDefault;
+  final String confirmText;
+  final String confirmTextToEnable;
+  final String confirmTextToDisable;
+  final String confirmModalTitle;
+  final String confirmModalCancelCaption;
+  final String confirmModalConfirmCaption;
+
+  DropdownSettingsTile({
+    @required this.settingKey,
+    @required this.title,
+    @required this.enabled,
+    @required this.defaultValue,
+    @required this.values,
+    @required this.widgetBuilder,
+    this.subtitle,
+    this.subtitleIfOff,
+    this.icon,
+    this.screen,
+    this.visibleIfKey,
+    this.enabledIfKey,
+    this.visibleByDefault = true,
+    this.confirmText,
+    this.confirmTextToEnable,
+    this.confirmTextToDisable,
+    this.confirmModalTitle,
+    this.confirmModalCancelCaption,
+    this.confirmModalConfirmCaption,
+  });
+
+  @override
+  State<StatefulWidget> createState() => _DropdownSettingsTileState<T>();
+}
+
+class _DropdownSettingsTileState<T> extends State<DropdownSettingsTile>
+    with _Confirmable, _Enableable {
+  T value;
+
+  @override
+  void initState() {
+    super.initState();
+    value = widget.defaultValue;
+    Future.delayed(Duration.zero, () {
+      Settings().pingBool(widget.settingKey, widget.defaultValue);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return wrapEnableable(
+      context: context,
+      enabledIfKey: widget.enabledIfKey,
+      visibleByDefault: widget.visibleByDefault,
+      childBuilder: (BuildContext context, bool enabled) {
+        return Settings().onObjectChanged<T>(
+          settingKey: widget.settingKey,
+          defaultValue:
+          getDefaultValue<T>(widget.settingKey, widget.defaultValue),
+          childBuilder: (BuildContext context, T value) {
+            return _SimpleDropDownTile<T>(
+              title: widget.title,
+              subtitle: value == true || widget.subtitleIfOff == null
+                  ? widget.subtitle
+                  : widget.subtitleIfOff,
+              value: widget.defaultValue,
+              values: widget.values,
+              enabled: widget.enabled,
+              icon: widget.icon,
+              screen: widget.screen,
+              visibleIfKey: widget.visibleIfKey,
+              visibleByDefault: widget.visibleByDefault,
+              onChanged: _onChanged,
+              widgetBuilder: widget.widgetBuilder,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _onChanged(T newValue) {
+    confirm(
+      context: context,
+      oldValue: value,
+      newValue: newValue,
+      onConfirm: () {
+        setState(() {
+          _change(newValue);
+        });
+      },
+      confirmText: widget.confirmText,
+      confirmTextToEnable: widget.confirmTextToEnable,
+      confirmTextToDisable: widget.confirmTextToDisable,
+      confirmModalTitle: widget.confirmModalTitle,
+      confirmModalConfirmCaption: widget.confirmModalConfirmCaption,
+      confirmModalCancelCaption: widget.confirmModalCancelCaption,
+    );
+  }
+
+  void _change(T newValue) {
+    value = newValue;
+    Settings().save<T>(widget.settingKey, value);
+  }
+}
+
+class _SimpleDropDownTile<T> extends StatelessWidget {
+  final String title;
+  final T value;
+  final List<T> values;
+  final Widget Function(T) widgetBuilder;
+  final ValueChanged<T> onChanged;
+  final bool enabled;
+  final Widget icon;
+  final String subtitle;
+  final Widget screen;
+  final String visibleIfKey;
+  final bool visibleByDefault;
+
+  _SimpleDropDownTile({
+    @required this.title,
+    @required this.value,
+    @required this.values,
+    @required this.widgetBuilder,
+    @required this.onChanged,
+    @required this.enabled,
+    this.icon,
+    this.subtitle,
+    this.screen,
+    this.visibleIfKey,
+    this.visibleByDefault,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _SettingsTile(
+      title: title,
+      subtitle: subtitle,
+      icon: icon,
+      screen: screen,
+      visibleIfKey: visibleIfKey,
+      visibleByDefault: visibleByDefault,
+      widget: _SettingsDropDown<T>(
+        value: value,
+        values: values,
+        widgetBuilder: widgetBuilder,
+        onChanged: onChanged,
+        enabled: enabled,
+      ),
+    );
+  }
+}
+
+class _SettingsDropDown<T> extends StatelessWidget {
+  final T value;
+  final List<T> values;
+  final Widget Function(T) widgetBuilder;
+  final ValueChanged<T> onChanged;
+  final Widget icon;
+  final bool enabled;
+
+  _SettingsDropDown({
+    @required this.value,
+    @required this.values,
+    @required this.widgetBuilder,
+    @required this.onChanged,
+    this.icon,
+    this.enabled = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<T>(
+      value: this.value,
+      onChanged: enabled ? onChanged : null,
+      underline: Container(),
+      icon: this.icon,
+      items: values.map<DropdownMenuItem<T>>(
+            (T val) {
+          return DropdownMenuItem(
+            child: widgetBuilder(val),
+            value: val,
+          );
+        },
+      ),
     );
   }
 }

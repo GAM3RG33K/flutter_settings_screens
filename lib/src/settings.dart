@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'cache_provider.dart';
 
@@ -22,6 +21,38 @@ class Settings {
 
   static void init(CacheProvider cacheProvider) {
     _cacheProvider = cacheProvider;
+  }
+
+  Map<String, _SettingStream<dynamic>> _objectStreams =
+  Map<String, _SettingStream<dynamic>>();
+
+  _SettingStream _getObjectStreamOf<T>(String settingKey) {
+    if (_objectStreams.containsKey(settingKey)) {
+      return _objectStreams[settingKey];
+    }
+    _SettingStream<T> stream = _SettingStream<T>();
+    _objectStreams[settingKey] = stream;
+    return stream;
+  }
+
+  StreamBuilder<T> onObjectChanged<T>({
+    @required String settingKey,
+    @required T defaultValue,
+    @required Function childBuilder,
+  }) {
+    return StreamBuilder<T>(
+      stream: _getObjectStreamOf(settingKey).stream,
+      initialData: defaultValue,
+      builder: (context, snapshot) {
+        return childBuilder(context, snapshot.data);
+      },
+    );
+  }
+
+  void _objectChanged<T>(String settingKey, T value) {
+    if (_objectStreams.containsKey(settingKey)) {
+      _objectStreams[settingKey].push(value);
+    }
   }
 
   //
@@ -178,6 +209,10 @@ class Settings {
     return _cacheProvider.getBool(key) ?? defaultValue;
   }
 
+  T getObject<T>(String key, T defaultValue) {
+    return _cacheProvider.getObject<T>(key) ?? defaultValue;
+  }
+
   void pingString(String key, String defaultValue) async {
     final String value = await getString(key, defaultValue);
     _stringChanged(key, value);
@@ -193,7 +228,12 @@ class Settings {
     _boolChanged(key, value);
   }
 
-  void save(String key, dynamic value) async {
+  Future<void> pingObject<T>(String key, T defaultValue) async {
+    final T value = await getObject<T>(key, defaultValue);
+    _objectChanged<T>(key, value);
+  }
+
+  void save<T>(String key, T value) async {
     if (value is int) {
       _cacheProvider.setInt(key, value);
       _intChanged(key, value);
@@ -206,6 +246,9 @@ class Settings {
     } else if (value is bool) {
       _cacheProvider.setBool(key, value);
       _boolChanged(key, value);
+    } else {
+      _cacheProvider.setObject<T>(key, value);
+      _objectChanged<T>(key, value);
     }
   }
 
@@ -220,7 +263,7 @@ class Settings {
 }
 
 class _SettingStream<T> {
-  final BehaviorSubject<T> _subject = BehaviorSubject<T>();
+  final StreamController<T> _subject = StreamController<T>();
 
   Stream<T> get stream => _subject.stream;
 

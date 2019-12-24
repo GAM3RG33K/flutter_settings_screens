@@ -65,6 +65,11 @@ class HiveCache extends CacheProvider {
   }
 
   @override
+  Future<void> setObject<T>(String key, T value) {
+    return _preferences.put(key, value);
+  }
+
+  @override
   bool containsKey(String key) {
     return _preferences.containsKey(key);
   }
@@ -90,6 +95,11 @@ class HiveCache extends CacheProvider {
   @override
   dynamic getValue(String settingsKey) {
     return _preferences.get(settingsKey);
+  }
+
+  @override
+  T getObject<T>(String key) {
+    return _preferences.get(key).cast<T>();
   }
 }
 
@@ -148,6 +158,11 @@ class SharePreferenceCache extends CacheProvider {
   }
 
   @override
+  void setObject<T>(String key, T value) {
+    throw Exception('No Implementation Found');
+  }
+
+  @override
   bool containsKey(String key) {
     return _preferences.containsKey(key);
   }
@@ -172,5 +187,10 @@ class SharePreferenceCache extends CacheProvider {
   @override
   dynamic getValue(String settingsKey) {
     return _preferences.get(settingsKey);
+  }
+
+  @override
+  T getObject<T>(String key) {
+    throw Exception('No Implementation Found');
   }
 }

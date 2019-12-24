@@ -30,4 +30,8 @@ abstract class CacheProvider {
   void removeAll();
 
   dynamic getValue(String settingsKey);
+
+  void setObject<T>(String key, T value);
+
+  T getObject<T>(String key);
 }
