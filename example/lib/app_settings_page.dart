@@ -61,7 +61,7 @@ class _AppSettingsState extends State<AppSettings> {
             children: <Widget>[
               RadioSettingsTile<double>(
                 title: 'Preferred Ratio (Radio)',
-                settingKey: 'key-golden-ratio',
+                settingKey: 'key-golden-ratio-radio',
                 values: <double, String>{
                   1.0: 'Simple',
                   1.5: 'Normal',
@@ -75,7 +75,7 @@ class _AppSettingsState extends State<AppSettings> {
               ),
               DropDownSettingsTile<double>(
                 title: 'Preferred Ratio (DropDown)',
-                settingKey: 'key-golden-ratio',
+                settingKey: 'key-golden-ratio-dropdown',
                 values: <double, String>{
                   1.0: 'Simple',
                   1.5: 'Normal',
@@ -94,11 +94,11 @@ class _AppSettingsState extends State<AppSettings> {
             children: <Widget>[
               SliderSettingsTile(
                 title: 'Golden Ratio(Slider)',
-                defaultValue: 3.5,
+                settingKey: 'key-golden-ratio-slider',
+                defaultValue: 2.5,
                 min: 1,
-                max: 4,
-                step: 0.5,
-                settingKey: 'key-golden-ratio',
+                max: 5,
+                step: 0.1,
               ),
               ColorPickerSettingsTile(
                 settingKey: 'key-color-picker',
