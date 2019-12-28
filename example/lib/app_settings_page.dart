@@ -100,6 +100,11 @@ class _AppSettingsState extends State<AppSettings> {
                 step: 0.5,
                 settingKey: 'key-golden-ratio',
               ),
+              ColorPickerSettingsTile(
+                settingKey: 'key-color-picker',
+                title: 'Color Picker',
+                defaultValue: Colors.blue,
+              )
             ],
           ),
         ],

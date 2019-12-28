@@ -8,6 +8,7 @@ typedef WidgetBuilder<T> = Widget Function(
 typedef SimpleWidgetBuilder<T> = Widget Function(T value);
 
 typedef OnChangeCallBack<T> = void Function(T value);
+typedef OnChangeCustom<T> = void Function(T value);
 
 class Settings {
   static final Settings _instance = Settings._internal();

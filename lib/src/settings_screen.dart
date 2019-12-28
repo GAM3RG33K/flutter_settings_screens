@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:flutter_settings_screens/src/utils/utils.dart';
 
+import '../flutter_settings_screens.dart';
 import 'settings.dart';
 
 /// [SettingsScreen] is a simple Screen widget that may contain Tiles or other
@@ -464,6 +468,52 @@ class _SettingsSlider extends StatelessWidget {
   }
 }
 
+class _SettingsColorPicker extends StatelessWidget {
+  final String value;
+  final OnChangeCallBack<String> onChanged;
+  final bool enabled;
+  final String title;
+
+  _SettingsColorPicker({
+    @required this.value,
+    @required this.onChanged,
+    @required this.enabled,
+    @required this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _SettingsTile(
+      title: title,
+      subtitle: value,
+      enabled: enabled,
+      onTap: enabled ? () => _showColorPicker(context, value) : null,
+      child: FloatingActionButton(
+        backgroundColor: Utils.colorFromString(value),
+        elevation: 0,
+        onPressed: enabled ? () => _showColorPicker(context, value) : null,
+      ),
+    );
+  }
+
+  void _showColorPicker(BuildContext context, String value) {
+    Widget dialogContent = MaterialColorPicker(
+      shrinkWrap: true,
+      selectedColor: Utils.colorFromString(value),
+      onColorChange: (Color color) => onChanged(Utils.stringFromColor(color)),
+    );
+
+    showDialog(
+        context: context,
+        builder: (dialogContext) {
+          return AlertDialog(
+            title: Text('Pick a Color'),
+            content: dialogContent,
+          );
+        });
+  }
+}
+
 /// [SwitchSettingsTile] is a screen widget similar to [SettingsScreen], but
 /// additionally, it contains a built-in Checkbox at the beginning of its body.
 /// Therefore, it requires a settingKey to save its value.
@@ -531,12 +581,14 @@ class SwitchSettingsTile extends StatelessWidget {
   final bool defaultValue;
   final String title;
   final bool enabled;
+  final OnChangeCustom<bool> onChangeCustom;
 
   SwitchSettingsTile({
     @required this.title,
     @required this.settingKey,
     this.defaultValue = false,
     this.enabled = true,
+    this.onChangeCustom,
   });
 
   @override
@@ -550,15 +602,23 @@ class SwitchSettingsTile extends StatelessWidget {
         return _SettingsTile(
           title: title,
           subtitle: (enabled).toString(),
-          onTap: () => onChange(!value),
+          onTap: enabled ? () => onChange(!value) : null,
           child: _SettingsSwitch(
             value: value,
-            onChanged: onChange,
+            onChanged:
+            enabled ? (value) => _onSwitchChange(value, onChange) : null,
             enabled: enabled,
           ),
         );
       },
     );
+  }
+
+  void _onSwitchChange(bool value, OnChangeCustom<bool> onChange) {
+    onChange(value);
+    if (onChangeCustom != null) {
+      onChangeCustom(value);
+    }
   }
 }
 
@@ -567,12 +627,14 @@ class CheckboxSettingsTile extends StatelessWidget {
   final bool defaultValue;
   final String title;
   final bool enabled;
+  final OnChangeCustom<bool> onChangeCustom;
 
   CheckboxSettingsTile({
     @required this.title,
     @required this.settingKey,
     this.defaultValue = false,
     this.enabled = true,
+    this.onChangeCustom,
   });
 
   @override
@@ -585,15 +647,23 @@ class CheckboxSettingsTile extends StatelessWidget {
         return _SettingsTile(
           title: title,
           subtitle: (enabled).toString(),
-          onTap: () => onChange(!value),
+          onTap: enabled ? () => _onCheckboxChange(!value, onChange) : null,
           child: _SettingsCheckbox(
             value: value,
-            onChanged: onChange,
+            onChanged:
+            enabled ? (value) => _onCheckboxChange(value, onChange) : null,
             enabled: enabled,
           ),
         );
       },
     );
+  }
+
+  void _onCheckboxChange(bool value, OnChangeCustom<bool> onChange) {
+    onChange(value);
+    if (onChangeCustom != null) {
+      onChangeCustom(value);
+    }
   }
 }
 
@@ -603,6 +673,7 @@ class RadioSettingsTile<T> extends StatefulWidget {
   final Map<T, String> values;
   final String title;
   final bool enabled;
+  final OnChangeCustom<T> onChangeCustom;
 
   RadioSettingsTile({
     @required this.title,
@@ -610,6 +681,7 @@ class RadioSettingsTile<T> extends StatefulWidget {
     @required this.selected,
     @required this.values,
     this.enabled = true,
+    this.onChangeCustom,
   });
 
   @override
@@ -623,6 +695,14 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
   void initState() {
     super.initState();
     selectedValue = widget.selected;
+  }
+
+  void _onRadioChange(T value, OnChangeCallBack<T> onChange) {
+    selectedValue = value;
+    onChange(value);
+    if (widget.onChangeCustom != null) {
+      widget.onChangeCustom(value);
+    }
   }
 
   @override
@@ -655,7 +735,8 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
         padding: const EdgeInsets.all(0.0),
         child: _SettingsTile(
           title: entry.value,
-          onTap: () => _onRadioChange(entry.key, onChange),
+          onTap:
+          widget.enabled ? () => _onRadioChange(entry.key, onChange) : null,
           child: _SettingsRadio<T>(
             value: entry.key,
             onChanged: widget.enabled
@@ -673,11 +754,6 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
       children: radioList,
     );
   }
-
-  void _onRadioChange(T value, OnChangeCallBack<T> onChange) {
-    selectedValue = value;
-    onChange(value);
-  }
 }
 
 class DropDownSettingsTile<T> extends StatefulWidget {
@@ -686,6 +762,7 @@ class DropDownSettingsTile<T> extends StatefulWidget {
   final Map<T, String> values;
   final String title;
   final bool enabled;
+  final OnChangeCustom<T> onChangeCustom;
 
   DropDownSettingsTile({
     @required this.title,
@@ -693,6 +770,7 @@ class DropDownSettingsTile<T> extends StatefulWidget {
     @required this.selected,
     @required this.values,
     this.enabled = true,
+    this.onChangeCustom,
   });
 
   @override
@@ -715,7 +793,7 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
       cacheKey: widget.settingKey,
       defaultValue: selectedValue,
       builder: (BuildContext context, T value, OnChangeCallBack<T> onChange) {
-        return Wrap(
+        return SettingsContainer(
           children: <Widget>[
             _SettingsTile(
               child: _SettingsDropDown<T>(
@@ -732,7 +810,7 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
                 },
               ),
               title: widget.title,
-            ),
+            )
           ],
         );
       },
@@ -742,6 +820,9 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
   void _handleDropDownChange(T value, OnChangeCallBack<T> onChange) {
     selectedValue = value;
     onChange(value);
+    if (widget.onChangeCustom != null) {
+      widget.onChangeCustom(value);
+    }
   }
 }
 
@@ -753,6 +834,7 @@ class SliderSettingsTile extends StatefulWidget {
   final double min;
   final double max;
   final double step;
+  final OnChangeCustom<double> onChangeCustom;
 
   SliderSettingsTile({
     @required this.title,
@@ -762,6 +844,7 @@ class SliderSettingsTile extends StatefulWidget {
     @required this.min,
     @required this.max,
     this.step = 0.0,
+    this.onChangeCustom,
   });
 
   @override
@@ -781,7 +864,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
   Widget build(BuildContext context) {
     return CacheChangeObserver<double>(
       cacheKey: widget.settingKey,
-      defaultValue: widget.defaultValue,
+      defaultValue: currentValue,
       builder: (BuildContext context, double value,
           OnChangeCallBack<double> onChange) {
         debugPrint('creating settings Tile: ${widget.settingKey}');
@@ -813,5 +896,74 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
       OnChangeCallBack<double> onChange) {
     currentValue = newValue;
     onChange(newValue);
+    if (widget.onChangeCustom != null) {
+      widget.onChangeCustom(newValue);
+    }
+  }
+}
+
+class ColorPickerSettingsTile extends StatefulWidget {
+  final String settingKey;
+  final String defaultStringValue;
+  final Color defaultValue;
+  final String title;
+  final bool enabled;
+  final OnChangeCustom<Color> onChangeCustom;
+
+  ColorPickerSettingsTile({
+    @required this.title,
+    @required this.settingKey,
+    this.defaultValue,
+    this.enabled = true,
+    this.onChangeCustom,
+    this.defaultStringValue = '#ff000000',
+  });
+
+  @override
+  _ColorPickerSettingsTileState createState() =>
+      _ColorPickerSettingsTileState();
+}
+
+class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
+  String currentValue;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.defaultValue != null) {
+      currentValue = Utils.stringFromColor(widget.defaultValue);
+    } else {
+      currentValue = widget.defaultStringValue;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CacheChangeObserver<String>(
+      cacheKey: widget.settingKey,
+      defaultValue: currentValue,
+      builder: (BuildContext context, String value,
+          OnChangeCallBack<String> onChange) {
+        debugPrint('creating settings Tile: ${widget.settingKey}');
+        return _SettingsColorPicker(
+          title: widget.title,
+          value: value,
+          enabled: widget.enabled,
+          onChanged: widget.enabled
+              ? (color) => _handleColorChanged(color, onChange)
+              : null,
+        );
+      },
+    );
+  }
+
+  void _handleColorChanged(String color, OnChangeCallBack<String> onChange) {
+    currentValue = color;
+    onChange(color);
+    if (widget.onChangeCustom != null) {
+      var colorFromString = Utils.colorFromString(color);
+      widget.onChangeCustom(colorFromString);
+    }
   }
 }
