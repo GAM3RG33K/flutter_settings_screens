@@ -11,10 +11,12 @@ void main() {
 
 void initSettings() {
   // use this cache for settings based shared preferences
-  SharePreferenceCache spCache = SharePreferenceCache();
+  SharePreferenceCache spCache = SharePreferenceCache()
+    ..init();
 
   // use this cache for settings based Hive
-  HiveCache hCache = HiveCache();
+  HiveCache hCache = HiveCache()
+    ..init();
 
   Settings.init(_isUsingHive ? hCache : spCache);
 }
@@ -50,30 +52,15 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(widget.title),
         ),
         body: Center(
-            child: Column(
-          children: <Widget>[
-            _buildThemeSwitch(context),
-            _buildPreferenceSwitch(context),
-            AppBody(),
-          ],
-        )),
+          child: Column(
+            children: <Widget>[
+              _buildThemeSwitch(context),
+              _buildPreferenceSwitch(context),
+              AppBody(),
+            ],
+          ),
+        ),
       ),
-    );
-  }
-
-  Widget _buildThemeSwitch(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Text('Light Theme'),
-        Switch(
-            value: _isDarkTheme,
-            onChanged: (newVal) {
-              _isDarkTheme = newVal;
-              setState(() {});
-            }),
-        Text('Dark Theme'),
-      ],
     );
   }
 
@@ -97,6 +84,22 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
   }
+
+  Widget _buildThemeSwitch(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Text('Light Theme'),
+        Switch(
+            value: _isDarkTheme,
+            onChanged: (newVal) {
+              _isDarkTheme = newVal;
+              setState(() {});
+            }),
+        Text('Dark Theme'),
+      ],
+    );
+  }
 }
 
 class AppBody extends StatefulWidget {
@@ -107,11 +110,16 @@ class AppBody extends StatefulWidget {
 class _AppBodyState extends State<AppBody> {
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      child: Text('open settings'),
-      onPressed: () {
-        openAppSettings(context);
-      },
+    return Column(
+      children: <Widget>[
+        _buildClearCacheButton(context),
+        RaisedButton(
+          child: Text('open settings'),
+          onPressed: () {
+            openAppSettings(context);
+          },
+        ),
+      ],
     );
   }
 
@@ -119,5 +127,27 @@ class _AppBodyState extends State<AppBody> {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => AppSettings(),
     ));
+  }
+
+  Widget _buildClearCacheButton(BuildContext context) {
+    return RaisedButton(
+      child: Text('Clear selected Cache'),
+      onPressed: () {
+        Settings.clearCache();
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Cache cleared for selected cache.',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            backgroundColor: Theme
+                .of(context)
+                .primaryColor,
+          ),
+        );
+      },
+    );
   }
 }

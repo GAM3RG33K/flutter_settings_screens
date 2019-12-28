@@ -56,19 +56,52 @@ class _AppSettingsState extends State<AppSettings> {
               ),
             ],
           ),
-          RadioSettingsTile<double>(
-            title: 'Preferred Ratio',
-            settingKey: 'key-radio',
-            values: <double, String>{
-              1.0: 'Simple',
-              2.0: 'Normal',
-              2.5: 'Little Special',
-              3.0: 'Special',
-              3.5: 'Extra Special',
-              4.0: 'Bizzar',
-            },
-            selected: 2.0,
-          )
+          SettingsTileGroup(
+            title: 'Multiple choice settings',
+            children: <Widget>[
+              RadioSettingsTile<double>(
+                title: 'Preferred Ratio (Radio)',
+                settingKey: 'key-golden-ratio',
+                values: <double, String>{
+                  1.0: 'Simple',
+                  1.5: 'Normal',
+                  2.0: 'Little Special',
+                  2.5: 'Special',
+                  3.0: 'Extra Special',
+                  3.5: 'Bizzar',
+                  4.0: 'Horrific',
+                },
+                selected: 2.0,
+              ),
+              DropDownSettingsTile<double>(
+                title: 'Preferred Ratio (DropDown)',
+                settingKey: 'key-golden-ratio',
+                values: <double, String>{
+                  1.0: 'Simple',
+                  1.5: 'Normal',
+                  2.0: 'Little Special',
+                  2.5: 'Special',
+                  3.0: 'Extra Special',
+                  3.5: 'Bizzar',
+                  4.0: 'Horrific',
+                },
+                selected: 2.5,
+              ),
+            ],
+          ),
+          SettingsTileGroup(
+            title: 'Other settings',
+            children: <Widget>[
+              SliderSettingsTile(
+                title: 'Golden Ratio(Slider)',
+                defaultValue: 3.5,
+                min: 1,
+                max: 4,
+                step: 0.5,
+                settingKey: 'key-golden-ratio',
+              ),
+            ],
+          ),
         ],
       ),
     );

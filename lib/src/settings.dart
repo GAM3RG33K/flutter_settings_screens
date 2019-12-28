@@ -47,6 +47,14 @@ class Settings {
     }
     _cacheProvider.setObject<T>(key, value);
   }
+
+  static void clearCache() {
+    assert(
+    _cacheProvider != null,
+    'CacheProvider is not set.'
+        '\n Please Call `Settings.init()` before using settings!!');
+    _cacheProvider.removeAll();
+  }
 }
 
 class ValueChangeNotifier<T> extends ValueNotifier<T> {

@@ -58,6 +58,7 @@ class SettingsScreen extends StatelessWidget {
         title: Text(title),
       ),
       body: ListView.builder(
+        shrinkWrap: true,
         itemCount: children.length,
         itemBuilder: (BuildContext context, int index) {
           return children[index];
@@ -67,7 +68,7 @@ class SettingsScreen extends StatelessWidget {
   }
 }
 
-class _SettingsTile<T> extends StatefulWidget {
+class _SettingsTile extends StatefulWidget {
   final String title;
   final String subtitle;
   final bool enabled;
@@ -83,10 +84,10 @@ class _SettingsTile<T> extends StatefulWidget {
   });
 
   @override
-  __SettingsTileState<T> createState() => __SettingsTileState<T>();
+  __SettingsTileState createState() => __SettingsTileState();
 }
 
-class __SettingsTileState<T> extends State<_SettingsTile<T>> {
+class __SettingsTileState extends State<_SettingsTile> {
   @override
   void initState() {
     super.initState();
@@ -323,8 +324,12 @@ class SettingsTileGroup extends StatelessWidget {
       ]);
     }
     elements.addAll(children);
-    return Column(
-      children: elements,
+    return Wrap(
+      children: <Widget>[
+        Column(
+          children: elements,
+        )
+      ],
     );
   }
 }
@@ -393,56 +398,15 @@ class _SettingsRadio<T> extends StatelessWidget {
   }
 }
 
-class _SettingsSlider extends StatelessWidget {
-  final double value;
-  final double min;
-  final double max;
-  final double step;
-  final ValueChanged<double> onChanged;
-  final Widget leading;
-  final Widget trailing;
-  final bool enabled;
-
-  _SettingsSlider({
-    @required this.value,
-    @required this.min,
-    @required this.max,
-    @required this.step,
-    @required this.onChanged,
-    this.leading,
-    this.trailing,
-    @required this.enabled,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        leading,
-        Expanded(
-          child: Slider(
-            value: value,
-            min: min,
-            max: max,
-            divisions: (max - min) ~/ (step) + 1,
-            onChanged: enabled ? onChanged : null,
-          ),
-        ),
-        trailing,
-      ],
-    );
-  }
-}
-
 class _SettingsDropDown<T> extends StatelessWidget {
-  final T value;
+  final T selected;
   final List<T> values;
   final ValueChanged<T> onChanged;
   final SimpleWidgetBuilder<T> child;
   final bool enabled;
 
   _SettingsDropDown({
-    @required this.value,
+    @required this.selected,
     @required this.values,
     @required this.onChanged,
     this.child,
@@ -452,8 +416,9 @@ class _SettingsDropDown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<T>(
-      value: this.value,
-      onChanged: enabled ? onChanged : null,
+      isDense: true,
+      value: this.selected,
+      onChanged: onChanged,
       underline: Container(),
       items: values.map<DropdownMenuItem<T>>(
             (T val) {
@@ -463,6 +428,38 @@ class _SettingsDropDown<T> extends StatelessWidget {
           );
         },
       ).toList(),
+    );
+  }
+}
+
+class _SettingsSlider extends StatelessWidget {
+  final String label;
+  final double value;
+  final double min;
+  final double max;
+  final double step;
+  final OnChangeCallBack<double> onChanged;
+  final bool enabled;
+
+  _SettingsSlider({
+    @required this.value,
+    @required this.min,
+    @required this.max,
+    @required this.step,
+    @required this.onChanged,
+    @required this.enabled,
+    this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Slider(
+      label: label,
+      value: value,
+      min: min,
+      max: max,
+      divisions: (max - min) ~/ (step),
+      onChanged: enabled ? onChanged : null,
     );
   }
 }
@@ -550,7 +547,7 @@ class SwitchSettingsTile extends StatelessWidget {
       builder:
           (BuildContext context, bool value, OnChangeCallBack<bool> onChange) {
         debugPrint('creating settings Tile: $settingKey');
-        return _SettingsTile<bool>(
+        return _SettingsTile(
           title: title,
           subtitle: (enabled).toString(),
           onTap: () => onChange(!value),
@@ -585,7 +582,7 @@ class CheckboxSettingsTile extends StatelessWidget {
       defaultValue: defaultValue,
       builder:
           (BuildContext context, bool value, OnChangeCallBack<bool> onChange) {
-        return _SettingsTile<bool>(
+        return _SettingsTile(
           title: title,
           subtitle: (enabled).toString(),
           onTap: () => onChange(!value),
@@ -642,7 +639,7 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 16.0),
-              child: _buildRadioTiles(context, onChange),
+              child: _buildRadioTiles(context, value, onChange),
             )
           ],
         );
@@ -650,12 +647,13 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
     );
   }
 
-  Widget _buildRadioTiles(BuildContext context, OnChangeCallBack<T> onChange) {
+  Widget _buildRadioTiles(BuildContext context, T groupValue,
+      OnChangeCallBack<T> onChange) {
     List<Widget> radioList =
     widget.values.entries.map<Widget>((MapEntry<T, String> entry) {
       return Padding(
         padding: const EdgeInsets.all(0.0),
-        child: _SettingsTile<T>(
+        child: _SettingsTile(
           title: entry.value,
           onTap: () => _onRadioChange(entry.key, onChange),
           child: _SettingsRadio<T>(
@@ -666,7 +664,7 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
             }
                 : null,
             enabled: widget.enabled,
-            groupValue: selectedValue,
+            groupValue: groupValue,
           ),
         ),
       );
@@ -679,5 +677,141 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
   void _onRadioChange(T value, OnChangeCallBack<T> onChange) {
     selectedValue = value;
     onChange(value);
+  }
+}
+
+class DropDownSettingsTile<T> extends StatefulWidget {
+  final String settingKey;
+  final T selected;
+  final Map<T, String> values;
+  final String title;
+  final bool enabled;
+
+  DropDownSettingsTile({
+    @required this.title,
+    @required this.settingKey,
+    @required this.selected,
+    @required this.values,
+    this.enabled = true,
+  });
+
+  @override
+  _DropDownSettingsTileState<T> createState() =>
+      _DropDownSettingsTileState<T>();
+}
+
+class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
+  T selectedValue;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedValue = widget.selected;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CacheChangeObserver<T>(
+      cacheKey: widget.settingKey,
+      defaultValue: selectedValue,
+      builder: (BuildContext context, T value, OnChangeCallBack<T> onChange) {
+        return Wrap(
+          children: <Widget>[
+            _SettingsTile(
+              child: _SettingsDropDown<T>(
+                selected: value,
+                values: widget.values.keys.toList().cast<T>(),
+                onChanged: widget.enabled
+                    ? (T newValue) {
+                  _handleDropDownChange(newValue, onChange);
+                }
+                    : null,
+                enabled: widget.enabled,
+                child: (T value) {
+                  return Text(widget.values[value]);
+                },
+              ),
+              title: widget.title,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _handleDropDownChange(T value, OnChangeCallBack<T> onChange) {
+    selectedValue = value;
+    onChange(value);
+  }
+}
+
+class SliderSettingsTile extends StatefulWidget {
+  final String settingKey;
+  final double defaultValue;
+  final String title;
+  final bool enabled;
+  final double min;
+  final double max;
+  final double step;
+
+  SliderSettingsTile({
+    @required this.title,
+    @required this.settingKey,
+    this.defaultValue = 0.0,
+    this.enabled = true,
+    @required this.min,
+    @required this.max,
+    this.step = 0.0,
+  });
+
+  @override
+  _SliderSettingsTileState createState() => _SliderSettingsTileState();
+}
+
+class _SliderSettingsTileState extends State<SliderSettingsTile> {
+  double currentValue;
+
+  @override
+  void initState() {
+    super.initState();
+    currentValue = widget.defaultValue;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CacheChangeObserver<double>(
+      cacheKey: widget.settingKey,
+      defaultValue: widget.defaultValue,
+      builder: (BuildContext context, double value,
+          OnChangeCallBack<double> onChange) {
+        debugPrint('creating settings Tile: ${widget.settingKey}');
+        return SettingsContainer(
+          children: <Widget>[
+            _SettingsTile(
+              title: widget.title,
+              subtitle: value.toString(),
+            ),
+            _SettingsSlider(
+              onChanged: widget.enabled
+                  ? (double newValue) =>
+                  _handleSliderChanged(newValue, onChange)
+                  : null,
+              enabled: widget.enabled,
+              value: value,
+              max: widget.max,
+              min: widget.min,
+              step: widget.step,
+              label: value.toString(),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  void _handleSliderChanged(double newValue,
+      OnChangeCallBack<double> onChange) {
+    currentValue = newValue;
+    onChange(newValue);
   }
 }
