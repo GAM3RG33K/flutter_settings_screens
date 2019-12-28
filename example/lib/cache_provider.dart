@@ -93,13 +93,12 @@ class HiveCache extends CacheProvider {
   }
 
   @override
-  dynamic getValue(String settingsKey) {
-    return _preferences.get(settingsKey);
-  }
-
-  @override
-  T getObject<T>(String key) {
-    return _preferences.get(key).cast<T>();
+  T getValue<T>(String key, T defaultValue) {
+    var value = _preferences.get(key);
+    if (value is T) {
+      return value;
+    }
+    return defaultValue;
   }
 }
 
@@ -159,6 +158,27 @@ class SharePreferenceCache extends CacheProvider {
 
   @override
   void setObject<T>(String key, T value) {
+    debugPrint('setObject(): key: $key value: $value');
+    if (value is int) {
+      debugPrint('value is int');
+      _preferences.setInt(key, value);
+      return;
+    }
+    if (value is double) {
+      debugPrint('value is double');
+      _preferences.setDouble(key, value);
+      return;
+    }
+    if (value is bool) {
+      debugPrint('value is bool');
+      _preferences.setBool(key, value);
+      return;
+    }
+    if (value is String) {
+      debugPrint('value is String');
+      _preferences.setString(key, value);
+      return;
+    }
     throw Exception('No Implementation Found');
   }
 
@@ -169,7 +189,8 @@ class SharePreferenceCache extends CacheProvider {
 
   @override
   Set<E> getKeys<E>() {
-    return _preferences.getKeys().cast<E>();
+    var storedValue = _preferences.getKeys();
+    return storedValue.cast<E>();
   }
 
   @override
@@ -185,12 +206,19 @@ class SharePreferenceCache extends CacheProvider {
   }
 
   @override
-  dynamic getValue(String settingsKey) {
-    return _preferences.get(settingsKey);
-  }
-
-  @override
-  T getObject<T>(String key) {
+  T getValue<T>(String key, T defaultValue) {
+    if (defaultValue is int) {
+      return _preferences.getInt(key) as T;
+    }
+    if (defaultValue is double) {
+      return _preferences.getDouble(key) as T;
+    }
+    if (defaultValue is bool) {
+      return _preferences.getBool(key) as T;
+    }
+    if (defaultValue is String) {
+      return _preferences.getString(key) as T;
+    }
     throw Exception('No Implementation Found');
   }
 }

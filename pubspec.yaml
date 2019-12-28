@@ -20,6 +20,9 @@ dependencies:
   #library to access storage directories
   path_provider: ^1.4.4
 
+  #library to use Provider widgets
+  provider: ^4.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -28,16 +28,16 @@ class _AppSettingsState extends State<AppSettings> {
                 title: 'Advanced',
                 subtitle: 'More, advanced settings.',
                 screen: SettingsScreen(
-                  title: "Additional Settings",
+                  title: "Same Settings as Above but in full screen",
                   children: <Widget>[
                     CheckboxSettingsTile(
-                      settingKey: 'key-check-box-simple',
+                      settingKey: 'key-check-box',
                       title: 'Sub menu option',
                     ),
-                    CheckboxSettingsTile(
-                      settingKey: 'key-check-box-simple-2',
-                      title: 'Sub menu option 2',
-                    )
+                    SwitchSettingsTile(
+                      settingKey: 'key-switch',
+                      title: 'This is a Switch',
+                    ),
                   ],
                 ),
               ),
@@ -56,100 +56,18 @@ class _AppSettingsState extends State<AppSettings> {
               ),
             ],
           ),
-          ExpansionSettingsTile(
-            title: 'Same as Above, but You can expand & close',
-            children: [
-              CheckboxSettingsTile(
-                settingKey: 'key-check-box-2',
-                title: 'This is a simple Checkbox',
-              ),
-              CheckboxSettingsTile(
-                settingKey: 'key-check-box-3',
-                title: 'This is a simple Checkbox',
-              ),
-              SettingsContainer(
-                child: Text('This is Simple Setting! :)'),
-              ),
-            ],
-          ),
-          SettingsTileGroup(
-            title: 'Selection Settings',
-            children: <Widget>[
-              RadioSettingsTile(
-                settingKey: 'key-radio',
-                title: 'Select one option',
-                values: {
-                  'a': 'Option A',
-                  'b': 'Option B',
-                  'c': 'Option C',
-                  'd': 'Option D',
-                },
-              ),
-              RadioPickerSettingsTile(
-                settingKey: 'key-radio-2',
-                title: 'Choose one in the modal dialog',
-                values: {
-                  'a': 'Option A',
-                  'b': 'Option B',
-                  'c': 'Option C',
-                  'd': 'Option D',
-                },
-                defaultKey: 'b',
-              ),
-              DropdownSettingsTile<int>(
-                title: 'Select number',
-                defaultValue: 2,
-                values: <int>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                settingKey: 'key-drop-down',
-                enabled: true,
-                widgetBuilder: (int val) {
-                  return Text('$val');
-                },
-              ),
-            ],
-          ),
-          SliderSettingsTile(
-            settingKey: 'key-slider',
-            title: 'Rate this app',
-            subtitle: 'How would you rate this app from 1 to 5?',
-            defaultValue: 1.0,
-            minValue: 1.0,
-            maxValue: 5.0,
-            step: 0.5,
-          ),
-          SettingsContainer(
-            child: Text('Category Separator 2'),
-            children: <Widget>[
-              TextFieldModalSettingsTile(
-                settingKey: 'key-text-field',
-                title: 'Type your email',
-                defaultValue: 'This is by default.',
-                cancelCaption: 'Cancel',
-                okCaption: 'Save Email',
-                keyboardType: TextInputType.emailAddress,
-              ),
-              TextFieldModalSettingsTile(
-                settingKey: 'key-text-field-2',
-                title: 'Set User Password',
-                obscureText: true,
-              ),
-            ],
-          ),
-          SettingsTileGroup(
-            title: 'Color settings',
-            children: <Widget>[
-              MaterialColorPickerSettingsTile(
-                settingKey: 'key-color-picker-2',
-                title: 'Color Picker',
-                cancelCaption: 'Keep the old value',
-                okCaption: 'Select new',
-                confirmText:
-                    'Are you sure want to modify the previously selected color?',
-                confirmModalTitle: 'Are you sure?',
-                confirmModalCancelCaption: 'Keep the old one',
-                confirmModalConfirmCaption: 'Yes, I am sure',
-              )
-            ],
+          RadioSettingsTile<double>(
+            title: 'Preferred Ratio',
+            settingKey: 'key-radio',
+            values: <double, String>{
+              1.0: 'Simple',
+              2.0: 'Normal',
+              2.5: 'Little Special',
+              3.0: 'Special',
+              3.5: 'Extra Special',
+              4.0: 'Bizzar',
+            },
+            selected: 2.0,
           )
         ],
       ),
