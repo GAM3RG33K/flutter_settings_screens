@@ -14,7 +14,7 @@ class _AppSettingsState extends State<AppSettings> {
         title: "Application Settings",
         children: [
           SettingsTileGroup(
-            title: 'General Settings',
+            title: 'Single Choice Settings',
             children: <Widget>[
               CheckboxSettingsTile(
                 settingKey: 'key-check-box',
@@ -25,34 +25,55 @@ class _AppSettingsState extends State<AppSettings> {
                 title: 'This is a Switch',
               ),
               SimpleSettingsTile(
+                title: 'Disabled Settings',
+                subtitle: 'This settings is not accessible',
+                enabled: false,
+              ),
+              SimpleSettingsTile(
                 title: 'Advanced',
-                subtitle: 'More, advanced settings.',
+                subtitle: 'Settings on a new Screen',
                 screen: SettingsScreen(
-                  title: "Same Settings as Above but in full screen",
+                  title: "Full screen",
                   children: <Widget>[
                     CheckboxSettingsTile(
-                      settingKey: 'key-check-box',
+                      settingKey: 'key-check-box-1',
                       title: 'Sub menu option',
                     ),
                     SwitchSettingsTile(
-                      settingKey: 'key-switch',
+                      settingKey: 'key-switch-1',
                       title: 'This is a Switch',
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-          SettingsTileGroup(
-            title: 'Group title',
-            children: [
-              CheckboxSettingsTile(
-                settingKey: 'key-check-box-2',
-                title: 'This is a simple Checkbox 2',
+              SimpleModalSettingsTile(
+                title: 'Advanced',
+                subtitle: 'Settings on a dialog',
+                children: <Widget>[
+                  CheckboxSettingsTile(
+                    settingKey: 'key-check-box-2',
+                    title: 'Sub menu option',
+                  ),
+                  SwitchSettingsTile(
+                    settingKey: 'key-switch-2',
+                    title: 'This is a Switch',
+                  ),
+                ],
               ),
-              CheckboxSettingsTile(
-                settingKey: 'key-check-box-3',
-                title: 'This is a simple Checkbox 3',
+              SimpleExpandableSettingsTile(
+                title: 'More Advanced',
+                subtitle: 'Expandable Settings',
+                expanded: true,
+                children: <Widget>[
+                  CheckboxSettingsTile(
+                    settingKey: 'key-check-box-4',
+                    title: 'Sub menu option',
+                  ),
+                  SwitchSettingsTile(
+                    settingKey: 'key-switch-4',
+                    title: 'This is a Switch',
+                  ),
+                ],
               ),
             ],
           ),
@@ -89,6 +110,26 @@ class _AppSettingsState extends State<AppSettings> {
               ),
             ],
           ),
+          SimpleModalSettingsTile(
+            title: 'Group Settings',
+            subtitle: 'Same group settings but in a dialog',
+            children: <Widget>[
+              RadioSettingsTile<double>(
+                title: 'Preferred Ratio (Radio)',
+                settingKey: 'key-golden-ratio-radio-2',
+                values: <double, String>{
+                  1.0: 'Simple',
+                  1.5: 'Normal',
+                  2.0: 'Little Special',
+                  2.5: 'Special',
+                  3.0: 'Extra Special',
+                  3.5: 'Bizzar',
+                  4.0: 'Horrific',
+                },
+                selected: 2.0,
+              ),
+            ],
+          ),
           SettingsTileGroup(
             title: 'Other settings',
             children: <Widget>[
@@ -107,6 +148,25 @@ class _AppSettingsState extends State<AppSettings> {
               )
             ],
           ),
+          SimpleModalSettingsTile(
+            title: 'Other settings',
+            subtitle: 'Other Settings in a Dialog',
+            children: <Widget>[
+              SliderSettingsTile(
+                title: 'Golden Ratio(Slider)',
+                settingKey: 'key-golden-ratio-slider-2',
+                defaultValue: 2.5,
+                min: 1,
+                max: 5,
+                step: 0.1,
+              ),
+              ColorPickerSettingsTile(
+                settingKey: 'key-color-picker-2',
+                title: 'Color Picker',
+                defaultValue: Colors.blue,
+              )
+            ],
+          )
         ],
       ),
     );

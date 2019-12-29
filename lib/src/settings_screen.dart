@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:flutter_settings_screens/src/utils/utils.dart';
@@ -51,7 +52,7 @@ class SettingsScreen extends StatelessWidget {
   final List<Widget> children;
 
   SettingsScreen({
-    @required this.title,
+    this.title = 'Settings',
     @required this.children,
   });
 
@@ -78,13 +79,15 @@ class _SettingsTile extends StatefulWidget {
   final bool enabled;
   final Widget child;
   final Function onTap;
+  final bool childBelowTitle;
 
   _SettingsTile({
     @required this.title,
+    @required this.child,
     this.subtitle = '',
-    this.child,
     this.onTap,
     this.enabled = true,
+    this.childBelowTitle = false,
   });
 
   @override
@@ -99,21 +102,172 @@ class __SettingsTileState extends State<_SettingsTile> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Material(
-          child: ListTile(
+    return Material(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          ListTile(
             title: Text(widget.title),
             subtitle: Text(widget.subtitle),
             enabled: widget.enabled,
             onTap: widget.enabled ? widget.onTap : null,
-            trailing: widget.child,
+            trailing: Visibility(
+              visible: !widget.childBelowTitle,
+              child: widget.child,
+            ),
             dense: true,
           ),
+          Visibility(
+            visible: widget.childBelowTitle,
+            child: widget.child,
+          ),
+          _SettingsTileDivider(),
+        ],
+      ),
+    );
+  }
+}
+
+class _SimpleHeaderTile extends StatefulWidget {
+  final String title;
+  final String subtitle;
+
+  const _SimpleHeaderTile({
+    Key key,
+    this.title,
+    this.subtitle = '',
+  }) : super(key: key);
+
+  @override
+  __SimpleHeaderTileState createState() => __SimpleHeaderTileState();
+}
+
+class __SimpleHeaderTileState extends State<_SimpleHeaderTile> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          widget.title,
+          style: Theme
+              .of(context)
+              .textTheme
+              .button,
         ),
-        _SettingsTileDivider(),
+        Text(
+          widget.subtitle,
+          style: Theme
+              .of(context)
+              .textTheme
+              .caption,
+        ),
       ],
     );
+  }
+}
+
+class _ExpandableSettingsTile extends StatefulWidget {
+  final String title;
+  final String subtitle;
+  final bool enabled;
+  final bool expanded;
+  final Widget child;
+
+  _ExpandableSettingsTile({
+    @required this.title,
+    this.subtitle = '',
+    this.child,
+    this.enabled = true,
+    this.expanded = false,
+  });
+
+  @override
+  __ExpandableSettingsTileState createState() =>
+      __ExpandableSettingsTileState();
+}
+
+class __ExpandableSettingsTileState extends State<_ExpandableSettingsTile> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.enabled ? getExpansionTile() : getListTile();
+  }
+
+  Widget getListTile() {
+    return _SettingsTile(
+      title: widget.title,
+      subtitle: widget.subtitle,
+      enabled: false,
+      child: Text(''),
+    );
+  }
+
+  Widget getExpansionTile() {
+    return Material(
+      child: ExpansionTile(
+        title: Text(widget.title),
+        subtitle: Text(widget.subtitle),
+        children: <Widget>[widget.child],
+        initiallyExpanded: widget.expanded,
+      ),
+    );
+  }
+}
+
+class _ModalSettingsTile extends StatefulWidget {
+  final String title;
+  final String subtitle;
+  final bool enabled;
+  final Widget child;
+
+  _ModalSettingsTile({
+    @required this.title,
+    this.subtitle = '',
+    this.child,
+    this.enabled = true,
+  });
+
+  @override
+  __ModalSettingsTileState createState() => __ModalSettingsTileState();
+}
+
+class __ModalSettingsTileState extends State<_ModalSettingsTile> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: ListTile(
+        title: Text(widget.title),
+        subtitle: Text(widget.subtitle),
+        enabled: widget.enabled,
+        onTap: widget.enabled ? () => _showWidget(context, widget.child) : null,
+        dense: true,
+      ),
+    );
+  }
+
+  void _showWidget(BuildContext context, Widget child) {
+    Widget dialogContent = child;
+
+    showDialog(
+        context: context,
+        builder: (dialogContext) {
+          return AlertDialog(
+            title: Text(widget.title),
+            elevation: 1.0,
+            content: dialogContent,
+            contentPadding: EdgeInsets.zero,
+          );
+        });
   }
 }
 
@@ -184,16 +338,79 @@ class SimpleSettingsTile extends StatelessWidget {
       title: title,
       subtitle: subtitle,
       enabled: enabled,
-      onTap: enabled
-          ? () {
-        if (screen == null) {
-          return;
-        }
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => screen,
-        ));
-      }
-          : null,
+      child: screen != null ? getIcon(context) : Text(''),
+      onTap: enabled ? () => _handleTap(context) : null,
+    );
+  }
+
+  Widget getIcon(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.navigate_next),
+      onPressed: enabled ? () => _handleTap(context) : null,
+    );
+  }
+
+  void _handleTap(BuildContext context) {
+    if (screen == null) {
+      return;
+    }
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (BuildContext context) => screen,
+    ));
+  }
+}
+
+class SimpleModalSettingsTile extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final List<Widget> children;
+  final bool enabled;
+
+  SimpleModalSettingsTile({
+    @required this.title,
+    this.subtitle = '',
+    this.children,
+    this.enabled = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _ModalSettingsTile(
+      title: title,
+      subtitle: subtitle,
+      enabled: enabled,
+      child: SettingsContainer(
+        scrollable: true,
+        children: children,
+      ),
+    );
+  }
+}
+
+class SimpleExpandableSettingsTile extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final List<Widget> children;
+  final bool enabled;
+  final bool expanded;
+
+  SimpleExpandableSettingsTile({
+    @required this.title,
+    this.subtitle = '',
+    this.children,
+    this.enabled = true,
+    this.expanded = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _ExpandableSettingsTile(
+      title: title,
+      subtitle: subtitle,
+      enabled: enabled,
+      child: SettingsContainer(
+        children: children,
+      ),
     );
   }
 }
@@ -232,9 +449,11 @@ class SimpleSettingsTile extends StatelessWidget {
 /// );
 class SettingsContainer extends StatelessWidget {
   final List<Widget> children;
+  final bool scrollable;
 
   SettingsContainer({
     this.children,
+    this.scrollable = false,
   });
 
   @override
@@ -243,12 +462,35 @@ class SettingsContainer extends StatelessWidget {
   }
 
   Widget _buildChild() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: children,
+    Widget child = scrollable ? getList(children) : getColumn(children);
+    return Padding(
+      padding: EdgeInsets.only(
+        top: 16.0,
       ),
+      child: Material(
+        child: Container(
+          padding: EdgeInsets.only(left: 4.0),
+          child: child,
+        ),
+      ),
+    );
+  }
+
+  Widget getList(List<Widget> children) {
+    return ListView.builder(
+      itemBuilder: (context, index) {
+        return children[index];
+      },
+      shrinkWrap: true,
+      itemCount: children.length,
+    );
+  }
+
+  Widget getColumn(List<Widget> children) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: children,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
     );
   }
 }
@@ -711,16 +953,13 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
       cacheKey: widget.settingKey,
       defaultValue: selectedValue,
       builder: (BuildContext context, T value, OnChangeCallBack<T> onChange) {
-        return Column(
+        return SettingsContainer(
           children: <Widget>[
-            SimpleSettingsTile(
+            _SimpleHeaderTile(
               title: widget.title,
               subtitle: widget.values[selectedValue],
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: _buildRadioTiles(context, value, onChange),
-            )
+            _buildRadioTiles(context, value, onChange)
           ],
         );
       },
@@ -731,22 +970,19 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
       OnChangeCallBack<T> onChange) {
     List<Widget> radioList =
     widget.values.entries.map<Widget>((MapEntry<T, String> entry) {
-      return Padding(
-        padding: const EdgeInsets.all(0.0),
-        child: _SettingsTile(
-          title: entry.value,
-          onTap:
-          widget.enabled ? () => _onRadioChange(entry.key, onChange) : null,
-          child: _SettingsRadio<T>(
-            value: entry.key,
-            onChanged: widget.enabled
-                ? (T newValue) {
-              _onRadioChange(newValue, onChange);
-            }
-                : null,
-            enabled: widget.enabled,
-            groupValue: groupValue,
-          ),
+      return _SettingsTile(
+        title: entry.value,
+        onTap:
+        widget.enabled ? () => _onRadioChange(entry.key, onChange) : null,
+        child: _SettingsRadio<T>(
+          value: entry.key,
+          onChanged: widget.enabled
+              ? (T newValue) {
+            _onRadioChange(newValue, onChange);
+          }
+              : null,
+          enabled: widget.enabled,
+          groupValue: groupValue,
         ),
       );
     }).toList();
@@ -870,7 +1106,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
         debugPrint('creating settings Tile: ${widget.settingKey}');
         return SettingsContainer(
           children: <Widget>[
-            _SettingsTile(
+            _SimpleHeaderTile(
               title: widget.title,
               subtitle: value.toString(),
             ),
@@ -885,7 +1121,8 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
               min: widget.min,
               step: widget.step,
               label: value.toString(),
-            )
+            ),
+            _SettingsTileDivider(),
           ],
         );
       },
@@ -964,6 +1201,169 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
     if (widget.onChangeCustom != null) {
       var colorFromString = Utils.colorFromString(color);
       widget.onChangeCustom(colorFromString);
+    }
+  }
+}
+
+//TODO(hjoshi) Add A common Widget like [_SettingsTile] for Modal Dialog Display
+// of the provided widgets ans Make Modal versions of all the compatible from above widgets.
+
+class RadioModalSettingsTile<T> extends StatefulWidget {
+  final String settingKey;
+  final T selected;
+  final Map<T, String> values;
+  final String title;
+  final bool enabled;
+  final OnChangeCustom<T> onChangeCustom;
+
+  RadioModalSettingsTile({
+    @required this.title,
+    @required this.settingKey,
+    @required this.selected,
+    @required this.values,
+    this.enabled = true,
+    this.onChangeCustom,
+  });
+
+  @override
+  _RadioModalSettingsTileState<T> createState() =>
+      _RadioModalSettingsTileState<T>();
+}
+
+class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
+  T selectedValue;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedValue = widget.selected;
+  }
+
+  void _onRadioChange(T value, OnChangeCallBack<T> onChange) {
+    selectedValue = value;
+    onChange(value);
+    if (widget.onChangeCustom != null) {
+      widget.onChangeCustom(value);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CacheChangeObserver<T>(
+      cacheKey: widget.settingKey,
+      defaultValue: selectedValue,
+      builder: (BuildContext convtext, T value, OnChangeCallBack<T> onChange) {
+        return _ModalSettingsTile(
+          child: _buildRadioTiles(context, value, onChange),
+          title: widget.title,
+          subtitle: widget.values[selectedValue],
+        );
+      },
+    );
+  }
+
+  Widget _buildRadioTiles(BuildContext context, T groupValue,
+      OnChangeCallBack<T> onChange) {
+    List<Widget> radioList =
+    widget.values.entries.map<Widget>((MapEntry<T, String> entry) {
+      return Padding(
+        padding: const EdgeInsets.all(0.0),
+        child: _SettingsTile(
+          title: entry.value,
+          onTap:
+          widget.enabled ? () => _onRadioChange(entry.key, onChange) : null,
+          child: _SettingsRadio<T>(
+            value: entry.key,
+            onChanged: widget.enabled
+                ? (T newValue) {
+              _onRadioChange(newValue, onChange);
+            }
+                : null,
+            enabled: widget.enabled,
+            groupValue: groupValue,
+          ),
+        ),
+      );
+    }).toList();
+    return Column(
+      children: radioList,
+    );
+  }
+}
+
+class SliderModalSettingsTile extends StatefulWidget {
+  final String settingKey;
+  final double defaultValue;
+  final String title;
+  final bool enabled;
+  final double min;
+  final double max;
+  final double step;
+  final OnChangeCustom<double> onChangeCustom;
+
+  SliderModalSettingsTile({
+    @required this.title,
+    @required this.settingKey,
+    this.defaultValue = 0.0,
+    this.enabled = true,
+    @required this.min,
+    @required this.max,
+    this.step = 0.0,
+    this.onChangeCustom,
+  });
+
+  @override
+  _SliderModalSettingsTileState createState() =>
+      _SliderModalSettingsTileState();
+}
+
+class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
+  double currentValue;
+
+  @override
+  void initState() {
+    super.initState();
+    currentValue = widget.defaultValue;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CacheChangeObserver<double>(
+      cacheKey: widget.settingKey,
+      defaultValue: currentValue,
+      builder: (BuildContext context, double value,
+          OnChangeCallBack<double> onChange) {
+        debugPrint('creating settings Tile: ${widget.settingKey}');
+        return SettingsContainer(
+          children: <Widget>[
+            _ModalSettingsTile(
+              title: widget.title,
+              subtitle: value.toString(),
+              child: _SettingsSlider(
+                onChanged: widget.enabled
+                    ? (double newValue) =>
+                    _handleSliderChanged(newValue, onChange)
+                    : null,
+                enabled: widget.enabled,
+                value: value,
+                max: widget.max,
+                min: widget.min,
+                step: widget.step,
+                label: value.toString(),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _handleSliderChanged(double newValue,
+      OnChangeCallBack<double> onChange) {
+    currentValue = newValue;
+    onChange(newValue);
+    if (widget.onChangeCustom != null) {
+      widget.onChangeCustom(newValue);
     }
   }
 }
