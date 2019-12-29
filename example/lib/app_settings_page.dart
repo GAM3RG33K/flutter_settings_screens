@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:flutter_settings_screens_example/main.dart';
 
 class AppSettings extends StatefulWidget {
   @override
@@ -30,10 +31,27 @@ class _AppSettingsState extends State<AppSettings> {
                 disabledLabel: 'Disabled',
                 leading: Icon(Icons.bluetooth),
               ),
-              SimpleSettingsTile(
-                title: 'Root Settings',
-                subtitle: 'These settings is not accessible',
-                enabled: false,
+              SwitchSettingsTile(
+                leading: Icon(Icons.developer_mode),
+                settingKey: 'key-switch-dev-mode',
+                title: 'Developer Settings',
+                childrenIfEnabled: <Widget>[
+                  CheckboxSettingsTile(
+                    leading: Icon(Icons.adb),
+                    settingKey: 'key-is-developer',
+                    title: 'Developer Mode',
+                  ),
+                  SwitchSettingsTile(
+                    leading: Icon(Icons.usb),
+                    settingKey: 'key-is-usb-debugging',
+                    title: 'USB Debugging',
+                  ),
+                  SimpleSettingsTile(
+                    title: 'Root Settings',
+                    subtitle: 'These settings is not accessible',
+                    enabled: false,
+                  )
+                ],
               ),
               SimpleSettingsTile(
                 title: 'More Settings',
@@ -45,6 +63,12 @@ class _AppSettingsState extends State<AppSettings> {
                       leading: Icon(Icons.adb),
                       settingKey: 'key-is-developer',
                       title: 'Developer Mode',
+                      onChange: (value) {
+                        // TODO(hjoshi): resolve `onChange == null` issue
+                        if (value) {
+                          showSnackBar(context, 'You are a developer Now!!');
+                        }
+                      },
                     ),
                     SwitchSettingsTile(
                       leading: Icon(Icons.usb),

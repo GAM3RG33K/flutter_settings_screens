@@ -845,6 +845,7 @@ class SwitchSettingsTile extends StatelessWidget {
   final Widget leading;
   final String enabledLabel;
   final String disabledLabel;
+  final List<Widget> childrenIfEnabled;
 
   SwitchSettingsTile({
     @required this.title,
@@ -855,6 +856,7 @@ class SwitchSettingsTile extends StatelessWidget {
     this.leading,
     this.enabledLabel = '',
     this.disabledLabel = '',
+    this.childrenIfEnabled,
   });
 
   @override
@@ -864,8 +866,7 @@ class SwitchSettingsTile extends StatelessWidget {
       defaultValue: defaultValue,
       builder: (BuildContext context, bool value,
           InternalChangeCallBack<bool> onChange) {
-        debugPrint('creating settings Tile: $settingKey');
-        return _SettingsTile(
+        Widget mainWidget = _SettingsTile(
           leading: leading,
           title: title,
           subtitle: getSubtitle(value),
@@ -877,6 +878,14 @@ class SwitchSettingsTile extends StatelessWidget {
             enabled: enabled,
           ),
         );
+
+        Widget finalWidget = getFinalWidget(
+          context,
+          mainWidget,
+          value,
+          childrenIfEnabled,
+        );
+        return finalWidget;
       },
     );
   }
@@ -898,6 +907,22 @@ class SwitchSettingsTile extends StatelessWidget {
     }
     return label;
   }
+
+  Widget getFinalWidget(BuildContext context, Widget mainWidget,
+      bool currentValue, List<Widget> childrenIfEnabled) {
+    if (childrenIfEnabled == null || !currentValue) {
+      return SettingsContainer(
+        children: <Widget>[
+          mainWidget,
+        ],
+      );
+    }
+    List<Widget> children = <Widget>[mainWidget];
+    children.addAll(childrenIfEnabled);
+    return SettingsContainer(
+      children: children,
+    );
+  }
 }
 
 class CheckboxSettingsTile extends StatelessWidget {
@@ -909,6 +934,7 @@ class CheckboxSettingsTile extends StatelessWidget {
   final Widget leading;
   final String enabledLabel;
   final String disabledLabel;
+  final List<Widget> childrenIfEnabled;
 
   CheckboxSettingsTile({
     @required this.title,
@@ -919,6 +945,7 @@ class CheckboxSettingsTile extends StatelessWidget {
     this.leading,
     this.enabledLabel = '',
     this.disabledLabel = '',
+    this.childrenIfEnabled,
   });
 
   @override
@@ -928,7 +955,7 @@ class CheckboxSettingsTile extends StatelessWidget {
       defaultValue: defaultValue,
       builder: (BuildContext context, bool value,
           InternalChangeCallBack<bool> onChange) {
-        return _SettingsTile(
+        var mainWidget = _SettingsTile(
           leading: leading,
           title: title,
           subtitle: getSubtitle(value),
@@ -940,15 +967,25 @@ class CheckboxSettingsTile extends StatelessWidget {
             enabled: enabled,
           ),
         );
+
+        Widget finalWidget = getFinalWidget(
+          context,
+          mainWidget,
+          value,
+          childrenIfEnabled,
+        );
+        return finalWidget;
       },
     );
   }
 
   void _onCheckboxChange(bool value, OnChange<bool> onChange) {
-    onChange(value);
-    if (onChange != null) {
-      onChange(value);
+    debugPrint('_onCheckboxChange:$value');
+    if (this.onChange != null) {
+      debugPrint('calling this.onChange() for value:$value');
+      this.onChange(value);
     }
+    onChange(value);
   }
 
   String getSubtitle(bool currentStatus) {
@@ -960,6 +997,20 @@ class CheckboxSettingsTile extends StatelessWidget {
       label = disabledLabel;
     }
     return label;
+  }
+
+  Widget getFinalWidget(BuildContext context, Widget mainWidget,
+      bool currentValue, List<Widget> childrenIfEnabled) {
+    if (childrenIfEnabled == null || !currentValue) {
+      return SettingsContainer(
+        children: <Widget>[mainWidget],
+      );
+    }
+    List<Widget> children = <Widget>[mainWidget];
+    children.addAll(childrenIfEnabled);
+    return SettingsContainer(
+      children: children,
+    );
   }
 }
 

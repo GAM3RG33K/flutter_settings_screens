@@ -134,20 +134,27 @@ class _AppBodyState extends State<AppBody> {
       child: Text('Clear selected Cache'),
       onPressed: () {
         Settings.clearCache();
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Cache cleared for selected cache.',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            backgroundColor: Theme
-                .of(context)
-                .primaryColor,
-          ),
+        showSnackBar(
+          context,
+          'Cache cleared for selected cache.',
         );
       },
     );
   }
+}
+
+void showSnackBar(BuildContext context, String message) {
+  Scaffold.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        message,
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+      backgroundColor: Theme
+          .of(context)
+          .primaryColor,
+    ),
+  );
 }
