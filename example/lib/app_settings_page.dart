@@ -16,62 +16,81 @@ class _AppSettingsState extends State<AppSettings> {
           SettingsTileGroup(
             title: 'Single Choice Settings',
             children: <Widget>[
-              CheckboxSettingsTile(
-                settingKey: 'key-check-box',
-                title: 'This is a simple Checkbox',
-              ),
               SwitchSettingsTile(
-                settingKey: 'key-switch',
-                title: 'This is a Switch',
+                settingKey: 'key-wifi',
+                title: 'Wi-Fi',
+                enabledLabel: 'Enabled',
+                disabledLabel: 'Disabled',
+                leading: Icon(Icons.wifi),
+              ),
+              CheckboxSettingsTile(
+                settingKey: 'key-blue-tooth',
+                title: 'Bluetooth',
+                enabledLabel: 'Enabled',
+                disabledLabel: 'Disabled',
+                leading: Icon(Icons.bluetooth),
               ),
               SimpleSettingsTile(
-                title: 'Disabled Settings',
-                subtitle: 'This settings is not accessible',
+                title: 'Root Settings',
+                subtitle: 'These settings is not accessible',
                 enabled: false,
               ),
               SimpleSettingsTile(
-                title: 'Advanced',
-                subtitle: 'Settings on a new Screen',
+                title: 'More Settings',
+                subtitle: 'General App Settings',
                 screen: SettingsScreen(
-                  title: "Full screen",
+                  title: "App Settings",
                   children: <Widget>[
                     CheckboxSettingsTile(
-                      settingKey: 'key-check-box-1',
-                      title: 'Sub menu option',
+                      leading: Icon(Icons.adb),
+                      settingKey: 'key-is-developer',
+                      title: 'Developer Mode',
                     ),
                     SwitchSettingsTile(
-                      settingKey: 'key-switch-1',
-                      title: 'This is a Switch',
+                      leading: Icon(Icons.usb),
+                      settingKey: 'key-is-usb-debugging',
+                      title: 'USB Debugging',
                     ),
                   ],
                 ),
               ),
               SimpleModalSettingsTile(
-                title: 'Advanced',
+                title: 'Quick setting dialog',
                 subtitle: 'Settings on a dialog',
                 children: <Widget>[
                   CheckboxSettingsTile(
-                    settingKey: 'key-check-box-2',
-                    title: 'Sub menu option',
+                    settingKey: 'key-day-light-savings',
+                    title: 'Daylight Time Saving',
+                    enabledLabel: 'Enabled',
+                    disabledLabel: 'Disabled',
+                    leading: Icon(Icons.timelapse),
                   ),
                   SwitchSettingsTile(
-                    settingKey: 'key-switch-2',
-                    title: 'This is a Switch',
+                    settingKey: 'key-dark-mode',
+                    title: 'Dark Mode',
+                    enabledLabel: 'Enabled',
+                    disabledLabel: 'Disabled',
+                    leading: Icon(Icons.palette),
                   ),
                 ],
               ),
               SimpleExpandableSettingsTile(
-                title: 'More Advanced',
+                title: 'Quick setting 2',
                 subtitle: 'Expandable Settings',
-                expanded: true,
                 children: <Widget>[
                   CheckboxSettingsTile(
-                    settingKey: 'key-check-box-4',
-                    title: 'Sub menu option',
+                    settingKey: 'key-day-light-savings-2',
+                    title: 'Daylight Time Saving',
+                    enabledLabel: 'Enabled',
+                    disabledLabel: 'Disabled',
+                    leading: Icon(Icons.timelapse),
                   ),
                   SwitchSettingsTile(
-                    settingKey: 'key-switch-4',
-                    title: 'This is a Switch',
+                    settingKey: 'key-dark-mode-2',
+                    title: 'Dark Mode',
+                    enabledLabel: 'Enabled',
+                    disabledLabel: 'Disabled',
+                    leading: Icon(Icons.palette),
                   ),
                 ],
               ),
@@ -81,28 +100,28 @@ class _AppSettingsState extends State<AppSettings> {
             title: 'Multiple choice settings',
             children: <Widget>[
               RadioSettingsTile<int>(
-                title: 'Preferred Ratio (Radio)',
-                settingKey: 'key-radio-gender',
+                title: 'Preferred Sync Period',
+                settingKey: 'key-radio-sync-period',
                 values: <int, String>{
-                  0: 'Male',
-                  1: 'Female',
-                  2: 'Other',
+                  0: 'Never',
+                  1: 'Daily',
+                  7: 'Weekly',
+                  15: 'Fortnight',
+                  30: 'Monthly',
                 },
                 selected: 0,
               ),
-              DropDownSettingsTile<double>(
-                title: 'Preferred Ratio (DropDown)',
-                settingKey: 'key-golden-ratio-dropdown',
-                values: <double, String>{
-                  1.0: 'Simple',
-                  1.5: 'Normal',
-                  2.0: 'Little Special',
-                  2.5: 'Special',
-                  3.0: 'Extra Special',
-                  3.5: 'Bizzar',
-                  4.0: 'Horrific',
+              DropDownSettingsTile<int>(
+                title: 'E-Mail View',
+                settingKey: 'key-dropdown-email-view',
+                values: <int, String>{
+                  2: 'Simple',
+                  3: 'Adjusted',
+                  4: 'Normal',
+                  5: 'Compact',
+                  6: 'Squizzed',
                 },
-                selected: 2.5,
+                selected: 2,
               ),
             ],
           ),
@@ -110,33 +129,31 @@ class _AppSettingsState extends State<AppSettings> {
             title: 'Group Settings',
             subtitle: 'Same group settings but in a dialog',
             children: <Widget>[
-              RadioSettingsTile<double>(
-                title: 'Preferred Ratio (Radio)',
-                settingKey: 'key-golden-ratio-radio-2',
-                values: <double, String>{
-                  1.0: 'Simple',
-                  1.5: 'Normal',
-                  2.0: 'Little Special',
-                  2.5: 'Special',
-                  3.0: 'Extra Special',
-                  3.5: 'Bizzar',
-                  4.0: 'Horrific',
-                },
-                selected: 2.0,
+              SimpleRadioSettingsTile(
+                title: 'Sync Settings',
+                settingKey: 'key-radio-sync-settings',
+                values: <String>[
+                  'Never',
+                  'Daily',
+                  'Weekly',
+                  'Fortnight',
+                  'Monthly',
+                ],
+                selected: 'Daily',
               ),
-              DropDownSettingsTile<double>(
-                title: 'Preferred Ratio (DropDown)',
-                settingKey: 'key-golden-ratio-dropdown-2',
-                values: <double, String>{
-                  1.0: 'Simple',
-                  1.5: 'Normal',
-                  2.0: 'Little Special',
-                  2.5: 'Special',
-                  3.0: 'Extra Special',
-                  3.5: 'Bizzar',
-                  4.0: 'Horrific',
-                },
-                selected: 2.5,
+              SimpleDropDownSettingsTile(
+                title: 'Beauty Filter',
+                settingKey: 'key-dropdown-beauty-filter',
+                values: <String>[
+                  'Simple',
+                  'Normal',
+                  'Little Special',
+                  'Special',
+                  'Extra Special',
+                  'Bizzar',
+                  'Horrific',
+                ],
+                selected: 'Special',
               )
             ],
           ),
@@ -145,8 +162,8 @@ class _AppSettingsState extends State<AppSettings> {
             subtitle: 'Group of settings (expandable)',
             children: <Widget>[
               RadioSettingsTile<double>(
-                title: 'Preferred Ratio (Radio)',
-                settingKey: 'key-radio-gender-exapndable',
+                title: 'Beauty Filter',
+                settingKey: 'key-radio-beauty-filter-exapndable',
                 values: <double, String>{
                   1.0: 'Simple',
                   1.5: 'Normal',
@@ -159,12 +176,14 @@ class _AppSettingsState extends State<AppSettings> {
                 selected: 2.5,
               ),
               DropDownSettingsTile<int>(
-                title: 'Preferred Ratio (DropDown)',
-                settingKey: 'key-golden-ratio-dropdown-expandable',
+                title: 'Preferred Sync Period',
+                settingKey: 'key-dropdown-sync-period-2',
                 values: <int, String>{
-                  0: 'Male',
-                  1: 'Female',
-                  2: 'Other',
+                  0: 'Never',
+                  1: 'Daily',
+                  7: 'Weekly',
+                  15: 'Fortnight',
+                  30: 'Monthly',
                 },
                 selected: 0,
               )
@@ -174,16 +193,17 @@ class _AppSettingsState extends State<AppSettings> {
             title: 'Other settings',
             children: <Widget>[
               SliderSettingsTile(
-                title: 'Golden Ratio(Slider)',
-                settingKey: 'key-golden-ratio-slider',
-                defaultValue: 2.5,
-                min: 1,
-                max: 5,
-                step: 0.1,
+                title: 'Volume',
+                settingKey: 'key-slider-volume',
+                defaultValue: 20,
+                min: 0,
+                max: 100,
+                step: 1,
+                leading: Icon(Icons.volume_up),
               ),
               ColorPickerSettingsTile(
                 settingKey: 'key-color-picker',
-                title: 'Color Picker',
+                title: 'Accent Color',
                 defaultValue: Colors.blue,
               )
             ],
@@ -193,16 +213,17 @@ class _AppSettingsState extends State<AppSettings> {
             subtitle: 'Other Settings in a Dialog',
             children: <Widget>[
               SliderSettingsTile(
-                title: 'Golden Ratio(Slider)',
-                settingKey: 'key-golden-ratio-slider-2',
+                title: 'Custom Ratio',
+                settingKey: 'key-custom-ratio-slider-2',
                 defaultValue: 2.5,
                 min: 1,
                 max: 5,
                 step: 0.1,
+                leading: Icon(Icons.aspect_ratio),
               ),
               ColorPickerSettingsTile(
                 settingKey: 'key-color-picker-2',
-                title: 'Color Picker',
+                title: 'Accent Picker',
                 defaultValue: Colors.blue,
               )
             ],

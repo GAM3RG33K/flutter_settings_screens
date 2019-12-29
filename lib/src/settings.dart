@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'cache_provider.dart';
 
 typedef WidgetBuilder<T> = Widget Function(
-    BuildContext context, T value, OnChangeCallBack<T> onChange);
+    BuildContext context, T value, InternalChangeCallBack<T> onChange);
 
 typedef SimpleWidgetBuilder<T> = Widget Function(T value);
 
-typedef OnChangeCallBack<T> = void Function(T value);
-typedef OnChangeCustom<T> = void Function(T value);
+typedef InternalChangeCallBack<T> = void Function(T value);
+typedef OnChange<T> = void Function(T value);
 
 class Settings {
   static final Settings _instance = Settings._internal();
