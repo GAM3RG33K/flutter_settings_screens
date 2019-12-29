@@ -80,19 +80,15 @@ class _AppSettingsState extends State<AppSettings> {
           SettingsTileGroup(
             title: 'Multiple choice settings',
             children: <Widget>[
-              RadioSettingsTile<double>(
+              RadioSettingsTile<int>(
                 title: 'Preferred Ratio (Radio)',
-                settingKey: 'key-golden-ratio-radio',
-                values: <double, String>{
-                  1.0: 'Simple',
-                  1.5: 'Normal',
-                  2.0: 'Little Special',
-                  2.5: 'Special',
-                  3.0: 'Extra Special',
-                  3.5: 'Bizzar',
-                  4.0: 'Horrific',
+                settingKey: 'key-radio-gender',
+                values: <int, String>{
+                  0: 'Male',
+                  1: 'Female',
+                  2: 'Other',
                 },
-                selected: 2.0,
+                selected: 0,
               ),
               DropDownSettingsTile<double>(
                 title: 'Preferred Ratio (DropDown)',
@@ -128,6 +124,50 @@ class _AppSettingsState extends State<AppSettings> {
                 },
                 selected: 2.0,
               ),
+              DropDownSettingsTile<double>(
+                title: 'Preferred Ratio (DropDown)',
+                settingKey: 'key-golden-ratio-dropdown-2',
+                values: <double, String>{
+                  1.0: 'Simple',
+                  1.5: 'Normal',
+                  2.0: 'Little Special',
+                  2.5: 'Special',
+                  3.0: 'Extra Special',
+                  3.5: 'Bizzar',
+                  4.0: 'Horrific',
+                },
+                selected: 2.5,
+              )
+            ],
+          ),
+          SimpleExpandableSettingsTile(
+            title: 'Expandable Group Settings',
+            subtitle: 'Group of settings (expandable)',
+            children: <Widget>[
+              RadioSettingsTile<double>(
+                title: 'Preferred Ratio (Radio)',
+                settingKey: 'key-radio-gender-exapndable',
+                values: <double, String>{
+                  1.0: 'Simple',
+                  1.5: 'Normal',
+                  2.0: 'Little Special',
+                  2.5: 'Special',
+                  3.0: 'Extra Special',
+                  3.5: 'Bizzar',
+                  4.0: 'Horrific',
+                },
+                selected: 2.5,
+              ),
+              DropDownSettingsTile<int>(
+                title: 'Preferred Ratio (DropDown)',
+                settingKey: 'key-golden-ratio-dropdown-expandable',
+                values: <int, String>{
+                  0: 'Male',
+                  1: 'Female',
+                  2: 'Other',
+                },
+                selected: 0,
+              )
             ],
           ),
           SettingsTileGroup(

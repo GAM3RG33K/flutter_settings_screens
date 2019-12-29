@@ -223,12 +223,12 @@ class _ModalSettingsTile extends StatefulWidget {
   final String title;
   final String subtitle;
   final bool enabled;
-  final Widget child;
+  final List<Widget> children;
 
   _ModalSettingsTile({
     @required this.title,
     this.subtitle = '',
-    this.child,
+    this.children,
     this.enabled = true,
   });
 
@@ -249,22 +249,22 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
         title: Text(widget.title),
         subtitle: Text(widget.subtitle),
         enabled: widget.enabled,
-        onTap: widget.enabled ? () => _showWidget(context, widget.child) : null,
+        onTap:
+        widget.enabled ? () => _showWidget(context, widget.children) : null,
         dense: true,
       ),
     );
   }
 
-  void _showWidget(BuildContext context, Widget child) {
-    Widget dialogContent = child;
-
+  void _showWidget(BuildContext context, List<Widget> children) {
     showDialog(
         context: context,
         builder: (dialogContext) {
-          return AlertDialog(
-            title: Text(widget.title),
+          return SimpleDialog(
+            title: Center(child: Text(widget.title)),
+            titlePadding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 2.0),
             elevation: 1.0,
-            content: dialogContent,
+            children: children,
             contentPadding: EdgeInsets.zero,
           );
         });
@@ -379,10 +379,7 @@ class SimpleModalSettingsTile extends StatelessWidget {
       title: title,
       subtitle: subtitle,
       enabled: enabled,
-      child: SettingsContainer(
-        scrollable: true,
-        children: children,
-      ),
+      children: children,
     );
   }
 }
@@ -661,19 +658,23 @@ class _SettingsDropDown<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<T>(
-      isDense: true,
-      value: this.selected,
-      onChanged: onChanged,
-      underline: Container(),
-      items: values.map<DropdownMenuItem<T>>(
+    return Wrap(
+      children: <Widget>[
+        DropdownButton<T>(
+          isDense: true,
+          value: this.selected,
+          onChanged: onChanged,
+          underline: Container(),
+          items: values.map<DropdownMenuItem<T>>(
             (T val) {
-          return DropdownMenuItem<T>(
-            child: child(val),
-            value: val,
-          );
-        },
-      ).toList(),
+              return DropdownMenuItem<T>(
+                child: child(val),
+                value: val,
+              );
+            },
+          ).toList(),
+        ),
+      ],
     );
   }
 }
@@ -1205,9 +1206,6 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
   }
 }
 
-//TODO(hjoshi) Add A common Widget like [_SettingsTile] for Modal Dialog Display
-// of the provided widgets ans Make Modal versions of all the compatible from above widgets.
-
 class RadioModalSettingsTile<T> extends StatefulWidget {
   final String settingKey;
   final T selected;
@@ -1254,7 +1252,7 @@ class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
       defaultValue: selectedValue,
       builder: (BuildContext convtext, T value, OnChangeCallBack<T> onChange) {
         return _ModalSettingsTile(
-          child: _buildRadioTiles(context, value, onChange),
+          children: <Widget>[_buildRadioTiles(context, value, onChange)],
           title: widget.title,
           subtitle: widget.values[selectedValue],
         );
@@ -1339,18 +1337,20 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
             _ModalSettingsTile(
               title: widget.title,
               subtitle: value.toString(),
-              child: _SettingsSlider(
-                onChanged: widget.enabled
-                    ? (double newValue) =>
-                    _handleSliderChanged(newValue, onChange)
-                    : null,
-                enabled: widget.enabled,
-                value: value,
-                max: widget.max,
-                min: widget.min,
-                step: widget.step,
-                label: value.toString(),
-              ),
+              children: <Widget>[
+                _SettingsSlider(
+                  onChanged: widget.enabled
+                      ? (double newValue) =>
+                      _handleSliderChanged(newValue, onChange)
+                      : null,
+                  enabled: widget.enabled,
+                  value: value,
+                  max: widget.max,
+                  min: widget.min,
+                  step: widget.step,
+                  label: value.toString(),
+                )
+              ],
             ),
           ],
         );
