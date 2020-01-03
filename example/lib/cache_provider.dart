@@ -158,24 +158,19 @@ class SharePreferenceCache extends CacheProvider {
 
   @override
   void setObject<T>(String key, T value) {
-    debugPrint('setObject(): key: $key value: $value');
     if (value is int) {
-      debugPrint('value is int');
       _preferences.setInt(key, value);
       return;
     }
     if (value is double) {
-      debugPrint('value is double');
       _preferences.setDouble(key, value);
       return;
     }
     if (value is bool) {
-      debugPrint('value is bool');
       _preferences.setBool(key, value);
       return;
     }
     if (value is String) {
-      debugPrint('value is String');
       _preferences.setString(key, value);
       return;
     }

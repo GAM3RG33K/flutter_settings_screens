@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'cache_provider.dart';
 
-typedef WidgetBuilder<T> = Widget Function(
-    BuildContext, T, InternalChangeCallBack<T>);
+typedef InternalWidgetBuilder<T> = Widget Function(
+    BuildContext, T, ValueChanged<T>);
 
 typedef SimpleWidgetBuilder<T> = Widget Function(T);
 
-typedef InternalChangeCallBack<T> = void Function(T);
-typedef OnChange<T> = void Function(T);
+typedef OnChanged<T> = void Function(T);
 
 class Settings {
   static final Settings _instance = Settings._internal();
@@ -72,12 +71,8 @@ class ValueChangeNotifier<T> extends ValueNotifier<T> {
 
   @override
   void notifyListeners() {
-    debugPrint('\n===============================================\n');
 //    debugPrint('Notifying listeners: for'
 //        '\n new value: $value \n\n${StackTrace.current}');
-    debugPrint('Notifying listeners: new value: $value');
-    debugPrint('CurrentStatus : $_notifiers');
-    debugPrint('\n===============================================\n');
     super.notifyListeners();
   }
 
@@ -87,20 +82,19 @@ class ValueChangeNotifier<T> extends ValueNotifier<T> {
   }
 }
 
-Map<String, ValueChangeNotifier> _notifiers =
-Map<String, ValueChangeNotifier>();
+Map<String, List<ValueChangeNotifier>> _notifiers =
+Map<String, List<ValueChangeNotifier>>();
 
 class CacheChangeObserver<T> extends StatefulWidget {
   final String cacheKey;
   final T defaultValue;
-  final WidgetBuilder<T> builder;
+  final InternalWidgetBuilder<T> builder;
 
   const CacheChangeObserver({
-    Key key,
     @required this.cacheKey,
     @required this.defaultValue,
     @required this.builder,
-  }) : super(key: key);
+  });
 
   @override
   _CacheChangeObserverState<T> createState() => _CacheChangeObserverState<T>();
@@ -113,10 +107,7 @@ class _CacheChangeObserverState<T> extends State<CacheChangeObserver<T>> {
 
   T get defaultValue => widget.defaultValue;
 
-  WidgetBuilder<T> get builder => widget.builder;
-
-  ValueChangeNotifier<T> get notifier =>
-      _notifiers[cacheKey] as ValueChangeNotifier<T>;
+  ValueChangeNotifier<T> notifier;
 
   @override
   void initState() {
@@ -125,23 +116,26 @@ class _CacheChangeObserverState<T> extends State<CacheChangeObserver<T>> {
       Settings.setValue<T>(cacheKey, defaultValue);
     }
     value = Settings.getValue<T>(cacheKey, defaultValue);
-    ValueChangeNotifier<T> notifier = ValueChangeNotifier<T>(value, cacheKey);
-    _notifiers[cacheKey] = notifier;
+    notifier = ValueChangeNotifier<T>(value, cacheKey);
+    if (!_notifiers.containsKey(cacheKey)) {
+      _notifiers[cacheKey] = List<ValueChangeNotifier<T>>();
+    }
+    _notifiers[cacheKey].add(notifier);
   }
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('creating ValueChangeNotifier for:'
-        '\n  key: $cacheKey and value: $value');
     return ValueListenableBuilder<T>(
       valueListenable: notifier,
       builder: (BuildContext context, T value, Widget child) {
-        return builder(context, value, onChange);
+        return widget.builder(context, value, onChange);
       },
     );
   }
 
   void onChange(T newValue) {
-    notifier.value = newValue;
+    _notifiers[cacheKey].forEach((notifier) {
+      notifier.value = newValue;
+    });
   }
 }
