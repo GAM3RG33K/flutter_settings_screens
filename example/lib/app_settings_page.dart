@@ -92,6 +92,32 @@ class _AppSettingsState extends State<AppSettings> {
                   ],
                 ),
               ),
+              TextInputSettingsTile(
+                title: 'User Name',
+                settingKey: 'key-user-name',
+                initialValue: 'admin',
+                validator: (String username) {
+                  if (username != null && username.length > 3) {
+                    return null;
+                  }
+                  return "User Name can't be smaller than 6 letters";
+                },
+                borderColor: Colors.blueAccent,
+                errorColor: Colors.deepOrangeAccent,
+              ),
+              TextInputSettingsTile(
+                title: 'password',
+                settingKey: 'key-user-password',
+                obscureText: true,
+                validator: (String password) {
+                  if (password != null && password.length > 6) {
+                    return null;
+                  }
+                  return "Password can't be smaller than 6 letters";
+                },
+                borderColor: Colors.blueAccent,
+                errorColor: Colors.deepOrangeAccent,
+              ),
               SimpleModalSettingsTile(
                 title: 'Quick setting dialog',
                 subtitle: 'Settings on a dialog',

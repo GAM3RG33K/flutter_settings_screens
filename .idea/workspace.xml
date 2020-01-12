@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a712b089-3e51-4298-8fb2-0324a1f9bfd0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/app_settings_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/app_settings_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/cache_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/cache_provider.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/settings.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/settings.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/settings_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/settings_screen.dart" afterDir="false" />
     </list>
@@ -30,11 +28,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="192.168.1.248:5050" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/example/lib/app_settings_page.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="236">
-              <caret line="315" selection-start-line="315" selection-end-line="315" />
+            <state relative-caret-position="104">
+              <caret line="94" column="27" selection-start-line="94" selection-start-column="27" selection-end-line="94" selection-end-column="27" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -42,11 +40,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/src/settings_screen.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="462">
-              <caret line="1542" column="41" selection-start-line="1542" selection-start-column="41" selection-end-line="1542" selection-end-column="41" />
+            <state relative-caret-position="170">
+              <caret line="883" column="36" selection-start-line="883" selection-start-column="36" selection-end-line="883" selection-end-column="36" />
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -57,8 +55,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/src/settings.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="83">
-              <caret line="122" column="60" lean-forward="true" selection-start-line="122" selection-start-column="60" selection-end-line="122" selection-end-column="60" />
+            <state relative-caret-position="189">
+              <caret line="141" column="3" selection-start-line="141" selection-start-column="3" selection-end-line="141" selection-end-column="3" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -77,7 +75,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>_SettingsTile</find>
       <find>Modal</find>
       <find>onChangeCustom</find>
       <find>leadin</find>
@@ -107,6 +104,7 @@
       <find>CurrentStatus :</find>
       <find>_onCheckboxChange:</find>
       <find>TODO</find>
+      <find>validator</find>
     </findStrings>
     <replaceStrings>
       <replace>Widgetbuilder</replace>
@@ -147,11 +145,11 @@
         <option value="$PROJECT_DIR$/lib/src/cache_provider.dart" />
         <option value="$PROJECT_DIR$/lib/src/utils/utils.dart" />
         <option value="$PROJECT_DIR$/example/lib/main.dart" />
-        <option value="$PROJECT_DIR$/example/lib/app_settings_page.dart" />
         <option value="$PROJECT_DIR$/example/lib/cache_provider.dart" />
-        <option value="$PROJECT_DIR$/lib/src/settings.dart" />
         <option value="$PROJECT_DIR$/example/android/app/build.gradle" />
+        <option value="$PROJECT_DIR$/example/lib/app_settings_page.dart" />
         <option value="$PROJECT_DIR$/lib/src/settings_screen.dart" />
+        <option value="$PROJECT_DIR$/lib/src/settings.dart" />
       </list>
     </option>
   </component>
@@ -166,63 +164,13 @@
     <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
+    <navigator currentView="Scope" currentSubView="Scope 'Changed Files'; set:Changed Files; ALL; class com.intellij.packageDependencies.ChangeListScope" proportions="" version="1">
       <flattenPackages ProjectPane="false" />
       <hideEmptyPackages ProjectPane="false" />
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Scope 'Changed Files'; set:Changed Files; ALL; class com.intellij.packageDependencies.ChangeListScope">
-          <expand>
-            <path>
-              <item name="flutter_settings_screens" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="D:\Development\Projects\Flutter\flutter_settings_screens" type="442cc68d:ScopeViewTreeModel$RootNode" />
-            </path>
-            <path>
-              <item name="flutter_settings_screens" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="D:\Development\Projects\Flutter\flutter_settings_screens" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="android" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="flutter_settings_screens" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="D:\Development\Projects\Flutter\flutter_settings_screens" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="android" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="gradle" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="flutter_settings_screens" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="D:\Development\Projects\Flutter\flutter_settings_screens" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="android" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="gradle" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="wrapper" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="flutter_settings_screens" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="D:\Development\Projects\Flutter\flutter_settings_screens" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="example" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="flutter_settings_screens" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="D:\Development\Projects\Flutter\flutter_settings_screens" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="example" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="lib" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="flutter_settings_screens" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="D:\Development\Projects\Flutter\flutter_settings_screens" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="lib" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="flutter_settings_screens" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="D:\Development\Projects\Flutter\flutter_settings_screens" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="lib" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="PackagesPane" />
       <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
@@ -309,7 +257,39 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="Scope">
+        <subPane subId="Scope 'Changed Files'; set:Changed Files; ALL; class com.intellij.packageDependencies.ChangeListScope">
+          <expand>
+            <path>
+              <item name="flutter_settings_screens" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="D:\Development\Projects\Flutter\flutter_settings_screens" type="442cc68d:ScopeViewTreeModel$RootNode" />
+            </path>
+            <path>
+              <item name="flutter_settings_screens" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="D:\Development\Projects\Flutter\flutter_settings_screens" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="example" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="flutter_settings_screens" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="D:\Development\Projects\Flutter\flutter_settings_screens" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="example" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="lib" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="flutter_settings_screens" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="D:\Development\Projects\Flutter\flutter_settings_screens" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="lib" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="flutter_settings_screens" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="D:\Development\Projects\Flutter\flutter_settings_screens" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="lib" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -434,7 +414,14 @@
       <option name="project" value="LOCAL" />
       <updated>1577636189127</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Changes:&#10; • check/test the code for custom onChange callbacks on each setting.&#10; &#10;TODO: &#10; • need to add TextField settings">
+      <created>1578071270925</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1578071270925</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TodoView">
@@ -450,7 +437,7 @@
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24962178" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24281392" />
       <window_info id="Captures" order="1" side_tool="true" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
@@ -460,7 +447,7 @@
       <window_info id="Capture Tool" order="7" />
       <window_info id="Favorites" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Dart Analysis" order="0" weight="0.3293718" />
-      <window_info anchor="bottom" id="Run" order="1" weight="0.4057725" />
+      <window_info anchor="bottom" id="Run" order="1" visible="true" weight="0.4057725" />
       <window_info anchor="bottom" id="TODO" order="2" weight="0.3293718" />
       <window_info anchor="bottom" id="Android Profiler" order="3" show_stripe_button="false" />
       <window_info anchor="bottom" id="Logcat" order="4" weight="0.7809847" />
@@ -566,7 +553,8 @@
     <MESSAGE value="Complete Makeover:&#10; • Improve Example to show case most of common settings&#10; • Update Modal Setting layouts" />
     <MESSAGE value="Changes:&#10; • Improve Example to show case most recognizable settings" />
     <MESSAGE value="Changes:&#10; • Added additional function in Switch and CheckBox settings tile&#10;  - Now both supports showing additional widgets provided as `childrenIfEnabled`&#10;    These widgets will be shown only when the Main widget state is checked/enabled" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changes:&#10; • Added additional function in Switch and CheckBox settings tile&#10;  - Now both supports showing additional widgets provided as `childrenIfEnabled`&#10;    These widgets will be shown only when the Main widget state is checked/enabled" />
+    <MESSAGE value="Changes:&#10; • check/test the code for custom onChange callbacks on each setting.&#10; &#10;TODO: &#10; • need to add TextField settings" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changes:&#10; • check/test the code for custom onChange callbacks on each setting.&#10; &#10;TODO: &#10; • need to add TextField settings" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -587,38 +575,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/example/test/widget_test.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/flutter_settings_screens_test.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="9" lean-forward="true" selection-end-line="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CHANGELOG.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="22" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/flutter_settings_screens.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="16" column="67" selection-start-line="16" selection-start-column="67" selection-end-line="16" selection-end-column="67" />
-          <folding>
-            <element signature="e#0#586#0" expanded="true" />
-            <element signature="e#391#457#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../../FlutterSDK/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_colorpicker-0.2.6/lib/flutter_colorpicker.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -749,13 +705,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="188">
           <caret line="26" column="6" selection-start-line="26" selection-start-column="6" selection-end-line="26" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../FlutterSDK/flutter/packages/flutter/lib/src/widgets/text.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="86">
-          <caret line="285" column="9" selection-start-line="285" selection-start-column="9" selection-end-line="285" selection-end-column="9" />
         </state>
       </provider>
     </entry>
@@ -920,32 +869,81 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/example/lib/app_settings_page.dart">
+    <entry file="file://$PROJECT_DIR$/../../../FlutterSDK/flutter/packages/flutter/lib/src/material/text_form_field.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="236">
-          <caret line="315" selection-start-line="315" selection-end-line="315" />
+        <state relative-caret-position="188">
+          <caret line="98" column="9" selection-start-line="98" selection-start-column="9" selection-end-line="98" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../FlutterSDK/flutter/packages/flutter/lib/src/painting/borders.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="64" column="8" selection-start-line="64" selection-start-column="8" selection-end-line="64" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../FlutterSDK/flutter/packages/flutter/lib/src/material/input_decorator.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="2522" column="18" selection-start-line="2522" selection-start-column="18" selection-end-line="2522" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../FlutterSDK/flutter/packages/flutter/lib/src/widgets/form.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="242" column="8" selection-start-line="242" selection-start-column="8" selection-end-line="242" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../FlutterSDK/flutter/packages/flutter/lib/src/widgets/text.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="284" column="9" selection-start-line="284" selection-start-column="9" selection-end-line="284" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../FlutterSDK/flutter/packages/flutter/lib/src/services/text_input.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="608" selection-start-line="608" selection-end-line="608" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../FlutterSDK/flutter/packages/flutter/lib/src/widgets/editable_text.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="146" column="4" selection-start-line="146" selection-start-column="4" selection-end-line="146" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/settings_screen.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="883" column="36" selection-start-line="883" selection-start-column="36" selection-end-line="883" selection-end-column="36" />
           <folding>
-            <element signature="e#0#39#0" expanded="true" />
+            <element signature="e#0#40#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/src/settings.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="83">
-          <caret line="122" column="60" lean-forward="true" selection-start-line="122" selection-start-column="60" selection-end-line="122" selection-end-column="60" />
+        <state relative-caret-position="189">
+          <caret line="141" column="3" selection-start-line="141" selection-start-column="3" selection-end-line="141" selection-end-column="3" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/settings_screen.dart">
+    <entry file="file://$PROJECT_DIR$/example/lib/app_settings_page.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
-          <caret line="1542" column="41" selection-start-line="1542" selection-start-column="41" selection-end-line="1542" selection-end-column="41" />
+        <state relative-caret-position="104">
+          <caret line="94" column="27" selection-start-line="94" selection-start-column="27" selection-end-line="94" selection-end-column="27" />
           <folding>
-            <element signature="e#0#40#0" expanded="true" />
+            <element signature="e#0#39#0" expanded="true" />
           </folding>
         </state>
       </provider>

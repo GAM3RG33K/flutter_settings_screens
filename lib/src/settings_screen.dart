@@ -220,6 +220,9 @@ class _ModalSettingsTile extends StatefulWidget {
   final bool enabled;
   final Widget leading;
   final List<Widget> children;
+  final bool showConfirmation;
+  final GestureTapCallback onCancel;
+  final GestureTapCallback onConfirm;
 
   _ModalSettingsTile({
     @required this.title,
@@ -227,6 +230,9 @@ class _ModalSettingsTile extends StatefulWidget {
     this.children,
     this.enabled = true,
     this.leading,
+    this.showConfirmation = false,
+    this.onCancel,
+    this.onConfirm,
   });
 
   @override
@@ -262,10 +268,18 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
             title: Center(child: getTitle()),
             titlePadding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 2.0),
             elevation: 1.0,
-            children: children,
+            children: _finalWidgets(dialogContext, children),
             contentPadding: EdgeInsets.zero,
           );
         });
+  }
+
+  List<Widget> _finalWidgets(BuildContext dialogContext,
+      List<Widget> children) {
+    if (widget.showConfirmation == null || !widget.showConfirmation) {
+      return children;
+    }
+    return _addActionWidgets(dialogContext, children);
   }
 
   Widget getTitle() {
@@ -277,6 +291,41 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
       ],
     )
         : Text(widget.title);
+  }
+
+  List<Widget> _addActionWidgets(BuildContext dialogContext,
+      List<Widget> children) {
+    final finalList = List<Widget>.from(children);
+    finalList.add(Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        FlatButton(
+          padding: EdgeInsets.zero,
+          child: Text('Cancel'),
+          onPressed: () {
+            if (widget.onCancel != null) {
+              widget.onCancel();
+            }
+            _disposeDialog(dialogContext);
+          },
+        ),
+        FlatButton(
+          child: Text('OK'),
+          padding: EdgeInsets.zero,
+          onPressed: () {
+            if (widget.onConfirm != null) {
+              widget.onConfirm();
+            }
+            _disposeDialog(dialogContext);
+          },
+        )
+      ],
+    ));
+    return finalList;
+  }
+
+  void _disposeDialog(BuildContext dialogContext) {
+    Navigator.of(dialogContext).pop();
   }
 }
 
@@ -769,6 +818,128 @@ class _SettingsColorPicker extends StatelessWidget {
             content: dialogContent,
           );
         });
+  }
+}
+
+class TextInputSettingsTile extends StatefulWidget {
+  final String settingKey;
+  final String initialValue;
+  final String title;
+  final bool enabled;
+  final OnChanged<String> onChange;
+  final FormFieldValidator<String> validator;
+  final bool obscureText;
+  final Color borderColor;
+  final Color errorColor;
+
+  TextInputSettingsTile({
+    @required this.title,
+    @required this.settingKey,
+    this.initialValue = '',
+    this.enabled = true,
+    this.onChange,
+    this.validator,
+    this.obscureText = false,
+    this.borderColor,
+    this.errorColor,
+  });
+
+  @override
+  _TextInputSettingsTileState createState() => _TextInputSettingsTileState();
+}
+
+class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
+//  String currentValue;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CacheChangeObserver<String>(
+      cacheKey: widget.settingKey,
+      defaultValue: widget.initialValue,
+      builder:
+          (BuildContext context, String value, OnChanged<String> onChanged) {
+        _controller.text = value;
+        return _ModalSettingsTile(
+          title: widget.title,
+          subtitle: widget.obscureText ? '' : value,
+          children: <Widget>[
+            _buildTextField(context, value, onChanged),
+          ],
+          showConfirmation: true,
+          onConfirm: () {
+            _submitText(_controller.text);
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildTextField(BuildContext context, String value,
+      OnChanged<String> onChanged) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Form(
+        key: _formKey,
+        child: TextFormField(
+          controller: _controller,
+          enabled: widget.enabled,
+          validator: widget.enabled ? widget.validator : null,
+          onSaved: widget.enabled ? (value) => _onSave(value, onChanged) : null,
+          obscureText: widget.obscureText,
+          decoration: InputDecoration(
+              errorStyle: TextStyle(
+                color: widget.errorColor ?? Colors.red,
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5.0),
+                ),
+                borderSide: BorderSide(color: widget.errorColor ?? Colors.red),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5.0),
+                ),
+                borderSide:
+                BorderSide(color: widget.borderColor ?? Colors.blue),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5.0),
+                ),
+                borderSide:
+                BorderSide(color: widget.borderColor ?? Colors.blue),
+              )),
+        ),
+      ),
+    );
+  }
+
+  void _submitText(String newValue) {
+    bool isValid = true;
+    final state = _formKey.currentState;
+    if (state != null) {
+      isValid = state.validate() ?? false;
+    }
+
+    if (isValid) {
+      state.save();
+    }
+  }
+
+  void _onSave(String newValue, OnChanged<String> onChanged) {
+    onChanged(newValue);
+    if (widget.onChange != null) {
+      widget.onChange(newValue);
+    }
   }
 }
 
@@ -1539,6 +1710,5 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
     });
     return valueMap;
   }
-
-// TODO(hjoshi): add TextField Settings
 }
+// TODO(hjoshi): add TextField Settings
