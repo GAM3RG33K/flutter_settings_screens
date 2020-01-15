@@ -890,6 +890,7 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
         key: _formKey,
         child: TextFormField(
           controller: _controller,
+          autovalidate: true,
           enabled: widget.enabled,
           validator: widget.enabled ? widget.validator : null,
           onSaved: widget.enabled ? (value) => _onSave(value, onChanged) : null,
@@ -936,10 +937,12 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
   }
 
   void _onSave(String newValue, OnChanged<String> onChanged) {
-    onChanged(newValue);
-    if (widget.onChange != null) {
-      widget.onChange(newValue);
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      onChanged(newValue);
+      if (widget.onChange != null) {
+        widget.onChange(newValue);
+      }
+    });
   }
 }
 

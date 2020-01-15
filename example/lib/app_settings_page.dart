@@ -100,7 +100,7 @@ class _AppSettingsState extends State<AppSettings> {
                   if (username != null && username.length > 3) {
                     return null;
                   }
-                  return "User Name can't be smaller than 6 letters";
+                  return "User Name can't be smaller than 4 letters";
                 },
                 borderColor: Colors.blueAccent,
                 errorColor: Colors.deepOrangeAccent,
@@ -113,7 +113,7 @@ class _AppSettingsState extends State<AppSettings> {
                   if (password != null && password.length > 6) {
                     return null;
                   }
-                  return "Password can't be smaller than 6 letters";
+                  return "Password can't be smaller than 7 letters";
                 },
                 borderColor: Colors.blueAccent,
                 errorColor: Colors.deepOrangeAccent,
