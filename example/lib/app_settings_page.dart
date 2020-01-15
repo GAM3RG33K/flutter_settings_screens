@@ -13,7 +13,7 @@ class _AppSettingsState extends State<AppSettings> {
       child: SettingsScreen(
         title: "Application Settings",
         children: [
-          SettingsTileGroup(
+          SettingsGroup(
             title: 'Single Choice Settings',
             children: <Widget>[
               SwitchSettingsTile(
@@ -118,7 +118,7 @@ class _AppSettingsState extends State<AppSettings> {
                 borderColor: Colors.blueAccent,
                 errorColor: Colors.deepOrangeAccent,
               ),
-              SimpleModalSettingsTile(
+              ModalSettingsTile(
                 title: 'Quick setting dialog',
                 subtitle: 'Settings on a dialog',
                 children: <Widget>[
@@ -144,7 +144,7 @@ class _AppSettingsState extends State<AppSettings> {
                   ),
                 ],
               ),
-              SimpleExpandableSettingsTile(
+              ExpandableSettingsTile(
                 title: 'Quick setting 2',
                 subtitle: 'Expandable Settings',
                 children: <Widget>[
@@ -172,7 +172,7 @@ class _AppSettingsState extends State<AppSettings> {
               ),
             ],
           ),
-          SettingsTileGroup(
+          SettingsGroup(
             title: 'Multiple choice settings',
             children: <Widget>[
               RadioSettingsTile<int>(
@@ -207,7 +207,7 @@ class _AppSettingsState extends State<AppSettings> {
               ),
             ],
           ),
-          SimpleModalSettingsTile(
+          ModalSettingsTile(
             title: 'Group Settings',
             subtitle: 'Same group settings but in a dialog',
             children: <Widget>[
@@ -245,7 +245,7 @@ class _AppSettingsState extends State<AppSettings> {
               )
             ],
           ),
-          SimpleExpandableSettingsTile(
+          ExpandableSettingsTile(
             title: 'Expandable Group Settings',
             subtitle: 'Group of settings (expandable)',
             children: <Widget>[
@@ -283,7 +283,7 @@ class _AppSettingsState extends State<AppSettings> {
               )
             ],
           ),
-          SettingsTileGroup(
+          SettingsGroup(
             title: 'Other settings',
             children: <Widget>[
               SliderSettingsTile(
@@ -308,7 +308,7 @@ class _AppSettingsState extends State<AppSettings> {
               )
             ],
           ),
-          SimpleModalSettingsTile(
+          ModalSettingsTile(
             title: 'Other settings',
             subtitle: 'Other Settings in a Dialog',
             children: <Widget>[

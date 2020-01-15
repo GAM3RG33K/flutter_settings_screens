@@ -10,44 +10,75 @@ import 'settings.dart';
 /// [SettingsScreen] is a simple Screen widget that may contain Tiles or other
 /// widgets.
 ///
-///
-/// * Parameters:
-///
-/// title (required) - Appbar title in Scaffold.
-/// children (required) - Content of the screen, body of the Scaffold.
-/// confirmText - If not null, a confirmation dialog will appear with this
-///   text by opening the screen.
-/// confirmModalTitle - Title of the confirmation dialog. Default: Confirmation.
-/// confirmModalCancelCaption - Caption of the cancel button in the confirmation
-///   dialog. Default: Cancel.
-/// confirmModalConfirmCaption - Caption of the confirm button in the
-///   confirmation dialog. Default: Confirm.
-///
-///
-/// * Examples:
-///
-/// 1) The following example shows how you can create an empty settings screen
-/// with a title.
-/// SettingsScreen(
-///   title: 'Application Settings',
-///   children: <Widget>[],
-/// );
-///
-/// 2) Inside the parameter called children you can define settings tiles and
-/// other widgets. In this example we create a screen with a simple
-/// [CheckboxSettingsTile] in it.
+/// * Example:
+/// ```dart
 /// SettingsScreen(
 ///   title: 'Application Settings',
 ///   children: <Widget>[
-///     CheckboxSettingsTile(
-///       settingsKey: 'key-of-your-setting',
-///       title: 'This is a simple Checkbox',
-///     ),
+///     SettingsTileGroup(
+///            title: 'Single Choice Settings',
+///            children: <Widget>[
+///              SwitchSettingsTile(
+///                settingKey: 'key-wifi',
+///                title: 'Wi-Fi',
+///                enabledLabel: 'Enabled',
+///                disabledLabel: 'Disabled',
+///                leading: Icon(Icons.wifi),
+///                onChange: (value) {
+///                  debugPrint('key-wifi: $value');
+///                },
+///              ),
+///              CheckboxSettingsTile(
+///                settingKey: 'key-blue-tooth',
+///                title: 'Bluetooth',
+///                enabledLabel: 'Enabled',
+///                disabledLabel: 'Disabled',
+///                leading: Icon(Icons.bluetooth),
+///                onChange: (value) {
+///                  debugPrint('key-blue-tooth: $value');
+///                },
+///              ),
+///              SwitchSettingsTile(
+///                leading: Icon(Icons.developer_mode),
+///                settingKey: 'key-switch-dev-mode',
+///                title: 'Developer Settings',
+///                onChange: (value) {
+///                  debugPrint('key-switch-dev-mod: $value');
+///                },
+///                childrenIfEnabled: <Widget>[
+///                  CheckboxSettingsTile(
+///                    leading: Icon(Icons.adb),
+///                    settingKey: 'key-is-developer',
+///                    title: 'Developer Mode',
+///                    onChange: (value) {
+///                      debugPrint('key-is-developer: $value');
+///                    },
+///                  ),
+///                  SwitchSettingsTile(
+///                    leading: Icon(Icons.usb),
+///                    settingKey: 'key-is-usb-debugging',
+///                    title: 'USB Debugging',
+///                    onChange: (value) {
+///                      debugPrint('key-is-usb-debugging: $value');
+///                    },
+///                  ),
+///                  SimpleSettingsTile(
+///                    title: 'Root Settings',
+///                    subtitle: 'These settings is not accessible',
+///                    enabled: false,
+///                  ),
+///               ],
+///             ),
+///          ],
+///       ),
 ///   ],
 /// );
-///
+/// ```
 class SettingsScreen extends StatelessWidget {
+  /// Appbar title in Scaffold.
   final String title;
+
+  /// Content of the screen, body of the Scaffold.
   final List<Widget> children;
 
   SettingsScreen({
@@ -72,14 +103,30 @@ class SettingsScreen extends StatelessWidget {
   }
 }
 
+/// [_SettingsTile] is a Basic Building block for Any Settings widget.
+///
+/// This widget is container for any widget which is to be used for setting.
 class _SettingsTile extends StatefulWidget {
+  /// title string for the tile
   final String title;
+
+  /// widget to be placed at first in the tile
   final Widget leading;
+
+  /// subtitle string for the tile
   final String subtitle;
+
+  /// flag to represent if the tile is accessible or not, if false user input is ignored
   final bool enabled;
+
+  /// widget which is placed as the main element of the tile as settings UI
   final Widget child;
-  final Function onTap;
-  final bool childBelowTitle;
+
+  /// call back for handling the tap event on tile
+  final GestureTapCallback onTap;
+
+  /// flag to show the child below the main tile elements
+  final bool showChildBelow;
 
   _SettingsTile({
     @required this.title,
@@ -87,7 +134,7 @@ class _SettingsTile extends StatefulWidget {
     this.subtitle = '',
     this.onTap,
     this.enabled = true,
-    this.childBelowTitle = false,
+    this.showChildBelow = false,
     this.leading,
   });
 
@@ -114,13 +161,13 @@ class __SettingsTileState extends State<_SettingsTile> {
             enabled: widget.enabled,
             onTap: widget.enabled ? widget.onTap : null,
             trailing: Visibility(
-              visible: !widget.childBelowTitle,
+              visible: !widget.showChildBelow,
               child: widget.child,
             ),
             dense: true,
           ),
           Visibility(
-            visible: widget.childBelowTitle,
+            visible: widget.showChildBelow,
             child: widget.child,
           ),
           _SettingsTileDivider(),
@@ -130,9 +177,16 @@ class __SettingsTileState extends State<_SettingsTile> {
   }
 }
 
+/// [_SimpleHeaderTile] is a widget which is used to show Leading, Title and subtitle
+/// of a [_SettingsTile] without the main child widget
 class _SimpleHeaderTile extends StatefulWidget {
+  /// title string for the tile
   final String title;
+
+  /// subtitle string for the tile
   final String subtitle;
+
+  /// widget to be placed at first in the tile
   final Widget leading;
 
   const _SimpleHeaderTile({
@@ -159,6 +213,15 @@ class __SimpleHeaderTileState extends State<_SimpleHeaderTile> {
   }
 }
 
+/// [_ExpansionSettingsTile] is a special setting widget which has two states.
+///
+/// Collapsed State:
+///   In this state the settings tile would only show the Title,Subtitle and leading
+///   widget
+///
+/// Expanded State:
+///   In this state the settings tile would show all widgets in collapsed state,
+///   but also the children widgets.
 class _ExpansionSettingsTile extends StatefulWidget {
   final String title;
   final String subtitle;
@@ -214,6 +277,11 @@ class _ExpansionSettingsTileState extends State<_ExpansionSettingsTile> {
   }
 }
 
+///[_ModalSettingsTile] is a widget which shows the given child widget inside a
+/// dialog view.
+///
+/// This widget can be used to show a settings UI which is too big for a single
+///  tile in the SettingScreen UI or a Setting tile which needs to be shown separately.
 class _ModalSettingsTile extends StatefulWidget {
   final String title;
   final String subtitle;
@@ -329,6 +397,8 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
   }
 }
 
+/// [_SettingsTileDivider] is widget which is used as a Divide various settings
+/// tile in a list
 class _SettingsTileDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -338,36 +408,249 @@ class _SettingsTileDivider extends StatelessWidget {
   }
 }
 
+/// [_SettingsCheckbox] is a Settings UI version of the [Checkbox] widget.
+class _SettingsCheckbox extends StatelessWidget {
+  /// current state of the checkbox
+  final bool value;
+
+  /// on change callback to handle state change
+  final OnChanged<bool> onChanged;
+
+  /// flag which represents the state of the settings, if false the the tile will
+  /// ignore all the user inputs
+  final bool enabled;
+
+  _SettingsCheckbox({
+    @required this.value,
+    @required this.onChanged,
+    @required this.enabled,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Checkbox(
+      value: value,
+      onChanged: enabled ? onChanged : null,
+    );
+  }
+}
+
+/// [_SettingsSwitch] is a Settings UI version of the [Switch] widget
+class _SettingsSwitch extends StatelessWidget {
+  /// current state of the switch
+  final bool value;
+
+  /// on change callback to handle state change
+  final OnChanged<bool> onChanged;
+
+  /// flag which represents the state of the settings, if false the the tile will
+  /// ignore all the user inputs
+  final bool enabled;
+
+  _SettingsSwitch({
+    @required this.value,
+    @required this.onChanged,
+    @required this.enabled,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Switch(
+      value: value,
+      onChanged: enabled ? onChanged : null,
+    );
+  }
+}
+
+/// [_SettingsRadio] is a Settings UI version of the [Radio] widgets
+class _SettingsRadio<T> extends StatelessWidget {
+  /// value of the selected radio in this group
+  final T groupValue;
+
+  /// value of the current radio widget
+  final T value;
+
+  /// on change callback to handle state change
+  final OnChanged<T> onChanged;
+
+  /// flag which represents the state of the settings, if false the the tile will
+  /// ignore all the user inputs
+  final bool enabled;
+
+  _SettingsRadio({
+    @required this.groupValue,
+    @required this.value,
+    @required this.onChanged,
+    @required this.enabled,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Radio<T>(
+      groupValue: groupValue,
+      value: value,
+      onChanged: enabled ? onChanged : null,
+    );
+  }
+}
+
+/// [_SettingsDropDown] is a Settings UI version of the [DropdownButton]
+class _SettingsDropDown<T> extends StatelessWidget {
+  /// value of the selected in this dropdown
+  final T selected;
+
+  /// List of values for this dropdown
+  final List<T> values;
+
+  /// on change call back to handle selected value change
+  final OnChanged<T> onChanged;
+
+  /// single item builder for creating a [DropdownMenuItem]
+  final ItemBuilder<T> itemBuilder;
+
+  /// flag which represents the state of the settings, if false the the tile will
+  /// ignore all the user inputs
+  final bool enabled;
+
+  _SettingsDropDown({
+    @required this.selected,
+    @required this.values,
+    @required this.onChanged,
+    this.itemBuilder,
+    this.enabled = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      alignment: WrapAlignment.end,
+      children: <Widget>[
+        DropdownButton<T>(
+          isDense: true,
+          value: this.selected,
+          onChanged: onChanged,
+          underline: Container(),
+          items: values.map<DropdownMenuItem<T>>(
+                (T val) {
+              return DropdownMenuItem<T>(
+                child: itemBuilder(val),
+                value: val,
+              );
+            },
+          ).toList(),
+        ),
+      ],
+    );
+  }
+}
+
+/// [_SettingsSlider] is a Settings UI version of [Slider] widget
+class _SettingsSlider extends StatelessWidget {
+  /// min value allowed for the slider
+  final double min;
+
+  /// max value allowed for the slider
+  final double max;
+
+  /// step value for slider interval
+  final double step;
+
+  /// current value of the slider
+  final double value;
+
+  /// on change callback to handle the value change
+  final OnChanged<double> onChanged;
+
+  /// flag which represents the state of the settings, if false the the tile will
+  /// ignore all the user inputs
+  final bool enabled;
+
+  _SettingsSlider({
+    @required this.value,
+    @required this.min,
+    @required this.max,
+    @required this.step,
+    @required this.onChanged,
+    @required this.enabled,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Slider(
+      value: value,
+      min: min,
+      max: max,
+      divisions: (max - min) ~/ (step),
+      onChanged: enabled ? onChanged : null,
+    );
+  }
+}
+
+/// [_SettingsColorPicker] is a widget which allows picking colors
+/// from pallet of colors
+class _SettingsColorPicker extends StatelessWidget {
+  /// title of the settings tile and color pallet dialog
+  final String title;
+
+  /// current value of the slider
+  final String value;
+
+  /// on change callback to handle the value change
+  final OnChanged<String> onChanged;
+
+  /// flag which represents the state of the settings, if false the the tile will
+  /// ignore all the user inputs
+  final bool enabled;
+
+  _SettingsColorPicker({
+    @required this.value,
+    @required this.onChanged,
+    @required this.enabled,
+    @required this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _SettingsTile(
+      title: title,
+      subtitle: value,
+      enabled: enabled,
+      onTap: enabled ? () => _showColorPicker(context, value) : null,
+      child: FloatingActionButton(
+        backgroundColor: Utils.colorFromString(value),
+        elevation: 0,
+        onPressed: enabled ? () => _showColorPicker(context, value) : null,
+      ),
+    );
+  }
+
+  void _showColorPicker(BuildContext context, String value) {
+    Widget dialogContent = MaterialColorPicker(
+      shrinkWrap: true,
+      selectedColor: Utils.colorFromString(value),
+      onColorChange: (Color color) => onChanged(Utils.stringFromColor(color)),
+    );
+
+    showDialog(
+        context: context,
+        builder: (dialogContext) {
+          return AlertDialog(
+            title: Text('Pick a Color'),
+            content: dialogContent,
+          );
+        });
+  }
+}
+
 /// [SimpleSettingsTile] is a simple settings tile that can open a new screen
-/// by tapping it.
+/// by tapping the tile.
 ///
-///
-/// * Parameters:
-///
-/// title (required) - Title of the tile.
-/// subtitle - Subtitle of the tile.
-/// icon - Optional [Icon] on the left side.
-/// screen - A [SettingsScreen] or [SwitchSettingsTile] that will be opened
-///   by tapping the tile. If it is null, the tile will do nothing.
-/// visibleIfKey - If not null, the tile will only be visible if the value
-///   of the given settings key is true.
-///   See more in the documentation: Conditional Logic.
-/// enabledIfKey - If not null, the tile will only be enabled if the value
-///   of the given settings key is true.
-///   See more in the documentation: Conditional Logic.
-/// visibleByDefault - If visibleIfKey is not null and the value of the given
-///   key is not saved yet then this value will be the default value.
-///   Default: true.
-///
-///
-/// * Examples:
-///
-/// 1) The following example shows how you can create a SimpleSettingsTile that
-/// open a new Screen by tapping it.
+/// Example:
+/// ```dart
 /// SimpleSettingsTile(
 ///   title: 'Advanced',
 ///   subtitle: 'More, advanced settings.'
-///   screen: SomeSettingsScreen(
+///   screen: SettingsScreen(
 ///     title: 'Sub menu',
 ///     children: <Widget>[
 ///       CheckboxSettingsTile(
@@ -377,12 +660,23 @@ class _SettingsTileDivider extends StatelessWidget {
 ///     ],
 ///   ),
 /// );
+/// ```
 class SimpleSettingsTile extends StatelessWidget {
+  /// title string for the tile
   final String title;
+
+  /// subtitle string for the tile
   final String subtitle;
-  final SettingsScreen screen;
-  final bool enabled;
+
+  /// widget to be placed at first in the tile
   final Widget leading;
+
+  /// flag which represents the state of the settings, if false the the tile will
+  /// ignore all the user inputs
+  final bool enabled;
+
+  /// [SettingsScreen] which will be displayed on tap of the tile
+  final SettingsScreen screen;
 
   SimpleSettingsTile({
     @required this.title,
@@ -421,14 +715,52 @@ class SimpleSettingsTile extends StatelessWidget {
   }
 }
 
-class SimpleModalSettingsTile extends StatelessWidget {
+/// [ModalSettingsTile] is a widget which allows creating
+/// a setting which shows the [children] in a [_ModalSettingsTile]
+///
+/// Example:
+/// ```dart
+///  ModalSettingsTile(
+///    title: 'Quick setting dialog',
+///    subtitle: 'Settings on a dialog',
+///    children: <Widget>[
+///      CheckboxSettingsTile(
+///        settingKey: 'key-day-light-savings',
+///        title: 'Daylight Time Saving',
+///        enabledLabel: 'Enabled',
+///        disabledLabel: 'Disabled',
+///        leading: Icon(Icons.timelapse),
+///      ),
+///      SwitchSettingsTile(
+///        settingKey: 'key-dark-mode',
+///        title: 'Dark Mode',
+///        enabledLabel: 'Enabled',
+///        disabledLabel: 'Disabled',
+///        leading: Icon(Icons.palette),
+///      ),
+///    ],
+///  );
+///
+/// ```
+///
+class ModalSettingsTile extends StatelessWidget {
+  /// title string for the tile
   final String title;
+
+  /// subtitle string for the tile
   final String subtitle;
-  final List<Widget> children;
-  final bool enabled;
+
+  /// widget to be placed at first in the tile
   final Widget leading;
 
-  SimpleModalSettingsTile({
+  /// flag which represents the state of the settings, if false the the tile will
+  /// ignore all the user inputs
+  final bool enabled;
+
+  /// List of widgets which are to be shown in the modal dialog
+  final List<Widget> children;
+
+  ModalSettingsTile({
     @required this.title,
     this.subtitle = '',
     this.children,
@@ -448,15 +780,55 @@ class SimpleModalSettingsTile extends StatelessWidget {
   }
 }
 
-class SimpleExpandableSettingsTile extends StatelessWidget {
+/// [ExpandableSettingsTile] is wrapper widget which shows the
+/// given [children] in an [_ExpansionSettingsTile]
+///
+/// Example:
+/// ```dart
+///  ExpandableSettingsTile(
+///    title: 'Quick setting dialog2',
+///    subtitle: 'Expandable Settings',
+///    children: <Widget>[
+///      CheckboxSettingsTile(
+///        settingKey: 'key-day-light-savings',
+///        title: 'Daylight Time Saving',
+///        enabledLabel: 'Enabled',
+///        disabledLabel: 'Disabled',
+///        leading: Icon(Icons.timelapse),
+///      ),
+///      SwitchSettingsTile(
+///        settingKey: 'key-dark-mode',
+///        title: 'Dark Mode',
+///        enabledLabel: 'Enabled',
+///        disabledLabel: 'Disabled',
+///        leading: Icon(Icons.palette),
+///      ),
+///    ],
+///  );
+///
+/// ```
+class ExpandableSettingsTile extends StatelessWidget {
+  /// title string for the tile
   final String title;
+
+  /// subtitle string for the tile
   final String subtitle;
-  final List<Widget> children;
-  final bool enabled;
-  final bool expanded;
+
+  /// widget to be placed at first in the tile
   final Widget leading;
 
-  SimpleExpandableSettingsTile({
+  /// flag which represents the state of the settings, if false the the tile will
+  /// ignore all the user inputs
+  final bool enabled;
+
+  /// List of the widgets which are to be shown when tile is expanded
+  final List<Widget> children;
+
+  /// flag which represents the initial state of the tile, if true the tile state is
+  /// set to expanded initially
+  final bool expanded;
+
+  ExpandableSettingsTile({
     @required this.title,
     this.subtitle = '',
     this.children,
@@ -482,37 +854,23 @@ class SimpleExpandableSettingsTile extends StatelessWidget {
 /// [SettingsContainer] is a widget that helps its child or children to fit in
 /// the settings screen. It is helpful if you want to place other widgets than
 /// settings tiles in the settings screen body.
-///
-///
-/// * Parameters:
-///
-/// child - A [StatelessWidget] or a [StatefulWidget].
-/// children - A [List] of [StatelessWidget]s or [StatefulWidget]s.
-///   One of them must not be null.
-/// visibleIfKey - If not null, the tile will only be visible if the value
-///   of the given settings key is true.
-///   See more in the documentation: Conditional Logic.
-/// visibleByDefault - If visibleIfKey is not null and the value of the given
-///   key is not saved yet then this value will be the default value.
-///   Default: true.
-///
-/// * Examples:
-///
-/// 1) The following example shows you how you can create a container with one
-/// [Text] widget.
-/// SettingsContainer(
-/// 	child: Text('Hello world'),
-/// );
-///
-/// 2) In this example, we create a container with multiple [Text] widgets.
+/// Example:
+/// ```dart
 /// SettingsContainer(
 /// 	children: <Widget>[
 /// 		Text('First line'),
 /// 		Text('Second line'),
+///     Icon(Icons.palette),
 /// 	],
 /// );
+/// ```
 class SettingsContainer extends StatelessWidget {
+  /// List of widgets which will be shown as Custom list of setting tile
   final List<Widget> children;
+
+  /// flag to represent if this Container allows internal scrolling of the widgets
+  /// along with the outer settings screen/container,
+  /// if true, the list of widget inside are made scrollable
   final bool scrollable;
 
   SettingsContainer({
@@ -559,45 +917,46 @@ class SettingsContainer extends StatelessWidget {
   }
 }
 
-/// [SettingsTileGroup] is a widget that groups settings tiles and other
-/// widgets together with a group title.
+/// [SettingsGroup] is a widget that contains multiple settings tiles and other
+/// widgets together as a group and shows a title/name of that group.
 ///
+/// All the children widget will have a small padding from the left and top
+/// to provide a sense that they in a separate group from others
 ///
-/// * Parameters:
+///  Example:
 ///
-/// title (required) - Title of the group
-/// subtitle - Subtitle of the group. It can be used to share some information
-///   about the group.
-/// children (required) - Settings tiles or other widgets that are in the
-///   group.
-/// visibleIfKey - If not null, the group will only be visible if the value
-///   of the given settings key is true.
-///   See more in the documentation: Conditional Logic.
-/// visibleByDefault - If visibleIfKey is not null and the value of the given
-///   key is not saved yet then this value will be the default value.
-///   Default: true.
-///
-///
-/// * Examples:
-///
-/// 1) The following example shows how you can create a group with a simple
-/// [CheckboxSettingsTile].
+/// ```dart
 /// SettingsTileGroup(
-///   title: 'Group title',
-///   children: <Widget>[
-///     CheckboxSettingsTile(
-/// 		  settingKey: 'key-of-your-setting',
-/// 			title: 'This is a simple Checkbox',
-/// 		),
-/// 	],
-/// );
-///
-class SettingsTileGroup extends StatelessWidget {
+///    title: 'Group title',
+///    children: <Widget>[
+///       CheckboxSettingsTile(
+///         settingKey: 'key-day-light-savings',
+///         title: 'Daylight Time Saving',
+///         enabledLabel: 'Enabled',
+///         disabledLabel: 'Disabled',
+///         leading: Icon(Icons.timelapse),
+///       ),
+///       SwitchSettingsTile(
+///         settingKey: 'key-dark-mode',
+///         title: 'Dark Mode',
+///         enabledLabel: 'Enabled',
+///         disabledLabel: 'Disabled',
+///         leading: Icon(Icons.palette),
+///       ),
+///  	],
+///  );
+///```
+class SettingsGroup extends StatelessWidget {
+  /// title string for the tile
   final String title;
+
+  /// subtitle string for the tile
   final String subtitle;
+
+  /// List of the widgets which are to be shown under the title as a group
   final List<Widget> children;
 
-  SettingsTileGroup({
+  SettingsGroup({
     @required this.title,
     this.subtitle,
     @required this.children,
@@ -644,192 +1003,36 @@ class SettingsTileGroup extends StatelessWidget {
   }
 }
 
-class _SettingsCheckbox extends StatelessWidget {
-  final bool value;
-  final OnChanged<bool> onChanged;
-  final bool enabled;
-
-  _SettingsCheckbox({
-    @required this.value,
-    @required this.onChanged,
-    @required this.enabled,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Checkbox(
-      value: value,
-      onChanged: enabled ? onChanged : null,
-    );
-  }
-}
-
-class _SettingsSwitch extends StatelessWidget {
-  final bool value;
-  final OnChanged<bool> onChanged;
-  final bool enabled;
-
-  _SettingsSwitch({
-    @required this.value,
-    @required this.onChanged,
-    @required this.enabled,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Switch(
-      value: value,
-      onChanged: enabled ? onChanged : null,
-    );
-  }
-}
-
-class _SettingsRadio<T> extends StatelessWidget {
-  final T groupValue;
-  final T value;
-  final OnChanged<T> onChanged;
-  final bool enabled;
-
-  _SettingsRadio({
-    @required this.groupValue,
-    @required this.value,
-    @required this.onChanged,
-    @required this.enabled,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Radio<T>(
-      groupValue: groupValue,
-      value: value,
-      onChanged: enabled ? onChanged : null,
-    );
-  }
-}
-
-class _SettingsDropDown<T> extends StatelessWidget {
-  final T selected;
-  final List<T> values;
-  final OnChanged<T> onChanged;
-  final SimpleWidgetBuilder<T> child;
-  final bool enabled;
-
-  _SettingsDropDown({
-    @required this.selected,
-    @required this.values,
-    @required this.onChanged,
-    this.child,
-    this.enabled = true,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      alignment: WrapAlignment.end,
-      children: <Widget>[
-        DropdownButton<T>(
-          isDense: true,
-          value: this.selected,
-          onChanged: onChanged,
-          underline: Container(),
-          items: values.map<DropdownMenuItem<T>>(
-                (T val) {
-              return DropdownMenuItem<T>(
-                child: child(val),
-                value: val,
-              );
-            },
-          ).toList(),
-        ),
-      ],
-    );
-  }
-}
-
-class _SettingsSlider extends StatelessWidget {
-  final double value;
-  final double min;
-  final double max;
-  final double step;
-  final OnChanged<double> onChanged;
-  final bool enabled;
-
-  _SettingsSlider({
-    @required this.value,
-    @required this.min,
-    @required this.max,
-    @required this.step,
-    @required this.onChanged,
-    @required this.enabled,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Slider(
-      value: value,
-      min: min,
-      max: max,
-      divisions: (max - min) ~/ (step),
-      onChanged: enabled ? onChanged : null,
-    );
-  }
-}
-
-class _SettingsColorPicker extends StatelessWidget {
-  final String value;
-  final OnChanged<String> onChanged;
-  final bool enabled;
-  final String title;
-
-  _SettingsColorPicker({
-    @required this.value,
-    @required this.onChanged,
-    @required this.enabled,
-    @required this.title,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return _SettingsTile(
-      title: title,
-      subtitle: value,
-      enabled: enabled,
-      onTap: enabled ? () => _showColorPicker(context, value) : null,
-      child: FloatingActionButton(
-        backgroundColor: Utils.colorFromString(value),
-        elevation: 0,
-        onPressed: enabled ? () => _showColorPicker(context, value) : null,
-      ),
-    );
-  }
-
-  void _showColorPicker(BuildContext context, String value) {
-    Widget dialogContent = MaterialColorPicker(
-      shrinkWrap: true,
-      selectedColor: Utils.colorFromString(value),
-      onColorChange: (Color color) => onChanged(Utils.stringFromColor(color)),
-    );
-
-    showDialog(
-        context: context,
-        builder: (dialogContext) {
-          return AlertDialog(
-            title: Text('Pick a Color'),
-            content: dialogContent,
-          );
-        });
-  }
-}
-
+/// A Setting widget which allows user a text input in a [TextFormField]
 class TextInputSettingsTile extends StatefulWidget {
+
+  /// Settings Key string for storing the text in cache (assumed to be unique)
   final String settingKey;
+
+  /// initial value to be filled in the text field
   final String initialValue;
+
+  /// title for the settings tile
   final String title;
+
+  /// flag which represents the state of the settings, if false the the tile will
+  /// ignore all the user inputs
   final bool enabled;
+
+  /// on change callback for handling the value change
   final OnChanged<String> onChange;
+
+  /// validator for input validation
   final FormFieldValidator<String> validator;
+
+  /// flag which represents the state of obscureText in the [TextFormField]
   final bool obscureText;
+
+  /// Color of the border of the [TextFormField]
   final Color borderColor;
+
+  /// Color of the border of the [TextFormField], when there's an error
+  /// or input is not passed through the validation
   final Color errorColor;
 
   TextInputSettingsTile({
@@ -849,7 +1052,7 @@ class TextInputSettingsTile extends StatefulWidget {
 }
 
 class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
-//  String currentValue;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _controller;
 
@@ -861,7 +1064,7 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
 
   @override
   Widget build(BuildContext context) {
-    return CacheChangeObserver<String>(
+    return ValueChangeObserver<String>(
       cacheKey: widget.settingKey,
       defaultValue: widget.initialValue,
       builder:
@@ -946,68 +1149,7 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
   }
 }
 
-/// [SwitchSettingsTile] is a screen widget similar to [SettingsScreen], but
-/// additionally, it contains a built-in Checkbox at the beginning of its body.
-/// Therefore, it requires a settingKey to save its value.
-///
-///
-/// * Parameters:
-///
-/// title (required) - Appbar title in Scaffold.
-/// settingKey (required) - Key name for the checkbox value.
-/// children (required) - Content of the screen, body of the Scaffold.
-/// childrenIfOff - Content of the screen if the checkbox is off. If null,
-///   parameter 'children' will be used both cases.
-/// defaultValue - Default value of the checkbox. Default: false. Please note,
-///   until the user does not change the value, retrieving it via [Settings]
-///   will return null.
-/// subtitle - The title of the checkbox. Default: On.
-/// subtitleIfOff - The title of the checkbox if it is off. If null, parameter
-///   called 'subtitle' will be used both cases.
-/// confirmText - If not null, a confirmation dialog will appear with this
-///   text by enabling or disabling the checkbox.
-/// confirmTextToEnable - If not null, a confirmation dialog will appear with
-///   this text by enabling the checkbox. It overrides the behaviour of
-///   'confirmText'.
-/// confirmTextToDisable - If not null, a confirmation dialog will appear with
-///   this text by disabling the checkbox. It overrides the behaviour of
-///   'confirmText'.
-/// confirmModalTitle - Title of the confirmation dialog. Default: Confirmation.
-/// confirmModalCancelCaption - Caption of the cancel button in the confirmation
-///   dialog. Default: Cancel.
-/// confirmModalConfirmCaption - Caption of the confirm button in the
-///   confirmation dialog. Default: Confirm.
-///
-///
-/// * Examples:
-///
-/// 1) The following example shows how you can create an empty settings toggle
-/// screen with a title.
-/// SettingsToggleScreen(
-///   settingKey: 'key-of-your-setting',
-///   title: 'Title',
-///   children: <Widget>[],
-/// );
-///
-/// 2) In this example, we create a settings toggle screen using more
-/// parameters and with children widgets according to its state.
-/// SettingsToggleScreen(
-///   settingKey: 'key-of-your-setting',
-///   title: 'Title',
-///   defaultValue: true,
-///   subtitle: 'Enabled',
-///   subtitleIfOff: 'Disabled',
-///   children: <Widget>[
-///     SettingsContainer(
-///       child: Text('This is enabled! :)'),
-///     ),
-///   ],
-///   childrenIfOff: <Widget>[
-///     SettingsContainer(
-///       child: Text('Tap the checkbox to enable.'),
-///     ),
-///   ],
-/// );
+
 class SwitchSettingsTile extends StatelessWidget {
   final String settingKey;
   final bool defaultValue;
@@ -1033,7 +1175,7 @@ class SwitchSettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CacheChangeObserver<bool>(
+    return ValueChangeObserver<bool>(
       cacheKey: settingKey,
       defaultValue: defaultValue,
       builder: (BuildContext context, bool value, OnChanged<bool> onChanged) {
@@ -1121,7 +1263,7 @@ class CheckboxSettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CacheChangeObserver<bool>(
+    return ValueChangeObserver<bool>(
       cacheKey: settingKey,
       defaultValue: defaultValue,
       builder: (BuildContext context, bool value, OnChanged<bool> onChanged) {
@@ -1224,7 +1366,7 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return CacheChangeObserver<T>(
+    return ValueChangeObserver<T>(
       cacheKey: widget.settingKey,
       defaultValue: selectedValue,
       builder: (BuildContext context, T value, OnChanged<T> onChanged) {
@@ -1301,7 +1443,7 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return CacheChangeObserver<T>(
+    return ValueChangeObserver<T>(
       cacheKey: widget.settingKey,
       defaultValue: selectedValue,
       builder: (BuildContext context, T value, OnChanged<T> onChanged) {
@@ -1318,7 +1460,7 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
                 }
                     : null,
                 enabled: widget.enabled,
-                child: (T value) {
+                itemBuilder: (T value) {
                   return Text(widget.values[value]);
                 },
               ),
@@ -1376,7 +1518,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
 
   @override
   Widget build(BuildContext context) {
-    return CacheChangeObserver<double>(
+    return ValueChangeObserver<double>(
       cacheKey: widget.settingKey,
       defaultValue: currentValue,
       builder:
@@ -1454,7 +1596,7 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
 
   @override
   Widget build(BuildContext context) {
-    return CacheChangeObserver<String>(
+    return ValueChangeObserver<String>(
       cacheKey: widget.settingKey,
       defaultValue: currentValue,
       builder:
@@ -1523,7 +1665,7 @@ class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return CacheChangeObserver<T>(
+    return ValueChangeObserver<T>(
       cacheKey: widget.settingKey,
       defaultValue: selectedValue,
       builder: (BuildContext context, T value, OnChanged<T> onChanged) {
@@ -1603,7 +1745,7 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
 
   @override
   Widget build(BuildContext context) {
-    return CacheChangeObserver<double>(
+    return ValueChangeObserver<double>(
       cacheKey: widget.settingKey,
       defaultValue: currentValue,
       builder:
@@ -1714,4 +1856,3 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
     return valueMap;
   }
 }
-// TODO(hjoshi): add TextField Settings
