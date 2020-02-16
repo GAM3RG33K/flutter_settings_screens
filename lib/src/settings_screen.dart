@@ -945,7 +945,7 @@ class SettingsContainer extends StatelessWidget {
 ///       ),
 ///  	],
 ///  );
-///```
+/// ```
 class SettingsGroup extends StatelessWidget {
   /// title string for the tile
   final String title;
@@ -1004,6 +1004,46 @@ class SettingsGroup extends StatelessWidget {
 }
 
 /// A Setting widget which allows user a text input in a [TextFormField]
+///
+/// This widget by default is a [_ModalSettingsTile]. Meaning, this input field
+/// will be shown in a dialog view.
+///
+/// Example:
+///
+/// ```dart
+/// TextInputSettingsTile(
+///   title: 'User Name',
+///   settingKey: 'key-user-name',
+///   initialValue: 'admin',
+///   validator: (String username) {
+///     if (username != null && username.length > 3) {
+///       return null;
+///     }
+///     return "User Name can't be smaller than 4 letters";
+///   },
+///   borderColor: Colors.blueAccent,
+///   errorColor: Colors.deepOrangeAccent,
+/// );
+///
+/// ```
+///
+///  OR
+///
+/// ``` dart
+/// TextInputSettingsTile(
+///   title: 'password',
+///   settingKey: 'key-user-password',
+///   obscureText: true,
+///   validator: (String password) {
+///     if (password != null && password.length > 6) {
+///       return null;
+///     }
+///     return "Password can't be smaller than 7 letters";
+///   },
+///   borderColor: Colors.blueAccent,
+///   errorColor: Colors.deepOrangeAccent,
+/// );
+/// ```
 class TextInputSettingsTile extends StatefulWidget {
 
   /// Settings Key string for storing the text in cache (assumed to be unique)
@@ -1150,6 +1190,49 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
 }
 
 
+/// [SwitchSettingsTile] is a widget that has a [Switch] with given title,
+/// subtitle and default value/status of the switch
+///
+/// This widget supports an additional list of widgets to display
+/// when the switch is enabled. These optional list of widgets is accessed
+/// through `childrenIfEnabled` property of this widget.
+///
+/// This widget works similar to [CheckboxSettingsTile].
+///
+///  Example:
+///
+/// ```dart
+///  SwitchSettingsTile(
+///   leading: Icon(Icons.developer_mode),
+///   settingKey: 'key-switch-dev-mode',
+///   title: 'Developer Settings',
+///   onChange: (value) {
+///     debugPrint('key-switch-dev-mod: $value');
+///   },
+///   childrenIfEnabled: <Widget>[
+///     CheckboxSettingsTile(
+///       leading: Icon(Icons.adb),
+///       settingKey: 'key-is-developer',
+///       title: 'Developer Mode',
+///       onChange: (value) {
+///         debugPrint('key-is-developer: $value');
+///       },
+///     ),
+///     SwitchSettingsTile(
+///       leading: Icon(Icons.usb),
+///       settingKey: 'key-is-usb-debugging',
+///       title: 'USB Debugging',
+///       onChange: (value) {
+///         debugPrint('key-is-usb-debugging: $value');
+///       },
+///     ),
+///     SimpleSettingsTile(
+///       title: 'Root Settings',
+///       subtitle: 'These settings is not accessible',
+///       enabled: false,
+///     )
+///   ],
+/// );
 class SwitchSettingsTile extends StatelessWidget {
   final String settingKey;
   final bool defaultValue;
@@ -1238,6 +1321,45 @@ class SwitchSettingsTile extends StatelessWidget {
   }
 }
 
+
+/// [CheckboxSettingsTile] is a widget that has a [Checkbox] with given title,
+/// subtitle and default value/status of the Checkbox
+///
+/// This widget supports an additional list of widgets to display
+/// when the Checkbox is checked. These optional list of widgets is accessed
+/// through `childrenIfEnabled` property of this widget.
+///
+/// This widget works similar to [SwitchSettingsTile].
+///
+///  Example:
+///
+/// ```dart
+///  CheckboxSettingsTile(
+///   leading: Icon(Icons.developer_mode),
+///   settingKey: 'key-check-box-dev-mode',
+///   title: 'Developer Settings',
+///   onChange: (value) {
+///     debugPrint('key-check-box-dev-mode: $value');
+///   },
+///   childrenIfEnabled: <Widget>[
+///     CheckboxSettingsTile(
+///       leading: Icon(Icons.adb),
+///       settingKey: 'key-is-developer',
+///       title: 'Developer Mode',
+///       onChange: (value) {
+///         debugPrint('key-is-developer: $value');
+///       },
+///     ),
+///     SwitchSettingsTile(
+///       leading: Icon(Icons.usb),
+///       settingKey: 'key-is-usb-debugging',
+///       title: 'USB Debugging',
+///       onChange: (value) {
+///         debugPrint('key-is-usb-debugging: $value');
+///       },
+///     ),
+///   ],
+/// );
 class CheckboxSettingsTile extends StatelessWidget {
   final String settingKey;
   final bool defaultValue;
@@ -1324,6 +1446,44 @@ class CheckboxSettingsTile extends StatelessWidget {
   }
 }
 
+
+/// [RadioSettingsTile] is a widget that has a list of [Radio] widgets with given title,
+/// subtitle and default/group value which determines which Radio will be selected
+/// initially.
+///
+/// This widget support Any type of values which should be put in the preference.
+/// However, since any types of the value is supported, the input for this widget
+/// is a Map to the required values with their string representation.
+///
+/// For example if the required value type is a boolean then the values map can
+/// be as following:
+///  <bool, String> {
+///     true: 'Enabled',
+///     false: 'Disabled'
+///  }
+///
+/// So, if the `enabled` value radio is selected then the value `true` will be
+/// stored in the preference
+///
+/// Complete Example:
+///
+/// ```dart
+/// RadioSettingsTile<int>(
+///   title: 'Preferred Sync Period',
+///   settingKey: 'key-radio-sync-period',
+///   values: <int, String>{
+///     0: 'Never',
+///     1: 'Daily',
+///     7: 'Weekly',
+///     15: 'Fortnight',
+///     30: 'Monthly',
+///   },
+///   selected: 0,
+///   onChange: (value) {
+///     debugPrint('key-radio-sync-period: $value days');
+///   },
+/// )
+/// ```
 class RadioSettingsTile<T> extends StatefulWidget {
   final String settingKey;
   final T selected;
@@ -1410,6 +1570,45 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
   }
 }
 
+
+/// [DropDownSettingsTile] is a widget that has a list of [DropdownMenuItem]s
+/// with given title, subtitle and default/group value which determines
+/// which value will be set to selected initially.
+///
+/// This widget support Any type of values which should be put in the preference.
+///
+/// However, since any types of the value is supported, the input for this widget
+/// is a Map to the required values with their string representation.
+///
+/// For example if the required value type is a boolean then the values map can
+/// be as following:
+///  <bool, String> {
+///     true: 'Enabled',
+///     false: 'Disabled'
+///  }
+///
+/// So, if the `enabled` value radio is selected then the value `true` will be
+/// stored in the preference
+///
+/// Complete Example:
+///
+/// ```dart
+/// DropDownSettingsTile<int>(
+///   title: 'E-Mail View',
+///   settingKey: 'key-dropdown-email-view',
+///   values: <int, String>{
+///     2: 'Simple',
+///     3: 'Adjusted',
+///     4: 'Normal',
+///     5: 'Compact',
+///     6: 'Squizzed',
+///   },
+///   selected: 2,
+///   onChange: (value) {
+///     debugPrint('key-dropdown-email-view: $value');
+///   },
+/// );
+/// ```
 class DropDownSettingsTile<T> extends StatefulWidget {
   final String settingKey;
   final T selected;
@@ -1480,6 +1679,29 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
   }
 }
 
+
+/// [SliderSettingsTile] is a widget that has a slider given title,
+/// subtitle and default value which determines what the slider's position
+/// will be set initially.
+///
+/// This widget supports double and integer type of values which should be put in the preference.
+///
+/// Example:
+///
+/// ```dart
+/// SliderSettingsTile(
+///  title: 'Volume',
+///  settingKey: 'key-slider-volume',
+///  defaultValue: 20,
+///  min: 0,
+///  max: 100,
+///  step: 1,
+///  leading: Icon(Icons.volume_up),
+///  onChange: (value) {
+///    debugPrint('key-slider-volume: $value');
+///  },
+/// );
+/// ```
 class SliderSettingsTile extends StatefulWidget {
   final String settingKey;
   final double defaultValue;

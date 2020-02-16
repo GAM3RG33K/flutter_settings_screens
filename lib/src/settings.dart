@@ -106,8 +106,7 @@ class ValueChangeNotifier<T> extends ValueNotifier<T> {
   /// A String which represents a setting (assumed to be unique)
   final String key;
 
-  ValueChangeNotifier(this.key,
-      value,) : super(value);
+  ValueChangeNotifier(this.key, value) : super(value);
 
   @override
   set value(T newValue) {
@@ -137,7 +136,7 @@ Map<String, List<ValueChangeNotifier>>();
 /// A Stateful widget which Takes in a [cacheKey], a [defaultValue]
 /// and a [builder]
 ///
-/// This widget rebuilds whenever there's a change in value associted with the
+/// This widget rebuilds whenever there's a change in value associated with the
 /// [cacheKey]
 class ValueChangeObserver<T> extends StatefulWidget {
   final String cacheKey;
