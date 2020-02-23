@@ -1780,6 +1780,32 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
   }
 }
 
+
+/// [ColorPickerSettingsTile] is a widget which allows user to
+/// select the a color from a set of Material color choices.
+///
+/// Since, [Color] is an in-memory object type, the serialized version
+/// of the value of this widget will be a Hex value [String] of the selected
+/// color.
+///
+/// This conversion string <-> color, makes this easy to check/debug the values
+/// from the storage/preference manually.
+///
+/// `flutter_material_color_picker` library is used for showing the color picker
+/// widget. The color panel shown in the widget is provided by this library.
+///
+/// Example:
+///
+/// ```dart
+///  ColorPickerSettingsTile(
+///    settingKey: 'key-color-picker',
+///    title: 'Accent Color',
+///    defaultValue: Colors.blue,
+///    onChange: (value) {
+///      debugPrint('key-color-picker: $value');
+///    },
+///  );
+/// ```
 class ColorPickerSettingsTile extends StatefulWidget {
   final String settingKey;
   final String defaultStringValue;
@@ -1846,6 +1872,35 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
   }
 }
 
+
+/// [RadioModalSettingsTile] widget is the dialog version of the
+/// [RadioSettingsTile] widget.
+///
+/// Meaning this widget is similar to a [RadioSettingsTile] shown in a dialog.
+///
+/// Use of this widget is similar to the [RadioSettingsTile], only the displayed
+/// widget will be in a different position. i.e instead of the settings screen,
+/// it will be shown in a dialog above the settings screen.
+///
+/// Example:
+/// ```dart
+/// RadioModalSettingsTile<int>(
+///   title: 'Preferred Sync Period',
+///   settingKey: 'key-radio-sync-period',
+///   values: <int, String>{
+///     0: 'Never',
+///     1: 'Daily',
+///     7: 'Weekly',
+///     15: 'Fortnight',
+///     30: 'Monthly',
+///   },
+///   selected: 0,
+///   onChange: (value) {
+///     debugPrint('key-radio-sync-period: $value days');
+///   },
+/// );
+/// ```
+///
 class RadioModalSettingsTile<T> extends StatefulWidget {
   final String settingKey;
   final T selected;
@@ -1930,6 +1985,32 @@ class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
   }
 }
 
+
+/// [SliderModalSettingsTile] widget is the dialog version of the
+/// [SliderSettingsTile] widget.
+///
+/// Meaning this widget is similar to a [SliderSettingsTile] shown in a dialog.
+///
+/// Use of this widget is similar to the [SliderSettingsTile], only the displayed
+/// widget will be in a different position. i.e instead of the settings screen,
+/// it will be shown in a dialog above the settings screen.
+///
+/// Example:
+/// ```dart
+/// SliderSettingsTile(
+///  title: 'Volume',
+///  settingKey: 'key-slider-volume',
+///  defaultValue: 20,
+///  min: 0,
+///  max: 100,
+///  step: 1,
+///  leading: Icon(Icons.volume_up),
+///  onChange: (value) {
+///    debugPrint('key-slider-volume: $value');
+///  },
+/// );
+/// ```
+///
 class SliderModalSettingsTile extends StatefulWidget {
   final String settingKey;
   final double defaultValue;
@@ -2007,6 +2088,30 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
   }
 }
 
+/// [SimpleRadioSettingsTile] is a simpler version of
+/// the [RadioSettingsTile].
+///
+/// Instead of a Value-String map, this widget just takes a list
+/// of String values.
+///
+/// Example:
+/// ```dart
+/// SimpleRadioSettingsTile(
+///   title: 'Sync Settings',
+///   settingKey: 'key-radio-sync-settings',
+///   values: <String>[
+///     'Never',
+///     'Daily',
+///     'Weekly',
+///     'Fortnight',
+///     'Monthly',
+///   ],
+///   selected: 'Daily',
+///   onChange: (value) {
+///     debugPrint('key-radio-sync-settins: $value');
+///   },
+/// );
+/// ```
 class SimpleRadioSettingsTile extends StatelessWidget {
   final String settingKey;
   final String selected;
@@ -2043,6 +2148,33 @@ class SimpleRadioSettingsTile extends StatelessWidget {
   }
 }
 
+
+/// [SimpleDropDownSettingsTile] is a simpler version of
+/// the [DropDownSettingsTile].
+///
+/// Instead of a Value-String map, this widget just takes a list
+/// of String values.
+///
+/// Example:
+/// ```dart
+/// SimpleDropDownSettingsTile(
+///   title: 'Beauty Filter',
+///   settingKey: 'key-dropdown-beauty-filter',
+///   values: <String>[
+///     'Simple',
+///     'Normal',
+///     'Little Special',
+///     'Special',
+///     'Extra Special',
+///     'Bizzar',
+///     'Horrific',
+///   ],
+///   selected: 'Special',
+///   onChange: (value) {
+///     debugPrint('key-dropdown-beauty-filter: $value');
+///  },
+///);
+/// ```
 class SimpleDropDownSettingsTile extends StatelessWidget {
   final String settingKey;
   final String selected;
