@@ -290,7 +290,7 @@ class _ModalSettingsTile extends StatefulWidget {
   final List<Widget> children;
   final bool showConfirmation;
   final GestureTapCallback onCancel;
-  final GestureTapCallback onConfirm;
+  final OnConfirmedCallback onConfirm;
 
   _ModalSettingsTile({
     @required this.title,
@@ -381,10 +381,13 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
           child: Text('OK'),
           padding: EdgeInsets.zero,
           onPressed: () {
+            bool closeDialog = true;
             if (widget.onConfirm != null) {
-              widget.onConfirm();
+              closeDialog = widget.onConfirm();
             }
-            _disposeDialog(dialogContext);
+            if (closeDialog) {
+              _disposeDialog(dialogContext);
+            }
           },
         )
       ],
@@ -1045,7 +1048,6 @@ class SettingsGroup extends StatelessWidget {
 /// );
 /// ```
 class TextInputSettingsTile extends StatefulWidget {
-
   /// Settings Key string for storing the text in cache (assumed to be unique)
   final String settingKey;
 
@@ -1058,6 +1060,18 @@ class TextInputSettingsTile extends StatefulWidget {
   /// flag which represents the state of the settings, if false the the tile will
   /// ignore all the user inputs
   final bool enabled;
+
+  /// flag which represents if the text field's data will be auto validated
+  /// or not
+  /// if true, the validation will be performed on all changes
+  /// otherwise it will only happen if the `OK` button is clicked
+  final bool autoValidate;
+
+  /// flag which represents if the text field will be focused by default
+  /// or not
+  /// if true, then the text field will be in focus other wise it will not be
+  /// in focus by default
+  final bool autoFocus;
 
   /// on change callback for handling the value change
   final OnChanged<String> onChange;
@@ -1080,6 +1094,8 @@ class TextInputSettingsTile extends StatefulWidget {
     @required this.settingKey,
     this.initialValue = '',
     this.enabled = true,
+    this.autoValidate = false,
+    this.autoFocus = true,
     this.onChange,
     this.validator,
     this.obscureText = false,
@@ -1092,14 +1108,15 @@ class TextInputSettingsTile extends StatefulWidget {
 }
 
 class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _controller;
+  FocusNode _focusNode;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    _focusNode = FocusNode();
   }
 
   @override
@@ -1117,8 +1134,9 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
             _buildTextField(context, value, onChanged),
           ],
           showConfirmation: true,
-          onConfirm: () {
-            _submitText(_controller.text);
+          onConfirm: () => _submitText(_controller.text),
+          onCancel: () {
+            _controller.text = Settings.getValue(widget.settingKey, '');
           },
         );
       },
@@ -1132,8 +1150,10 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
       child: Form(
         key: _formKey,
         child: TextFormField(
+          autofocus: widget.autoFocus,
           controller: _controller,
-          autovalidate: true,
+          focusNode: _focusNode,
+          autovalidate: widget.autoValidate,
           enabled: widget.enabled,
           validator: widget.enabled ? widget.validator : null,
           onSaved: widget.enabled ? (value) => _onSave(value, onChanged) : null,
@@ -1167,7 +1187,7 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
     );
   }
 
-  void _submitText(String newValue) {
+  bool _submitText(String newValue) {
     bool isValid = true;
     final state = _formKey.currentState;
     if (state != null) {
@@ -1176,7 +1196,10 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
 
     if (isValid) {
       state.save();
+      return true;
     }
+
+    return false;
   }
 
   void _onSave(String newValue, OnChanged<String> onChanged) {
@@ -1188,7 +1211,6 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
     });
   }
 }
-
 
 /// [SwitchSettingsTile] is a widget that has a [Switch] with given title,
 /// subtitle and default value/status of the switch
@@ -1321,7 +1343,6 @@ class SwitchSettingsTile extends StatelessWidget {
   }
 }
 
-
 /// [CheckboxSettingsTile] is a widget that has a [Checkbox] with given title,
 /// subtitle and default value/status of the Checkbox
 ///
@@ -1446,7 +1467,6 @@ class CheckboxSettingsTile extends StatelessWidget {
   }
 }
 
-
 /// [RadioSettingsTile] is a widget that has a list of [Radio] widgets with given title,
 /// subtitle and default/group value which determines which Radio will be selected
 /// initially.
@@ -1570,7 +1590,6 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
   }
 }
 
-
 /// [DropDownSettingsTile] is a widget that has a list of [DropdownMenuItem]s
 /// with given title, subtitle and default/group value which determines
 /// which value will be set to selected initially.
@@ -1679,7 +1698,6 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
   }
 }
 
-
 /// [SliderSettingsTile] is a widget that has a slider given title,
 /// subtitle and default value which determines what the slider's position
 /// will be set initially.
@@ -1780,7 +1798,6 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
   }
 }
 
-
 /// [ColorPickerSettingsTile] is a widget which allows user to
 /// select the a color from a set of Material color choices.
 ///
@@ -1871,7 +1888,6 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
     }
   }
 }
-
 
 /// [RadioModalSettingsTile] widget is the dialog version of the
 /// [RadioSettingsTile] widget.
@@ -1984,7 +2000,6 @@ class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
     );
   }
 }
-
 
 /// [SliderModalSettingsTile] widget is the dialog version of the
 /// [SliderSettingsTile] widget.
@@ -2147,7 +2162,6 @@ class SimpleRadioSettingsTile extends StatelessWidget {
     return valueMap;
   }
 }
-
 
 /// [SimpleDropDownSettingsTile] is a simpler version of
 /// the [DropDownSettingsTile].

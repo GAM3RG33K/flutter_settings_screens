@@ -18,7 +18,7 @@ void initSettings() {
   HiveCache hCache = HiveCache()
     ..init();
 
-  Settings.init(_isUsingHive ? hCache : spCache);
+  Settings.init(cacheProvider: _isUsingHive ? hCache : spCache);
 }
 
 bool _isDarkTheme = true;

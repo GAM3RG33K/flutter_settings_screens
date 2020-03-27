@@ -16,9 +16,6 @@ dependencies:
   #library to store the preference/settings using hive library
   hive_flutter: ^0.2.1
 
-  #library to store the preference/settings using shared_preferences library
-  shared_preferences: ^0.5.4+6
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

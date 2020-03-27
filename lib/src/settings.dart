@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'cache_provider.dart';
+import 'cache/cache_provider.dart';
+import 'cache/cache_provider_impl.dart';
 
 /// This function type is used for rebuilding any given child widgets
 ///
@@ -19,10 +20,22 @@ typedef ItemBuilder<T> = Widget Function(T);
 /// associated with a settings key changes.
 typedef OnChanged<T> = void Function(T);
 
-/// This class is a used for a accessing the [CacheProvider] methods.
+
+/// This function type is used for verifying that the dialog/modal
+/// widget is to be closed or not.
+///
+/// if true, the widget will be closed
+typedef OnConfirmedCallback = bool Function();
+
+/// This class behaves as a bridge between the settings screen widgets and the
+/// underlying storage mechanism.
+///
+/// To access the storage mechanism an instance of the [CacheProvider] implementation
+/// is required.
 ///
 /// Any Flutter App using this library must call `Settings.init(cacheProvider)`
 /// before showing the settings screen.
+///
 ///
 class Settings {
   /// Private constructor
@@ -58,7 +71,12 @@ class Settings {
   /// instance.
   ///
   /// This method must be called before the Settings screen is displayed.
-  static void init(CacheProvider cacheProvider) {
+  ///
+  /// Cache provider is optional, default cache provider uses the
+  /// shared preferences based cache provider implementation.
+  static void init({CacheProvider cacheProvider}) {
+    cacheProvider ??= SharePreferenceCache();
+
     _cacheProvider = cacheProvider;
   }
 

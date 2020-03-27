@@ -1,3 +1,5 @@
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+
 /// This is an abstract class to provide access of storage/preferences platform
 /// from the developer's existing app to this settings screen
 ///
@@ -39,11 +41,8 @@
 ///
 ///
 /// For more details on how to properly implement this class, Check out the
-/// `cache_provider.dart` file in the example code of this library.
-///
-/// The example includes two different class implementations:
-///  - shared_preference based implementation
-///  - hive based implementation
+/// `cache_provider.dart` file in the example code of this library along with
+/// the existing [SharePreferenceCache] implementation.
 ///
 abstract class CacheProvider {
   CacheProvider() {
