@@ -3,32 +3,36 @@
 [![pub package](https://img.shields.io/pub/v/flutter_settings_screens.svg)](https://pub.dev/packages/flutter_settings_screens)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-A flutter plugin for easily creating app settings screens. The unique thing about this library is
-that it is not dependent upon any specific shared preference library used to store settings.
+This is a simple flutter plugin for easily creating app settings screens.
+The unique thing about this library is that it is not dependent upon any specific storage library used to store settings.
 
-This library requires an Instance of Cache object which you can implement using the
-shared preference library of choice.
+This library requires an Instance of Cache object which you can implement using the storage library of choice.
 
-This plugin is enhanced version of the plugin [shared_preferences_settings](https://pub.dev/packages/shared_preferences_settings)
-by [Barnabás BARTHA](https://github.com/BarthaBRW).
+This plugin is inspired by the [shared_preferences_settings](https://pub.dev/packages/shared_preferences_settings) plugin by [Barnabás BARTHA](https://github.com/BarthaBRW).
 
 ## Features
-  - Key-value pairs saved via Library of your choice
-  - React style data retrieval
-  - Disable or hide widgets according to others' value
-
-
-## Examples
-![](https://public.barthaweb.com/flutter_shared_preferences_settings/1.gif "")
-![](https://public.barthaweb.com/flutter_shared_preferences_settings/2.gif "")
-![](https://public.barthaweb.com/flutter_shared_preferences_settings/3.gif "")
-![](https://public.barthaweb.com/flutter_shared_preferences_settings/4.gif "")
-![](https://public.barthaweb.com/flutter_shared_preferences_settings/5.gif "")
-![](https://public.barthaweb.com/flutter_shared_preferences_settings/6.gif "")
-![](https://public.barthaweb.com/flutter_shared_preferences_settings/7.gif "")
-![](https://public.barthaweb.com/flutter_shared_preferences_settings/8.gif "")
-![](https://public.barthaweb.com/flutter_shared_preferences_settings/9.gif "")
-
+  - A collection of settings widgets to make a settings page in a few seconds and get going.
+    - **Normal**:
+	  - SimpleSettingsTile
+	  - Switch/Toggle setting
+	  - Checkbox setting
+	  - Drop down setting
+	  - Radio selection Setting
+	  - Slider setting
+	  - Color choice panel
+	  - Text Input Setting
+	- **Advanced**:
+	  - SettingsScreen:
+		> A Flutter Widget/Page which can contain all settings widget.
+	  - ExpandableSettingsTile
+	  	> A settings widget which can hold a set of widgets in section which is collapsible
+	  - SettingsContainer
+	  > A Settings widget that helps any flutter widget fitting in the settings page
+	  - SettingsGroup
+	  > A Container widget that creates a section with a title to separate settings inside this from other settings
+  - Settings saved via Library of your choice
+  - Widgets with conditional visibility of some other settings.
+    - i.e. A set of settings is only visible if a switch or a check box is switched on / ticked.
 
 ## Using custom shared preferences library.
   - Check out the Example code provided with this plugin.
@@ -362,7 +366,7 @@ class CustomCacheProvider extends CacheProvider {
 ```
 
 
-for example 
+for example
 
 ```dart
 /// A cache access provider class for shared preferences using shared_preferences library
@@ -371,7 +375,7 @@ class SharePreferenceCache extends CacheProvider {
 }
 ```
 
-OR 
+OR
 
 ```dart
 /// A cache access provider class for shared preferences using Hive library
@@ -515,3 +519,14 @@ SimpleSettingsTile(
     defaultVisibility: true,
 );
 ```
+
+## Examples
+![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_1.gif "")
+![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_2.gif "")
+![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_3.gif "")
+![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_4.gif "")
+![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_5.gif "")
+
+File an issue on github repo, if something is not working as expected or you want a new feature to be added.
+
+All help and Pull requests are most welcome.

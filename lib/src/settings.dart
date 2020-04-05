@@ -20,7 +20,6 @@ typedef ItemBuilder<T> = Widget Function(T);
 /// associated with a settings key changes.
 typedef OnChanged<T> = void Function(T);
 
-
 /// This function type is used for verifying that the dialog/modal
 /// widget is to be closed or not.
 ///

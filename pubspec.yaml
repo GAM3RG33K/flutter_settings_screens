@@ -1,9 +1,8 @@
-author: Harshvardhan Joshi<hj2931996@gmail.com>
 name: flutter_settings_screens
-description: A Simple plugin to implement settings UI screens for your flutter apps. Customize what ever you want, From UI elements to underlying storage library.
+description: A Simple plugin to implement settings UI screens for your flutter apps. Customize what you want, From UI elements to underlying storage library.
 repository: https://github.com/GAM3RG33K/flutter_settings_screens
 homepage: https://github.com/GAM3RG33K/flutter_settings_screens
-version: 0.1.0+0.2
+version: 0.2.0
 
 
 environment:
