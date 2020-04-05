@@ -929,7 +929,7 @@ class SettingsContainer extends StatelessWidget {
 ///  Example:
 ///
 /// ```dart
-/// SettingsTileGroup(
+/// SettingsGroup(
 ///    title: 'Group title',
 ///    children: <Widget>[
 ///       CheckboxSettingsTile(
@@ -1254,7 +1254,8 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
 ///       enabled: false,
 ///     )
 ///   ],
-/// );
+///  );
+///  ```
 class SwitchSettingsTile extends StatelessWidget {
   final String settingKey;
   final bool defaultValue;
@@ -1380,7 +1381,8 @@ class SwitchSettingsTile extends StatelessWidget {
 ///       },
 ///     ),
 ///   ],
-/// );
+///  );
+///  ```
 class CheckboxSettingsTile extends StatelessWidget {
   final String settingKey;
   final bool defaultValue;
@@ -1482,7 +1484,7 @@ class CheckboxSettingsTile extends StatelessWidget {
 ///     false: 'Disabled'
 ///  }
 ///
-/// So, if the `enabled` value radio is selected then the value `true` will be
+/// So, if the `Enabled` value radio is selected then the value `true` will be
 /// stored in the preference
 ///
 /// Complete Example:
@@ -1606,7 +1608,7 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
 ///     false: 'Disabled'
 ///  }
 ///
-/// So, if the `enabled` value radio is selected then the value `true` will be
+/// So, if the `Enabled` value is selected then the value `true` will be
 /// stored in the preference
 ///
 /// Complete Example:
@@ -1808,8 +1810,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
 /// This conversion string <-> color, makes this easy to check/debug the values
 /// from the storage/preference manually.
 ///
-/// `flutter_material_color_picker` library is used for showing the color picker
-/// widget. The color panel shown in the widget is provided by this library.
+/// The color panel shown in the widget is provided by `flutter_material_color_picker` library.
 ///
 /// Example:
 ///
@@ -2187,7 +2188,7 @@ class SimpleRadioSettingsTile extends StatelessWidget {
 ///   onChange: (value) {
 ///     debugPrint('key-dropdown-beauty-filter: $value');
 ///  },
-///);
+/// );
 /// ```
 class SimpleDropDownSettingsTile extends StatelessWidget {
   final String settingKey;

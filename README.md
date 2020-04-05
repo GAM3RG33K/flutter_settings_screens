@@ -37,11 +37,380 @@ This plugin is inspired by the [shared_preferences_settings](https://pub.dev/pac
 ## Using custom shared preferences library.
   - Check out the Example code provided with this plugin.
 
-## Screen widgets
+## Tile widgets
+
+#### SimpleSettingsTile
+
+SimpleSettingsTile is a simple settings tile that can open a new screen by tapping the tile.
+
+Example:
+```dart
+SimpleSettingsTile(
+  title: 'Advanced',
+  subtitle: 'More, advanced settings.'
+  screen: SettingsScreen(
+    title: 'Sub menu',
+    children: <Widget>[
+      CheckboxSettingsTile(
+        settingsKey: 'key-of-your-setting',
+        title: 'This is a simple Checkbox',
+      ),
+    ],
+  ),
+);
+```
+
+#### SettingsTileGroup
+
+SettingsGroup is a widget that contains multiple settings tiles and other widgets together as a group and shows a title/name of that group.
+
+All the children widget will have a small padding from the left and top to provide a sense that they in a separate group from others
+
+Example:
+```dart
+SettingsGroup(
+   title: 'Group title',
+   children: <Widget>[
+      CheckboxSettingsTile(
+        settingKey: 'key-day-light-savings',
+        title: 'Daylight Time Saving',
+        enabledLabel: 'Enabled',
+        disabledLabel: 'Disabled',
+        leading: Icon(Icons.timelapse),
+      ),
+      SwitchSettingsTile(
+        settingKey: 'key-dark-mode',
+        title: 'Dark Mode',
+        enabledLabel: 'Enabled',
+        disabledLabel: 'Disabled',
+        leading: Icon(Icons.palette),
+      ),
+ 	],
+ );
+```
+
+
+#### ExpandableSettingsTile
+ExpandableSettingsTile is wrapper widget which shows the given children  when exapnded by clicking on the tile.
+
+Example:
+```dart
+ ExpandableSettingsTile(
+   title: 'Quick setting dialog2',
+   subtitle: 'Expandable Settings',
+   children: <Widget>[
+     CheckboxSettingsTile(
+       settingKey: 'key-day-light-savings',
+       title: 'Daylight Time Saving',
+       enabledLabel: 'Enabled',
+       disabledLabel: 'Disabled',
+       leading: Icon(Icons.timelapse),
+     ),
+     SwitchSettingsTile(
+       settingKey: 'key-dark-mode',
+       title: 'Dark Mode',
+       enabledLabel: 'Enabled',
+       disabledLabel: 'Disabled',
+       leading: Icon(Icons.palette),
+     ),
+   ],
+ );
+```
+
+#### CheckboxSettingsTile
+
+CheckboxSettingsTile is a widget that has a Checkbox with given title, subtitle and default value/status of the Checkbox
+
+This widget supports an additional list of widgets to display when the Checkbox is checked. These optional list of widgets is accessed through `childrenIfEnabled` property of this widget.
+
+This widget works similar to `SwitchSettingsTile`.
+
+Example:
+```dart
+ CheckboxSettingsTile(
+  leading: Icon(Icons.developer_mode),
+  settingKey: 'key-check-box-dev-mode',
+  title: 'Developer Settings',
+  onChange: (value) {
+    debugPrint('key-check-box-dev-mode: $value');
+  },
+  childrenIfEnabled: <Widget>[
+    CheckboxSettingsTile(
+      leading: Icon(Icons.adb),
+      settingKey: 'key-is-developer',
+      title: 'Developer Mode',
+      onChange: (value) {
+        debugPrint('key-is-developer: $value');
+      },
+    ),
+    SwitchSettingsTile(
+      leading: Icon(Icons.usb),
+      settingKey: 'key-is-usb-debugging',
+      title: 'USB Debugging',
+      onChange: (value) {
+        debugPrint('key-is-usb-debugging: $value');
+      },
+    ),
+  ],
+ );
+```
+
+#### SwitchSettingsTile
+SwitchSettingsTile is a widget that has a Switch with given title, subtitle and default value/status of the switch
+
+This widget supports an additional list of widgets to display when the switch is enabled. These optional list of widgets is accessed through `childrenIfEnabled` property of this widget.
+
+This widget works similar to `CheckboxSettingsTile`.
+
+Example:
+```dart
+ SwitchSettingsTile(
+  leading: Icon(Icons.developer_mode),
+  settingKey: 'key-switch-dev-mode',
+  title: 'Developer Settings',
+  onChange: (value) {
+    debugPrint('key-switch-dev-mod: $value');
+  },
+  childrenIfEnabled: <Widget>[
+    CheckboxSettingsTile(
+      leading: Icon(Icons.adb),
+      settingKey: 'key-is-developer',
+      title: 'Developer Mode',
+      onChange: (value) {
+        debugPrint('key-is-developer: $value');
+      },
+    ),
+    SwitchSettingsTile(
+      leading: Icon(Icons.usb),
+      settingKey: 'key-is-usb-debugging',
+      title: 'USB Debugging',
+      onChange: (value) {
+        debugPrint('key-is-usb-debugging: $value');
+      },
+    ),
+    SimpleSettingsTile(
+      title: 'Root Settings',
+      subtitle: 'These settings is not accessible',
+      enabled: false,
+    )
+  ],
+ );
+ ```
+
+#### RadioSettingsTile
+RadioSettingsTile is a widget that has a list of Radio widgets with given title, subtitle and default/group value which determines which Radio will be selected initially.
+
+This widget support Any type of values which should be put in the preference.
+
+However, since any types of the value is supported, the input for this widget is a Map to the required values with their string representation.
+
+For example, if the required value type is a boolean then the values map can be as following:
+ ```dart
+ <bool, String> {
+    true: 'Enabled',
+    false: 'Disabled'
+ }
+ ```
+
+So, if the `Enabled` value radio is selected then the value `true` will be stored in the preference
+
+Complete Example:
+```dart
+RadioSettingsTile<int>(
+  title: 'Preferred Sync Period',
+  settingKey: 'key-radio-sync-period',
+  values: <int, String>{
+    0: 'Never',
+    1: 'Daily',
+    7: 'Weekly',
+    15: 'Fortnight',
+    30: 'Monthly',
+  },
+  selected: 0,
+  onChange: (value) {
+    debugPrint('key-radio-sync-period: $value days');
+  },
+)
+```
+
+#### DropDownSettingTile
+DropDownSettingsTile is a widget that has a list of DropdownMenuItems with given title, subtitle and default/group value which determines which value will be set to selected initially.
+
+This widget support Any type of values which should be put in the preference.
+
+However, since any types of the value is supported, the input for this widget is a Map to the required values with their string representation.
+
+For example if the required value type is a boolean then the values map can
+be as following:
+```dart
+ <bool, String> {
+    true: 'Enabled',
+    false: 'Disabled'
+ }
+ ```
+
+So, if the `Enabled` value is selected then the value `true` will be stored in the preference
+
+Complete Example:
+```dart
+DropDownSettingsTile<int>(
+  title: 'E-Mail View',
+  settingKey: 'key-dropdown-email-view',
+  values: <int, String>{
+    2: 'Simple',
+    3: 'Adjusted',
+    4: 'Normal',
+    5: 'Compact',
+    6: 'Squizzed',
+  },
+  selected: 2,
+  onChange: (value) {
+    debugPrint('key-dropdown-email-view: $value');
+  },
+);
+```
+
+#### SliderSettingsTile
+SliderSettingsTile is a widget that has a slider given title, subtitle and default value which determines what the slider's position will be set initially.
+
+This widget supports double and integer type of values which should be put in the preference.
+
+Example:
+```dart
+SliderSettingsTile(
+ title: 'Volume',
+ settingKey: 'key-slider-volume',
+ defaultValue: 20,
+ min: 0,
+ max: 100,
+ step: 1,
+ leading: Icon(Icons.volume_up),
+ onChange: (value) {
+   debugPrint('key-slider-volume: $value');
+ },
+);
+```
+
+
+## Modal widgets
+
+#### RadioModalSettingsTile
+RadioModalSettingsTile widget is the dialog version of the `RadioSettingsTile` widget.
+
+Use of this widget is similar to the RadioSettingsTile, only the displayed widget will be in a different position.
+
+i.e instead of inside the settings screen, it will be shown in a dialog above the settings screen.
+
+Example:
+```dart
+RadioModalSettingsTile<int>(
+  title: 'Preferred Sync Period',
+  settingKey: 'key-radio-sync-period',
+  values: <int, String>{
+    0: 'Never',
+    1: 'Daily',
+    7: 'Weekly',
+    15: 'Fortnight',
+    30: 'Monthly',
+  },
+  selected: 0,
+  onChange: (value) {
+    debugPrint('key-radio-sync-period: $value days');
+  },
+);
+```
+
+#### SliderModalSettingsTile
+SliderModalSettingsTile widget is the dialog version of the SliderSettingsTile widget.
+
+Use of this widget is similar to the SliderSettingsTile, only the displayed widget will be in a different position.
+
+i.e instead of inside the settings screen, it will be shown in a dialog above the settings screen.
+
+Example:
+```dart
+SliderSettingsTile(
+ title: 'Volume',
+ settingKey: 'key-slider-volume',
+ defaultValue: 20,
+ min: 0,
+ max: 100,
+ step: 1,
+ leading: Icon(Icons.volume_up),
+ onChange: (value) {
+   debugPrint('key-slider-volume: $value');
+ },
+);
+```
+
+
+#### TextInputSettingsTile
+A Setting widget which allows user a text input in a TextFormField.
+
+Example:
+```dart
+TextInputSettingsTile(
+  title: 'User Name',
+  settingKey: 'key-user-name',
+  initialValue: 'admin',
+  validator: (String username) {
+    if (username != null && username.length > 3) {
+      return null;
+    }
+    return "User Name can't be smaller than 4 letters";
+  },
+  borderColor: Colors.blueAccent,
+  errorColor: Colors.deepOrangeAccent,
+);
+```
+
+ OR
+
+``` dart
+TextInputSettingsTile(
+  title: 'password',
+  settingKey: 'key-user-password',
+  obscureText: true,
+  validator: (String password) {
+    if (password != null && password.length > 6) {
+      return null;
+    }
+    return "Password can't be smaller than 7 letters";
+  },
+  borderColor: Colors.blueAccent,
+  errorColor: Colors.deepOrangeAccent,
+);
+```
+
+#### ColorPickerSettingsTile
+ColorPickerSettingsTile is a widget which allows user to select the a color from a set of Material color choices.
+
+Since, `Color` is an in-memory object type, the serialized version of the value of this widget will be a Hex value String of the selected color.
+
+For example, If selected color is `red` then the stored value will be "#ffff0000", but when retrieved, the value will be an instance of `Color` with properties of red color.
+
+This conversion string <-> color, makes this easy to check/debug the values from the storage/preference manually.
+
+The color panel shown in the widget is provided by `flutter_material_color_picker` library.
+
+Example:
+```dart
+ ColorPickerSettingsTile(
+   settingKey: 'key-color-picker',
+   title: 'Accent Color',
+   defaultValue: Colors.blue,
+   onChange: (value) {
+     debugPrint('key-color-picker: $value');
+   },
+ );
+```
+
+## Utility widgets
 
 #### SettingsScreen
 A simple Screen widget that may contain settings tiles or other widgets.
 The following example shows how you can create an empty settings screen with a title:
+
 ```dart
 SettingsScreen(
     title: "Application Settings",
@@ -50,6 +419,7 @@ SettingsScreen(
 ```
 
 Inside the children parameter you can define settings tiles and other widgets. In this example we create a screen with a simple CheckboxSettingsTile in it:
+
 ```dart
 SettingsScreen(
     title: "Application Settings",
@@ -59,276 +429,6 @@ SettingsScreen(
             title: 'This is a simple Checkbox',
         ),
     ,
-);
-```
-
-
-#### SettingsToggleScreen
-A Screen widget similar to SettingsScreen, but additionally, it contains a built-in Checkbox at the beginning of its body. Therefore, it requires a settingKey to save its value.
-The following example shows how you can create an empty settings toggle with a title:
-```dart
-SettingsToggleScreen(
-    settingKey: 'key-of-your-setting',
-    title: 'Title',
-    children: [],
-);
-```
-In this example, we create a settings toggle screen using more parameters and with children widgets according to its state:
-```dart
-SettingsToggleScreen(
-    settingKey: 'key-of-your-setting',
-    title: 'Title',
-    defaultValue: true,
-    subtitle: 'Enabled',
-    subtitleIfOff: 'Disabled',
-    children:
-        SettingsContainer(
-            child: Text('This is enabled! :)'),
-        ),
-    ],
-    childrenIfOff:
-        SettingsContainer(
-            child: Text('Tap the checkbox to enable.'),
-        ),
-    ],
-);
-```
-
-
-## Tile widgets
-#### SimpleSettingsTile
-A simple widget settings tile that can open a new screen by tapping it.
-The following example shows how you can create a SimpleSettingsTile that open a new Screen by tapping it:
-```dart
-SimpleSettingsTile(
-    title: 'Advanced',
-    subtitle: 'More, advanced settings.'
-    screen: SomeSettingsScreen(
-        title: 'Sub menu',
-        children:
-            CheckboxSettingsTile(
-                settingKey: 'key-of-your-setting',
-                title: 'This is a simple Checkbox',
-            ),
-        ],
-    ),
-);
-```
-
-#### SettingsTileGroup
-A widget that groups settings tiles and other widgets together with a group title.
-The following example shows how you can create a group with a simple CheckboxSettingsTile.:
-```dart
-SettingsTileGroup(
-    title: 'Group title',
-    children:
-        CheckboxSettingsTile(
-            settingKey: 'key-of-your-setting',
-            title: 'This is a simple Checkbox',
-        ),
-    ],
-);
-```
-
-#### ExpansionSettingsTile
-A widget that groups settings tiles and other widgets together with a group title and can be expanded or closed.
-The following example shows how you can create a simple ExpansionSettingsTile with a CheckboxSettingsTile:
-```dart
-ExpansionSettingsTile(
-    title: 'You can expand & close',
-    children:
-        CheckboxSettingsTile(
-            settingKey: 'key-of-your-setting',
-            title: 'This is a simple Checkbox',
-        ),
-    ],
-);
-```
-
-#### CheckboxSettingsTile
-A settings tile with a Checkbox that can be true or false.
-The following example shows how you can create a tile with checkbox:
-```dart
-CheckboxSettingsTile(
-    settingKey: 'key-of-your-setting',
-    title: 'This is a Checkbox',
-);
-```
-
-In this example, we create a tile using more parameters:
-```dart
-CheckboxSettingsTile(
-    settingKey: 'wifi_status',
-    title: 'Wi-Fi',
-    subtitle: 'Connected.',
-    subtitleIfOff: 'To see available networks, turn on Wi-Fi.',
-    screen: SettingsToggleScreen(
-        settingKey: 'wifi_status',
-        subtitle: 'Connected',
-        subtitleIfOff: 'To see available networks, turn on Wi-Fi.',
-        children:
-            SettingsContainer(
-                children:
-                    Text('Put some widgets or tiles here.'),
-                ],
-            ),
-        ],
-        children:
-            SettingsContainer(
-                children:
-                    Text('You are offline.'),
-                    Text('Put some widgets or tiles here.'),
-                ],
-            ),
-        ],
-    ),
-);
-```
-
-#### SwitchSettingsTile
-A settings tile with a Switch that can be true or false.
-The following example shows how you can create a tile with switch:
-```dart
-SwitchSettingsTile(
-    settingKey: 'key-of-your-setting',
-    title: 'This is a Switch',
-);
-```
-In this example, we create a tile using more parameters:
-```dart
-SwitchSettingsTile(
-    settingKey: 'wifi_status',
-    title: 'Wi-Fi',
-    subtitle: 'Connected.',
-    subtitleIfOff: 'To see available networks, turn on Wi-Fi.',
-    screen: SettingsToggleScreen(
-        settingKey: 'wifi_status',
-        subtitle: 'Connected',
-        subtitleIfOff: 'To see available networks, turn on Wi-Fi.',
-        children:
-            SettingsContainer(
-                children:
-                    Text('Put some widgets or tiles here.'),
-                ],
-            ),
-        ],
-        children:
-            SettingsContainer(
-                children:
-                    Text('You are offline.'),
-                    Text('Put some widgets or tiles here.'),
-                ],
-            ),
-        ],
-    ),
-);
-```
-
-#### RadioSettingsTile
-A settings tile that consist of a tile with title and subtitle and additional tiles according to the given key set.
-The following example shows how you can create a tile with switch:
-```dart
-RadioSettingsTile(
-    settingKey: 'key-of-your-setting',
-    title: 'Select one option',
-    values: {
-        'a': 'Option A',
-        'b': 'Option B',
-        'c': 'Option C',
-        'd': 'Option D',
-    },
-);
-```
-
-#### SliderSettingsTile
-A settings tile with a slider within a given range.
-The following example shows how you can create a tile with a slider:
-```dart
-SliderSettingsTile(
-    settingKey: 'key-of-your-setting',
-    title: 'Brightness',
-    minIcon: Icon(Icons.brightness_4),
-    maxIcon: Icon(Icons.brightness_7),
-);
-```
-In this example, we create a slider tile using more parameters:
-```dart
-SliderSettingsTile(
-    settingKey: 'key-of-your-setting',
-    title: 'Rate this app',
-    subtitle: 'How would you rate this app in a 5 to 1 scale?',
-    minValue: 1.0,
-    maxValue: 5.0,
-    step: 1.0,
-);
-```
-
-#### RadioPickerSettingsTile
-A simple tile that launches a modal dialog with radio buttons.
-The following example shows how you can create a tile that launches radio buttons:
-```dart
-RadioPickerSettingsTile(
-    settingKey: 'key-of-your-setting',
-    title: 'Choose one in the modal dialog',
-    values: {
-        'a': 'Option A',
-        'b': 'Option B',
-        'c': 'Option C',
-        'd': 'Option D',
-    },
-    defaultKey: 'b',
-);
-```
-
-#### TextFieldModalSettingsTile
-A simple tile that launches a modal dialog with a text input.
-The following example shows how you can create a tile that launches a modal dialog with a text input:
-```dart
-TextFieldModalSettingsTile(
-    settingKey: 'key-of-your-setting',
-    title: 'Type something',
-);
-```
-In this example, we create a text field modal tile using more parameters. By giving an emailAddress keyboardType, the phone's keyboard will be optimized to type email addresses easily:
-```dart
-TextFieldModalSettingsTile(
-    settingKey: 'key-of-your-setting',
-    title: 'Type your email',
-    defaultValue: 'This is by default.',
-    cancelCaption: 'Cancel',
-    okCaption: 'Save Email',
-    keyboardType: TextInputType.emailAddress,
-);
-```
-In this example, we replace the text with a series of bullets to obfuscate sensitive information such as user passwords.
-```dart
-TextFieldModalSettingsTile(
-    settingKey: 'key-of-your-setting',
-    title: 'Set User Password',
-    obfuscateText: true,
-);
-```
-
-#### MaterialColorPickerSettingsTile
-A tile that launches a modal dialog where the user can pick any Material color.
-The following example shows how you can create a tile that launches a modal dialog with a Material color picker:
-```dart
-MaterialColorPickerSettingsTile(
-    settingKey: 'key-of-your-setting',
-    title: 'Color Picker',
-);
-```
-In this example, we create the same tile but using more of its parameter:
-```dart
-MaterialColorPickerSettingsTile(
-    settingKey: 'key-of-your-setting',
-    title: 'Color Picker',
-    cancelCaption: 'Keep the old value',
-    okCaption: 'Select new',
-    confirmText: 'Are you sure want to modify the previously selected color?',
-    confirmModalTitle: 'Are you sure?',
-    confirmModalCancelCaption: 'Keep the old one',
-    confirmModalConfirmCaption: 'Yes, I am sure',
 );
 ```
 
@@ -350,7 +450,63 @@ SettingsContainer(
 );
 ```
 
+## Alternate widgets
+
+#### SimpleRadioSettingsTile
+SimpleRadioSettingsTile is a simpler version of the RadioSettingsTile.
+Instead of a Value-String map, this widget just takes a list of String values.
+
+In this widget the displayed value and the stored value will be the same.
+
+Example:
+```dart
+SimpleRadioSettingsTile(
+  title: 'Sync Settings',
+  settingKey: 'key-radio-sync-settings',
+  values: <String>[
+    'Never',
+    'Daily',
+    'Weekly',
+    'Fortnight',
+    'Monthly',
+  ],
+  selected: 'Daily',
+  onChange: (value) {
+    debugPrint('key-radio-sync-settins: $value');
+  },
+);
+```
+
+#### SimpleDropDownSettingsTile
+SimpleDropDownSettingsTile is a simpler version of the DropDownSettingsTile.
+Instead of a Value-String map, this widget just takes a list of String values.
+
+In this widget the displayed value and the stored value will be the same.
+
+Example:
+```dart
+SimpleDropDownSettingsTile(
+  title: 'Beauty Filter',
+  settingKey: 'key-dropdown-beauty-filter',
+  values: <String>[
+    'Simple',
+    'Normal',
+    'Little Special',
+    'Special',
+    'Extra Special',
+    'Bizzar',
+    'Horrific',
+  ],
+  selected: 'Special',
+  onChange: (value) {
+    debugPrint('key-dropdown-beauty-filter: $value');
+ },
+);
+```
+
+
 ## Implementing CacheProvider interface
+
 Cache Provider is an interface you'll need to implement in order to access the underlying caching storage.
 You can use your own choice of the preference library or implement one by your self.
 
@@ -360,13 +516,12 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
 class CustomCacheProvider extends CacheProvider {
     ///...
-    ///implment the methods as you want
+    ///implement the methods as you want
     ///...
 }
 ```
 
-
-for example
+for example,
 
 ```dart
 /// A cache access provider class for shared preferences using shared_preferences library
@@ -389,143 +544,48 @@ The Settings class is used by this library internally.
 To initialize pass the class instance as following:
 
 ```dart
-Settings.init(_customCacheProvider);
+Settings.init(cacheProvider: _customCacheProvider);
 ```
 Now you're good to go.
 
-## Retrieving data
-In this chapter, some StreamBuilder function will be introduced to show how you can retrieve data from Settings that will be rebuilt when the data changes.
+## Accessing/Retrieving data
+You can use static methods of `Settings` class to access any data from the storage.
 
-#### onStringChanged
-Use this function to retrieve a String type value.
-The following example shows how you can retrieve easily a data you have saved earlier. It also reacts if data changes:
+Get value:
 ```dart
-Settings().onStringChanged(
-    settingKey: 'key-of-your-setting',
-    defaultValue: 'Empty',
-    childBuilder: (BuildContext context, String value){
-        return Text(value);
-    },
-);
+ Settings.getValue<T>(cacheKey, defaultValue);
+```
+Set value:
+```dart
+ Settings.setValue<T>(cacheKey, newValue);
 ```
 
-#### onBoolChanged
-Use this function to retrieve a bool type value.
-The following example shows how you can retrieve easily a data you have saved earlier. It also reacts if data changes:
-```dart
-Settings().onBoolChanged(
-    settingKey: 'key-of-your-setting',
-    defaultValue: false,
-    childBuilder: (BuildContext context, bool value){
-        return Text(value.toString());
-    },
-);
-```
+T represents any of the following:
+ - String
+ - bool
+ - int
+ - double
+ - Object
 
-#### onDoubleChanged
-Use this function to retrieve a double type value.
-The following example shows how you can retrieve easily a data you have saved earlier. It also reacts if data changes:
+For example if you want to access a String value from the storage:
+Get value:
 ```dart
-Settings().onDoubleChanged(
-    settingKey: 'key-of-your-setting',
-    defaultValue: 0.0,
-    childBuilder: (BuildContext context, double value){
-        return Text(value.toString());
-    },
-);
+ Settings.getValue<String>(cacheKey, defaultValue);
 ```
-
-#### onIntChanged
-Use this function to retrieve a int type value.
-The following example shows how you can retrieve easily a data you have saved earlier. It also reacts if data changes:
+Set value:
 ```dart
-Settings().onIntChanged(
-    settingKey: 'key-of-your-setting',
-    defaultValue: 0,
-    childBuilder: (BuildContext context, int value){
-        return Text(value.toString());
-    },
-);
-```
-
-#### getString
-Retrieve String settings value asynchronously.
-The following example shows how you can retrieve easily a data asynchronously:
-```dart
-void someAsyncFunction() async {
-    String myValue = await Settings().getString(
-        settingKey: 'key-of-your-setting',
-        defaultValue: 'Default value',
-    );
-    // ...
-}
-```
-
-#### getBool
-Retrieve bool settings value asynchronously.
-The following example shows how you can retrieve easily a data asynchronously:
-```dart
-void someAsyncFunction() async {
-    bool myValue = await Settings().getBool(
-        settingKey: 'key-of-your-setting',
-        defaultValue: true,
-    );
-    // ...
-}
-```
-
-#### getDouble
-Retrieve double settings value asynchronously.
-The following example shows how you can retrieve easily a data asynchronously:
-```dart
-void someAsyncFunction() async {
-    double myValue = await Settings().getDouble(
-        settingKey: 'key-of-your-setting',
-        defaultValue: 0.0,
-    );
-    // ...
-}
-```
-
-#### getInt
-Retrieve int settings value asynchronously.
-The following example shows how you can retrieve easily a data asynchronously:
-```dart
-void someAsyncFunction() async {
-    int myValue = await Settings().getInt(
-        settingKey: 'key-of-your-setting',
-        defaultValue: 0,
-    );
-    // ...
-}
-```
-
-## Conditional Logic
-Some Settings Tiles have enabledIfKey and/or visibleIfKey, visibleByDefault parameters.
-Using these parameters, some basic conditional logic can be achieved.
-
-In this example, the SimpleSettingsTile will be hidden by default and will appear as soon as the Checkbox or Switch that has key-of-parent settingKey get turned on:
-```dart
-SimpleSettingsTile(
-    title: 'Conditionally visible',
-    visibleIfKey: 'key-of-parent',
-);
-```
-In this example, the SimpleSettingsTile will be enabled by default because we told it via the defaultVisibility: true parameter. It reams enabled until the key-of-parent is turned on. The parameter called defaultVisibility is the default behaviour of the visibility and the enabled state as well:
-```dart
-SimpleSettingsTile(
-    title: 'Conditionally enabled.',
-    enabledIfKey: 'key-of-parent',
-    defaultVisibility: true,
-);
+ Settings.setValue<String>(cacheKey, newValue);
 ```
 
 ## Examples
-![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_1.gif "")
-![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_2.gif "")
-![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_3.gif "")
-![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_4.gif "")
-![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_5.gif "")
+![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_1.gif?raw=true "")
+![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_2.gif?raw=true "")
+![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_3.gif?raw=true "")
+![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_4.gif?raw=true "")
+![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_5.gif?raw=true "")
+
+
+## Contribution/Support
 
 File an issue on github repo, if something is not working as expected or you want a new feature to be added.
 
