@@ -1,3 +1,7 @@
+## 0.2.0+1
+* improved plugin initialization, now supports async method call
+* resolved a bug where Radio Settings was not reflecting changes
+
 ## 0.2.0
 * complete re-do of the whole library
   * removed rx-dart dependency

@@ -6,8 +6,6 @@
 This is a simple flutter plugin for easily creating app settings screens.
 The unique thing about this library is that it is not dependent upon any specific storage library used to store settings.
 
-To initialize the plugin, an Instance of the `CacheProvider` is required, which can be implemented using the storage library of choice.
-
 Inspired by the [shared_preferences_settings](https://pub.dev/packages/shared_preferences_settings) plugin.
 
 ## Features
@@ -79,7 +77,7 @@ for example,
 ```dart
 /// A cache access provider class for shared preferences using shared_preferences library
 class SharePreferenceCache extends CacheProvider {
-    ...
+    //...
 }
 ```
 
@@ -88,7 +86,7 @@ OR
 ```dart
 /// A cache access provider class for shared preferences using Hive library
 class HiveCache extends CacheProvider {
-    ...
+    //...
 }
 ```
 
