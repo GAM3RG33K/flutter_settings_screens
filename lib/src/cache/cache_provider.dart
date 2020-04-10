@@ -45,11 +45,9 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 /// the existing [SharePreferenceCache] implementation.
 ///
 abstract class CacheProvider {
-  CacheProvider() {
-    init();
-  }
+  CacheProvider();
 
-  void init();
+  Future<void> init();
 
   int getInt(String key);
 

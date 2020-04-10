@@ -62,7 +62,7 @@ class _AppSettingsState extends State<AppSettings> {
                   ),
                   SimpleSettingsTile(
                     title: 'Root Settings',
-                    subtitle: 'These settings is not accessible',
+                    subtitle: 'These setting is not accessible',
                     enabled: false,
                   )
                 ],
@@ -292,7 +292,7 @@ class _AppSettingsState extends State<AppSettings> {
                 defaultValue: 20,
                 min: 0,
                 max: 100,
-                step: 1,
+                step: 5,
                 leading: Icon(Icons.volume_up),
                 onChange: (value) {
                   debugPrint('key-slider-volume: $value');

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'cache/cache_provider.dart';
-import 'cache/cache_provider_impl.dart';
+import 'cache/cache.dart';
 
 /// This function type is used for rebuilding any given child widgets
 ///
@@ -73,10 +72,11 @@ class Settings {
   ///
   /// Cache provider is optional, default cache provider uses the
   /// shared preferences based cache provider implementation.
-  static void init({CacheProvider cacheProvider}) {
+  static Future<void> init({CacheProvider cacheProvider}) async {
     cacheProvider ??= SharePreferenceCache();
 
     _cacheProvider = cacheProvider;
+    await _cacheProvider.init();
   }
 
   /// method to check if the cache provider contains given [key] or not.

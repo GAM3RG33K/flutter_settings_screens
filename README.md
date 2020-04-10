@@ -6,36 +6,124 @@
 This is a simple flutter plugin for easily creating app settings screens.
 The unique thing about this library is that it is not dependent upon any specific storage library used to store settings.
 
-This library requires an Instance of Cache object which you can implement using the storage library of choice.
+To initialize the plugin, an Instance of the `CacheProvider` is required, which can be implemented using the storage library of choice.
 
-This plugin is inspired by the [shared_preferences_settings](https://pub.dev/packages/shared_preferences_settings) plugin by [Barnabás BARTHA](https://github.com/BarthaBRW).
+Inspired by the [shared_preferences_settings](https://pub.dev/packages/shared_preferences_settings) plugin.
 
 ## Features
   - A collection of settings widgets to make a settings page in a few seconds and get going.
     - **Normal**:
-	  - SimpleSettingsTile
-	  - Switch/Toggle setting
-	  - Checkbox setting
-	  - Drop down setting
-	  - Radio selection Setting
-	  - Slider setting
-	  - Color choice panel
-	  - Text Input Setting
-	- **Advanced**:
-	  - SettingsScreen:
-		> A Flutter Widget/Page which can contain all settings widget.
-	  - ExpandableSettingsTile
-	  	> A settings widget which can hold a set of widgets in section which is collapsible
-	  - SettingsContainer
-	  > A Settings widget that helps any flutter widget fitting in the settings page
-	  - SettingsGroup
-	  > A Container widget that creates a section with a title to separate settings inside this from other settings
+      - SimpleSettingsTile
+      - Switch/Toggle setting
+      - Checkbox setting
+      - Drop down setting
+      - Radio selection Setting
+      - Slider setting
+      - Color choice panel
+      - Text Input Setting
+    - **Advanced**:
+      - SettingsScreen:
+        > A Flutter Widget/Page which can contain all settings widget.
+      - ExpandableSettingsTile
+          > A settings widget which can hold a set of widgets in a section which is collapsible
+      - SettingsContainer
+      > A Settings widget that helps any flutter widget fitting in the settings page
+      - SettingsGroup
+      > A Container widget that creates a section with a title to separate settings inside this from other settings
   - Settings saved via Library of your choice
   - Widgets with conditional visibility of some other settings.
-    - i.e. A set of settings is only visible if a switch or a check box is switched on / ticked.
+    - for example, A set of settings is only visible if a switch or a checkbox is enabled.
 
-## Using custom shared preferences library.
-  - Check out the Example code provided with this plugin.
+
+## Examples
+![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_1.gif?raw=true "")
+![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_2.gif?raw=true "")
+![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_3.gif?raw=true "")
+![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_4.gif?raw=true "")
+![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_5.gif?raw=true "")
+
+
+## Initializing the plugin
+
+Initialize the plugin as following:
+```dart
+await Settings.init(cacheProvider: _customCacheProvider);
+```
+
+**Note**:
+The plugin must be initialized before Navigating to the settings page.
+
+It is recommended that `Settings.init()` should be called before `runApp()` is called in the main file. However, anywhere before showing the settings page is fine.
+
+
+### Cache Provider Interface
+Cache Provider is an interface using which the plugin accesses the underlying caching storage.
+
+This plugin includes an implementation of the `CacheProvider` using the `SharedPrerefences` library by flutter. if `cacheProvider` parameter is not given explicitly then the default implementation will be used to store the settings.
+
+However, If you wish to use other means for storing the data,  You can implement one by your self.
+
+All you have to do is create a class as following:
+```dart
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+
+class CustomCacheProvider extends CacheProvider {
+    ///...
+    ///implement the methods as you want
+    ///...
+}
+```
+
+for example,
+
+```dart
+/// A cache access provider class for shared preferences using shared_preferences library
+class SharePreferenceCache extends CacheProvider {
+    ...
+}
+```
+
+OR
+
+```dart
+/// A cache access provider class for shared preferences using Hive library
+class HiveCache extends CacheProvider {
+    ...
+}
+```
+
+once you implement the class, use an instance of this class to initialize the Settings class.
+
+
+## Accessing/Retrieving data
+You can use static methods of `Settings` class to access any data from the storage.
+
+Get value:
+```dart
+ Settings.getValue<T>(cacheKey, defaultValue);
+```
+Set value:
+```dart
+ Settings.setValue<T>(cacheKey, newValue);
+```
+
+T represents any of the following:
+ - String
+ - bool
+ - int
+ - double
+ - Object
+
+For example if you want to access a String value from the storage:
+Get value:
+```dart
+ Settings.getValue<String>(cacheKey, defaultValue);
+```
+Set value:
+```dart
+ Settings.setValue<String>(cacheKey, newValue);
+```
+
 
 ## Tile widgets
 
@@ -64,7 +152,7 @@ SimpleSettingsTile(
 
 SettingsGroup is a widget that contains multiple settings tiles and other widgets together as a group and shows a title/name of that group.
 
-All the children widget will have a small padding from the left and top to provide a sense that they in a separate group from others
+All the children widget will have small padding from the left and top to provide a sense that they in a separate group from others
 
 Example:
 ```dart
@@ -85,13 +173,13 @@ SettingsGroup(
         disabledLabel: 'Disabled',
         leading: Icon(Icons.palette),
       ),
- 	],
+     ],
  );
 ```
 
 
 #### ExpandableSettingsTile
-ExpandableSettingsTile is wrapper widget which shows the given children  when exapnded by clicking on the tile.
+ExpandableSettingsTile is a wrapper widget that shows the given children when expanded by clicking on the tile.
 
 Example:
 ```dart
@@ -121,7 +209,7 @@ Example:
 
 CheckboxSettingsTile is a widget that has a Checkbox with given title, subtitle and default value/status of the Checkbox
 
-This widget supports an additional list of widgets to display when the Checkbox is checked. These optional list of widgets is accessed through `childrenIfEnabled` property of this widget.
+This widget supports an additional list of widgets to display when the Checkbox is checked. This optional list of widgets is accessed through `childrenIfEnabled` property of this widget.
 
 This widget works similar to `SwitchSettingsTile`.
 
@@ -158,7 +246,7 @@ Example:
 #### SwitchSettingsTile
 SwitchSettingsTile is a widget that has a Switch with given title, subtitle and default value/status of the switch
 
-This widget supports an additional list of widgets to display when the switch is enabled. These optional list of widgets is accessed through `childrenIfEnabled` property of this widget.
+This widget supports an additional list of widgets to display when the switch is enabled. This optional list of widgets is accessed through `childrenIfEnabled` property of this widget.
 
 This widget works similar to `CheckboxSettingsTile`.
 
@@ -200,9 +288,9 @@ Example:
 #### RadioSettingsTile
 RadioSettingsTile is a widget that has a list of Radio widgets with given title, subtitle and default/group value which determines which Radio will be selected initially.
 
-This widget support Any type of values which should be put in the preference.
+This widget supports Any type of values which should be put in the preference.
 
-However, since any types of the value is supported, the input for this widget is a Map to the required values with their string representation.
+However, since any type of value is supported, the input for this widget is a Map to the required values with their string representation.
 
 For example, if the required value type is a boolean then the values map can be as following:
  ```dart
@@ -236,11 +324,11 @@ RadioSettingsTile<int>(
 #### DropDownSettingTile
 DropDownSettingsTile is a widget that has a list of DropdownMenuItems with given title, subtitle and default/group value which determines which value will be set to selected initially.
 
-This widget support Any type of values which should be put in the preference.
+This widget supports Any type of values which should be put in the preference.
 
-However, since any types of the value is supported, the input for this widget is a Map to the required values with their string representation.
+However, since any type of value is supported, the input for this widget is a Map to the required values with their string representation.
 
-For example if the required value type is a boolean then the values map can
+For example, if the required value type is a boolean then the values map can
 be as following:
 ```dart
  <bool, String> {
@@ -273,7 +361,7 @@ DropDownSettingsTile<int>(
 #### SliderSettingsTile
 SliderSettingsTile is a widget that has a slider given title, subtitle and default value which determines what the slider's position will be set initially.
 
-This widget supports double and integer type of values which should be put in the preference.
+This widget supports double and integer types of values which should be put in the preference.
 
 Example:
 ```dart
@@ -297,7 +385,7 @@ SliderSettingsTile(
 #### RadioModalSettingsTile
 RadioModalSettingsTile widget is the dialog version of the `RadioSettingsTile` widget.
 
-Use of this widget is similar to the RadioSettingsTile, only the displayed widget will be in a different position.
+The use of this widget is similar to the RadioSettingsTile, only the displayed widget will be in a different position.
 
 i.e instead of inside the settings screen, it will be shown in a dialog above the settings screen.
 
@@ -323,7 +411,7 @@ RadioModalSettingsTile<int>(
 #### SliderModalSettingsTile
 SliderModalSettingsTile widget is the dialog version of the SliderSettingsTile widget.
 
-Use of this widget is similar to the SliderSettingsTile, only the displayed widget will be in a different position.
+The use of this widget is similar to the SliderSettingsTile, only the displayed widget will be in a different position.
 
 i.e instead of inside the settings screen, it will be shown in a dialog above the settings screen.
 
@@ -383,7 +471,7 @@ TextInputSettingsTile(
 ```
 
 #### ColorPickerSettingsTile
-ColorPickerSettingsTile is a widget which allows user to select the a color from a set of Material color choices.
+ColorPickerSettingsTile is a widget which allows user to select a color from a set of Material color choices.
 
 Since, `Color` is an in-memory object type, the serialized version of the value of this widget will be a Hex value String of the selected color.
 
@@ -391,7 +479,7 @@ For example, If selected color is `red` then the stored value will be "#ffff0000
 
 This conversion string <-> color, makes this easy to check/debug the values from the storage/preference manually.
 
-The color panel shown in the widget is provided by `flutter_material_color_picker` library.
+The color panel shown in the widget is provided by the `flutter_material_color_picker` library.
 
 Example:
 ```dart
@@ -418,7 +506,7 @@ SettingsScreen(
 );
 ```
 
-Inside the children parameter you can define settings tiles and other widgets. In this example we create a screen with a simple CheckboxSettingsTile in it:
+Inside the children parameter, you can define settings tiles and other widgets. In this example we create a screen with a simple CheckboxSettingsTile in it:
 
 ```dart
 SettingsScreen(
@@ -456,7 +544,7 @@ SettingsContainer(
 SimpleRadioSettingsTile is a simpler version of the RadioSettingsTile.
 Instead of a Value-String map, this widget just takes a list of String values.
 
-In this widget the displayed value and the stored value will be the same.
+In this widget, the displayed value and the stored value will be the same.
 
 Example:
 ```dart
@@ -481,7 +569,7 @@ SimpleRadioSettingsTile(
 SimpleDropDownSettingsTile is a simpler version of the DropDownSettingsTile.
 Instead of a Value-String map, this widget just takes a list of String values.
 
-In this widget the displayed value and the stored value will be the same.
+In this widget, the displayed value and the stored value will be the same.
 
 Example:
 ```dart
@@ -505,88 +593,9 @@ SimpleDropDownSettingsTile(
 ```
 
 
-## Implementing CacheProvider interface
-
-Cache Provider is an interface you'll need to implement in order to access the underlying caching storage.
-You can use your own choice of the preference library or implement one by your self.
-
-All you have to do is create a class as following:
-```dart
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
-
-class CustomCacheProvider extends CacheProvider {
-    ///...
-    ///implement the methods as you want
-    ///...
-}
-```
-
-for example,
-
-```dart
-/// A cache access provider class for shared preferences using shared_preferences library
-class SharePreferenceCache extends CacheProvider {
-    ...
-}
-```
-
-OR
-
-```dart
-/// A cache access provider class for shared preferences using Hive library
-class HiveCache extends CacheProvider {
-    ...
-}
-```
-once you implement the class, use an instance of this class to initialize the Settings class.
-The Settings class is used by this library internally.
-
-To initialize pass the class instance as following:
-
-```dart
-Settings.init(cacheProvider: _customCacheProvider);
-```
-Now you're good to go.
-
-## Accessing/Retrieving data
-You can use static methods of `Settings` class to access any data from the storage.
-
-Get value:
-```dart
- Settings.getValue<T>(cacheKey, defaultValue);
-```
-Set value:
-```dart
- Settings.setValue<T>(cacheKey, newValue);
-```
-
-T represents any of the following:
- - String
- - bool
- - int
- - double
- - Object
-
-For example if you want to access a String value from the storage:
-Get value:
-```dart
- Settings.getValue<String>(cacheKey, defaultValue);
-```
-Set value:
-```dart
- Settings.setValue<String>(cacheKey, newValue);
-```
-
-## Examples
-![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_1.gif?raw=true "")
-![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_2.gif?raw=true "")
-![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_3.gif?raw=true "")
-![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_4.gif?raw=true "")
-![](https://github.com/GAM3RG33K/flutter_settings_screens/blob/master/media/example_5.gif?raw=true "")
-
 
 ## Contribution/Support
 
-File an issue on github repo, if something is not working as expected or you want a new feature to be added.
+File an issue on GitHub repo, if something is not working as expected or you want a new feature to be added.
 
 All help and Pull requests are most welcome.

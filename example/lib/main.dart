@@ -1,24 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
-import 'package:flutter_settings_screens_example/app_settings_page.dart';
-import 'package:flutter_settings_screens_example/cache_provider.dart';
 
-void main() {
-  initSettings();
+import 'app_settings_page.dart';
+import 'cache_provider.dart';
+
+Future<void> main() async {
+  await initSettings();
   runApp(MyApp());
 }
 
-void initSettings() {
-  // use this cache for settings based shared preferences
-  SharePreferenceCache spCache = SharePreferenceCache()
-    ..init();
-
-  // use this cache for settings based Hive
-  HiveCache hCache = HiveCache()
-    ..init();
-
-  Settings.init(cacheProvider: _isUsingHive ? hCache : spCache);
+Future<void> initSettings() async {
+  await Settings.init(
+    cacheProvider: _isUsingHive ? HiveCache() : SharePreferenceCache(),
+  );
 }
 
 bool _isDarkTheme = true;

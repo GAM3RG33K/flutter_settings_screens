@@ -1512,6 +1512,7 @@ class RadioSettingsTile<T> extends StatefulWidget {
   final Map<T, String> values;
   final String title;
   final bool enabled;
+  final bool showTitles;
   final OnChanged<T> onChange;
   final Widget leading;
 
@@ -1523,6 +1524,7 @@ class RadioSettingsTile<T> extends StatefulWidget {
     this.enabled = true,
     this.onChange,
     this.leading,
+    this.showTitles,
   });
 
   @override
@@ -1554,10 +1556,13 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
       builder: (BuildContext context, T value, OnChanged<T> onChanged) {
         return SettingsContainer(
           children: <Widget>[
-            _SimpleHeaderTile(
-              title: widget.title,
-              subtitle: widget.values[selectedValue],
-              leading: widget.leading,
+            Visibility(
+              visible: showTitles,
+              child: _SimpleHeaderTile(
+                title: widget.title,
+                subtitle: widget.values[selectedValue],
+                leading: widget.leading,
+              ),
             ),
             _buildRadioTiles(context, value, onChanged)
           ],
@@ -1565,6 +1570,8 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
       },
     );
   }
+
+  bool get showTitles => widget.showTitles ?? true;
 
   Widget _buildRadioTiles(BuildContext context, T groupValue,
       OnChanged<T> onChanged) {
@@ -1622,7 +1629,7 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
 ///     3: 'Adjusted',
 ///     4: 'Normal',
 ///     5: 'Compact',
-///     6: 'Squizzed',
+///     6: 'Squeezed',
 ///   },
 ///   selected: 2,
 ///   onChange: (value) {
@@ -1924,6 +1931,7 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
   final Map<T, String> values;
   final String title;
   final bool enabled;
+  final bool showTitles;
   final OnChanged<T> onChange;
 
   RadioModalSettingsTile({
@@ -1932,6 +1940,7 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
     @required this.selected,
     @required this.values,
     this.enabled = true,
+    this.showTitles = false,
     this.onChange,
   });
 
@@ -1964,40 +1973,21 @@ class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
       defaultValue: selectedValue,
       builder: (BuildContext context, T value, OnChanged<T> onChanged) {
         return _ModalSettingsTile(
-          children: <Widget>[_buildRadioTiles(context, value, onChanged)],
+          children: <Widget>[
+            RadioSettingsTile(
+              title: '',
+              showTitles: widget.showTitles,
+              enabled: widget.enabled,
+              values: widget.values,
+              settingKey: widget.settingKey,
+              onChange: (value) => _onRadioChange(value, onChanged),
+              selected: value,
+            ),
+          ],
           title: widget.title,
-          subtitle: widget.values[selectedValue],
+          subtitle: widget.values[value],
         );
       },
-    );
-  }
-
-  Widget _buildRadioTiles(BuildContext context, T groupValue,
-      OnChanged<T> onChanged) {
-    List<Widget> radioList =
-    widget.values.entries.map<Widget>((MapEntry<T, String> entry) {
-      return Padding(
-        padding: const EdgeInsets.all(0.0),
-        child: _SettingsTile(
-          title: entry.value,
-          onTap: widget.enabled
-              ? () => _onRadioChange(entry.key, onChanged)
-              : null,
-          child: _SettingsRadio<T>(
-            value: entry.key,
-            onChanged: widget.enabled
-                ? (T newValue) {
-              _onRadioChange(newValue, onChanged);
-            }
-                : null,
-            enabled: widget.enabled,
-            groupValue: groupValue,
-          ),
-        ),
-      );
-    }).toList();
-    return Column(
-      children: radioList,
     );
   }
 }
@@ -2124,7 +2114,7 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
 ///   ],
 ///   selected: 'Daily',
 ///   onChange: (value) {
-///     debugPrint('key-radio-sync-settins: $value');
+///     debugPrint('key-radio-sync-settings: $value');
 ///   },
 /// );
 /// ```
