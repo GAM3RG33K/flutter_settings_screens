@@ -333,9 +333,10 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
         context: context,
         builder: (dialogContext) {
           return SimpleDialog(
-            title: Center(child: getTitle()),
+            title: Center(
+              child: getTitle(),
+            ),
             titlePadding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 2.0),
-            elevation: 1.0,
             children: _finalWidgets(dialogContext, children),
             contentPadding: EdgeInsets.zero,
           );
@@ -678,15 +679,18 @@ class SimpleSettingsTile extends StatelessWidget {
   /// ignore all the user inputs
   final bool enabled;
 
-  /// [SettingsScreen] which will be displayed on tap of the tile
-  final SettingsScreen screen;
+  /// widget that will be displayed on tap of the tile
+  final Widget child;
+
+  final VoidCallback onTap;
 
   SimpleSettingsTile({
     @required this.title,
     this.subtitle,
-    this.screen,
+    this.child,
     this.enabled = true,
     this.leading,
+    this.onTap,
   });
 
   @override
@@ -696,7 +700,7 @@ class SimpleSettingsTile extends StatelessWidget {
       title: title,
       subtitle: subtitle,
       enabled: enabled,
-      child: screen != null ? getIcon(context) : Text(''),
+      child: child != null ? getIcon(context) : Text(''),
       onTap: enabled ? () => _handleTap(context) : null,
     );
   }
@@ -709,12 +713,15 @@ class SimpleSettingsTile extends StatelessWidget {
   }
 
   void _handleTap(BuildContext context) {
-    if (screen == null) {
-      return;
+    if (onTap != null) {
+      onTap();
     }
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (BuildContext context) => screen,
-    ));
+
+    if (child != null) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (BuildContext context) => child,
+      ));
+    }
   }
 }
 
@@ -1172,15 +1179,17 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
                 borderRadius: BorderRadius.all(
                   Radius.circular(5.0),
                 ),
-                borderSide:
-                BorderSide(color: widget.borderColor ?? Colors.blue),
+                borderSide: BorderSide(
+                  color: widget.borderColor ?? Colors.blue,
+                ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(5.0),
                 ),
-                borderSide:
-                BorderSide(color: widget.borderColor ?? Colors.blue),
+                borderSide: BorderSide(
+                  color: widget.borderColor ?? Colors.blue,
+                ),
               )),
         ),
       ),
@@ -2126,12 +2135,14 @@ class SimpleRadioSettingsTile extends StatelessWidget {
   final bool enabled;
   final OnChanged<String> onChange;
 
-  SimpleRadioSettingsTile({@required this.title,
+  SimpleRadioSettingsTile({
+    @required this.title,
     @required this.settingKey,
     @required this.selected,
     @required this.values,
     this.enabled = true,
-    this.onChange});
+    this.onChange,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -2188,12 +2199,14 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
   final bool enabled;
   final OnChanged<String> onChange;
 
-  SimpleDropDownSettingsTile({@required this.title,
+  SimpleDropDownSettingsTile({
+    @required this.title,
     @required this.settingKey,
     @required this.selected,
     @required this.values,
     this.enabled = true,
-    this.onChange});
+    this.onChange,
+  });
 
   @override
   Widget build(BuildContext context) {

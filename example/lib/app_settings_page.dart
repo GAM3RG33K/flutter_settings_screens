@@ -64,13 +64,18 @@ class _AppSettingsState extends State<AppSettings> {
                     title: 'Root Settings',
                     subtitle: 'These setting is not accessible',
                     enabled: false,
-                  )
+                  ),
+                  SimpleSettingsTile(
+                    title: 'Custom Settings',
+                    subtitle: 'Tap to execute custom callback',
+                    onTap: () => debugPrint('Snackbar action'),
+                  ),
                 ],
               ),
               SimpleSettingsTile(
                 title: 'More Settings',
                 subtitle: 'General App Settings',
-                screen: SettingsScreen(
+                child: SettingsScreen(
                   title: "App Settings",
                   children: <Widget>[
                     CheckboxSettingsTile(
