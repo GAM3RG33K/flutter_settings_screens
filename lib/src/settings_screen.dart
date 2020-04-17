@@ -165,6 +165,8 @@ class __SettingsTileState extends State<_SettingsTile> {
               child: widget.child,
             ),
             dense: true,
+            isThreeLine: (widget.subtitle?.isNotEmpty ?? false) &&
+                widget.subtitle.length > 20,
           ),
           Visibility(
             visible: widget.showChildBelow,
@@ -596,6 +598,8 @@ class _SettingsColorPicker extends StatelessWidget {
   /// title of the settings tile and color pallet dialog
   final String title;
 
+  final String subtitle;
+
   /// current value of the slider
   final String value;
 
@@ -611,13 +615,14 @@ class _SettingsColorPicker extends StatelessWidget {
     @required this.onChanged,
     @required this.enabled,
     @required this.title,
+    this.subtitle,
   });
 
   @override
   Widget build(BuildContext context) {
     return _SettingsTile(
       title: title,
-      subtitle: value,
+      subtitle: subtitle != null && subtitle.isNotEmpty ? subtitle : value,
       enabled: enabled,
       onTap: enabled ? () => _showColorPicker(context, value) : null,
       child: FloatingActionButton(
@@ -1269,6 +1274,7 @@ class SwitchSettingsTile extends StatelessWidget {
   final String settingKey;
   final bool defaultValue;
   final String title;
+  final String subtitle;
   final bool enabled;
   final OnChanged<bool> onChange;
   final Widget leading;
@@ -1286,6 +1292,7 @@ class SwitchSettingsTile extends StatelessWidget {
     this.enabledLabel = '',
     this.disabledLabel = '',
     this.childrenIfEnabled,
+    this.subtitle = '',
   });
 
   @override
@@ -1326,6 +1333,9 @@ class SwitchSettingsTile extends StatelessWidget {
   }
 
   String getSubtitle(bool currentStatus) {
+    if (subtitle != null && subtitle.isNotEmpty) {
+      return subtitle;
+    }
     String label = '';
     if (currentStatus && enabledLabel.isNotEmpty) {
       label = enabledLabel;
@@ -1396,6 +1406,7 @@ class CheckboxSettingsTile extends StatelessWidget {
   final String settingKey;
   final bool defaultValue;
   final String title;
+  final String subtitle;
   final bool enabled;
   final OnChanged<bool> onChange;
   final Widget leading;
@@ -1413,6 +1424,7 @@ class CheckboxSettingsTile extends StatelessWidget {
     this.enabledLabel = '',
     this.disabledLabel = '',
     this.childrenIfEnabled,
+    this.subtitle = '',
   });
 
   @override
@@ -1453,6 +1465,10 @@ class CheckboxSettingsTile extends StatelessWidget {
   }
 
   String getSubtitle(bool currentStatus) {
+    if (subtitle != null && subtitle.isNotEmpty) {
+      return subtitle;
+    }
+
     String label = '';
     if (currentStatus && enabledLabel.isNotEmpty) {
       label = enabledLabel;
@@ -1520,6 +1536,7 @@ class RadioSettingsTile<T> extends StatefulWidget {
   final T selected;
   final Map<T, String> values;
   final String title;
+  final String subtitle;
   final bool enabled;
   final bool showTitles;
   final OnChanged<T> onChange;
@@ -1534,6 +1551,7 @@ class RadioSettingsTile<T> extends StatefulWidget {
     this.onChange,
     this.leading,
     this.showTitles,
+    this.subtitle = '',
   });
 
   @override
@@ -1569,7 +1587,9 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
               visible: showTitles,
               child: _SimpleHeaderTile(
                 title: widget.title,
-                subtitle: widget.values[selectedValue],
+                subtitle: widget.subtitle != null && widget.subtitle.isNotEmpty
+                    ? widget.subtitle
+                    : widget.values[selectedValue],
                 leading: widget.leading,
               ),
             ),
@@ -1651,6 +1671,7 @@ class DropDownSettingsTile<T> extends StatefulWidget {
   final T selected;
   final Map<T, String> values;
   final String title;
+  final String subtitle;
   final bool enabled;
   final OnChanged<T> onChange;
 
@@ -1661,6 +1682,7 @@ class DropDownSettingsTile<T> extends StatefulWidget {
     @required this.values,
     this.enabled = true,
     this.onChange,
+    this.subtitle = '',
   });
 
   @override
@@ -1687,6 +1709,7 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
           children: <Widget>[
             _SettingsTile(
               title: widget.title,
+              subtitle: widget.subtitle,
               child: _SettingsDropDown<T>(
                 selected: value,
                 values: widget.values.keys.toList().cast<T>(),
@@ -1742,6 +1765,7 @@ class SliderSettingsTile extends StatefulWidget {
   final String settingKey;
   final double defaultValue;
   final String title;
+  final String subtitle;
   final bool enabled;
   final double min;
   final double max;
@@ -1759,6 +1783,7 @@ class SliderSettingsTile extends StatefulWidget {
     this.step = 1.0,
     this.onChange,
     this.leading,
+    this.subtitle = '',
   });
 
   @override
@@ -1786,7 +1811,9 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
           children: <Widget>[
             _SimpleHeaderTile(
               title: widget.title,
-              subtitle: value.toString(),
+              subtitle: widget.subtitle != null && widget.subtitle.isNotEmpty
+                  ? widget.subtitle
+                  : value.toString(),
               leading: widget.leading,
             ),
             _SettingsSlider(
@@ -1845,6 +1872,7 @@ class ColorPickerSettingsTile extends StatefulWidget {
   final String defaultStringValue;
   final Color defaultValue;
   final String title;
+  final String subtitle;
   final bool enabled;
   final OnChanged<Color> onChange;
 
@@ -1855,6 +1883,7 @@ class ColorPickerSettingsTile extends StatefulWidget {
     this.enabled = true,
     this.onChange,
     this.defaultStringValue = '#ff000000',
+    this.subtitle = '',
   });
 
   @override
@@ -1939,6 +1968,7 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
   final T selected;
   final Map<T, String> values;
   final String title;
+  final String subtitle;
   final bool enabled;
   final bool showTitles;
   final OnChanged<T> onChange;
@@ -1951,6 +1981,7 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
     this.enabled = true,
     this.showTitles = false,
     this.onChange,
+    this.subtitle = '',
   });
 
   @override
@@ -1994,7 +2025,9 @@ class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
             ),
           ],
           title: widget.title,
-          subtitle: widget.values[value],
+          subtitle: widget.subtitle != null && widget.subtitle.isNotEmpty
+              ? widget.subtitle
+              : widget.values[value],
         );
       },
     );
@@ -2030,6 +2063,7 @@ class SliderModalSettingsTile extends StatefulWidget {
   final String settingKey;
   final double defaultValue;
   final String title;
+  final String subtitle;
   final bool enabled;
   final double min;
   final double max;
@@ -2045,6 +2079,7 @@ class SliderModalSettingsTile extends StatefulWidget {
     @required this.max,
     this.step = 0.0,
     this.onChange,
+    this.subtitle = '',
   });
 
   @override
@@ -2073,7 +2108,9 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
           children: <Widget>[
             _ModalSettingsTile(
               title: widget.title,
-              subtitle: value.toString(),
+              subtitle: widget.subtitle != null && widget.subtitle.isNotEmpty
+                  ? widget.subtitle
+                  : value.toString(),
               children: <Widget>[
                 _SettingsSlider(
                   onChanged: widget.enabled
@@ -2132,6 +2169,7 @@ class SimpleRadioSettingsTile extends StatelessWidget {
   final String selected;
   final List<String> values;
   final String title;
+  final String subtitle;
   final bool enabled;
   final OnChanged<String> onChange;
 
@@ -2142,12 +2180,14 @@ class SimpleRadioSettingsTile extends StatelessWidget {
     @required this.values,
     this.enabled = true,
     this.onChange,
+    this.subtitle = '',
   });
 
   @override
   Widget build(BuildContext context) {
     return RadioSettingsTile<String>(
       title: title,
+      subtitle: subtitle,
       settingKey: settingKey,
       selected: selected,
       enabled: enabled,
@@ -2196,6 +2236,7 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
   final String selected;
   final List<String> values;
   final String title;
+  final String subtitle;
   final bool enabled;
   final OnChanged<String> onChange;
 
@@ -2206,12 +2247,14 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
     @required this.values,
     this.enabled = true,
     this.onChange,
+    this.subtitle = '',
   });
 
   @override
   Widget build(BuildContext context) {
     return DropDownSettingsTile<String>(
       title: title,
+      subtitle: subtitle,
       settingKey: settingKey,
       selected: selected,
       enabled: enabled,
