@@ -19,6 +19,8 @@ class _AppSettingsState extends State<AppSettings> {
               SwitchSettingsTile(
                 settingKey: 'key-wifi',
                 title: 'Wi-Fi',
+                subtitle: 'Wi-Fi allows interacting with the local network '
+                    'or internet via connecting to a W-Fi router',
                 enabledLabel: 'Enabled',
                 disabledLabel: 'Disabled',
                 leading: Icon(Icons.wifi),
@@ -29,6 +31,8 @@ class _AppSettingsState extends State<AppSettings> {
               CheckboxSettingsTile(
                 settingKey: 'key-blue-tooth',
                 title: 'Bluetooth',
+                subtitle: 'Bluetooth allows interacting with the '
+                    'near by bluetooth enabled devices',
                 enabledLabel: 'Enabled',
                 disabledLabel: 'Disabled',
                 leading: Icon(Icons.bluetooth),
