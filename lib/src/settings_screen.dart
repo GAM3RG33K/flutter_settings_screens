@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
@@ -156,8 +155,16 @@ class __SettingsTileState extends State<_SettingsTile> {
         children: <Widget>[
           ListTile(
             leading: widget.leading,
-            title: Text(widget.title),
-            subtitle: widget.subtitle.isEmpty ? null : Text(widget.subtitle),
+            title: Text(
+              widget.title,
+              style: headerTextStyle(context),
+            ),
+            subtitle: widget.subtitle.isEmpty
+                ? null
+                : Text(
+                    widget.subtitle,
+                    style: subtitleTextStyle(context),
+                  ),
             enabled: widget.enabled,
             onTap: widget.enabled ? widget.onTap : null,
             trailing: Visibility(
@@ -207,8 +214,16 @@ class __SimpleHeaderTileState extends State<_SimpleHeaderTile> {
   Widget build(BuildContext context) {
     return AbsorbPointer(
       child: ListTile(
-        title: Text(widget.title),
-        subtitle: widget.subtitle.isNotEmpty ? Text(widget.subtitle) : null,
+        title: Text(
+          widget.title,
+          style: headerTextStyle(context),
+        ),
+        subtitle: widget.subtitle.isNotEmpty
+            ? Text(
+          widget.subtitle,
+          style: subtitleTextStyle(context),
+        )
+            : null,
         leading: widget.leading,
       ),
     );
@@ -269,9 +284,15 @@ class _ExpansionSettingsTileState extends State<_ExpansionSettingsTile> {
   Widget getExpansionTile() {
     return Material(
       child: ExpansionTile(
-        title: Text(widget.title),
+        title: Text(
+          widget.title,
+          style: headerTextStyle(context),
+        ),
         leading: widget.leading,
-        subtitle: Text(widget.subtitle),
+        subtitle: Text(
+          widget.subtitle,
+          style: subtitleTextStyle(context),
+        ),
         children: <Widget>[widget.child],
         initiallyExpanded: widget.expanded,
       ),
@@ -320,8 +341,11 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
     return Material(
       child: ListTile(
         leading: widget.leading,
-        title: Text(widget.title),
-        subtitle: Text(widget.subtitle),
+        title: Text(widget.title, style: headerTextStyle(context)),
+        subtitle: Text(
+          widget.subtitle,
+          style: subtitleTextStyle(context),
+        ),
         enabled: widget.enabled,
         onTap:
         widget.enabled ? () => _showWidget(context, widget.children) : null,
@@ -358,10 +382,10 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
         ? Row(
       children: <Widget>[
         widget.leading,
-        Text(widget.title),
+        Text(widget.title, style: headerTextStyle(context)),
       ],
     )
-        : Text(widget.title);
+        : Text(widget.title, style: headerTextStyle(context));
   }
 
   List<Widget> _addActionWidgets(BuildContext dialogContext,
@@ -567,7 +591,7 @@ class _SettingsSlider extends StatelessWidget {
   /// on change callback to handle the value change
   final OnChanged<double> onChanged;
 
-  /// flag which represents the state of the settings, if false the the tile will
+  /// flag which represents the state of the settings, if false then the tile will
   /// ignore all the user inputs
   final bool enabled;
 
@@ -986,13 +1010,7 @@ class SettingsGroup extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text(
             title.toUpperCase(),
-            style: TextStyle(
-              color: Theme
-                  .of(context)
-                  .accentColor,
-              fontSize: 12.0,
-              fontWeight: FontWeight.bold,
-            ),
+            style: groupStyle(context),
           ),
         ),
       ),
@@ -1014,6 +1032,16 @@ class SettingsGroup extends StatelessWidget {
           children: elements,
         )
       ],
+    );
+  }
+
+  TextStyle groupStyle(BuildContext context) {
+    return TextStyle(
+      color: Theme
+          .of(context)
+          .accentColor,
+      fontSize: 12.0,
+      fontWeight: FontWeight.bold,
     );
   }
 }
@@ -1767,6 +1795,7 @@ class SliderSettingsTile extends StatefulWidget {
   final String title;
   final String subtitle;
   final bool enabled;
+  final bool eagerUpdate;
   final double min;
   final double max;
   final double step;
@@ -1778,6 +1807,7 @@ class SliderSettingsTile extends StatefulWidget {
     @required this.settingKey,
     this.defaultValue = 0.0,
     this.enabled = true,
+    this.eagerUpdate = true,
     @required this.min,
     @required this.max,
     this.step = 1.0,
@@ -2271,3 +2301,17 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
     return valueMap;
   }
 }
+
+TextStyle headerTextStyle(BuildContext context) =>
+    Theme
+        .of(context)
+        .textTheme
+        .headline6
+        .copyWith(fontSize: 16.0);
+
+TextStyle subtitleTextStyle(BuildContext context) =>
+    Theme
+        .of(context)
+        .textTheme
+        .subtitle2
+        .copyWith(fontSize: 13.0, fontWeight: FontWeight.normal);
