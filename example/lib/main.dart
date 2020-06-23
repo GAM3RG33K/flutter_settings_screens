@@ -147,9 +147,7 @@ void showSnackBar(BuildContext context, String message) {
           color: Colors.white,
         ),
       ),
-      backgroundColor: Theme
-          .of(context)
-          .primaryColor,
+      backgroundColor: Theme.of(context).primaryColor,
     ),
   );
 }

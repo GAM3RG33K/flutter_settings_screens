@@ -303,8 +303,10 @@ class _AppSettingsState extends State<AppSettings> {
                 max: 100,
                 step: 5,
                 leading: Icon(Icons.volume_up),
-                onChange: (value) {
-                  debugPrint('key-slider-volume: $value');
+                onChangeEnd: (value) {
+                  debugPrint('\n===== on change end =====\n'
+                      'key-slider-volume: $value'
+                      '\n==========\n');
                 },
               ),
               ColorPickerSettingsTile(
@@ -330,7 +332,19 @@ class _AppSettingsState extends State<AppSettings> {
                 step: 0.1,
                 leading: Icon(Icons.aspect_ratio),
                 onChange: (value) {
-                  debugPrint('key-custom-ratio-slider-2: $value');
+                  debugPrint('\n===== on change =====\n'
+                      'key-custom-ratio-slider-2: $value'
+                      '\n==========\n');
+                },
+                onChangeStart: (value) {
+                  debugPrint('\n===== on change start =====\n'
+                      'key-custom-ratio-slider-2: $value'
+                      '\n==========\n');
+                },
+                onChangeEnd: (value) {
+                  debugPrint('\n===== on change end =====\n'
+                      'key-custom-ratio-slider-2: $value'
+                      '\n==========\n');
                 },
               ),
               ColorPickerSettingsTile(
