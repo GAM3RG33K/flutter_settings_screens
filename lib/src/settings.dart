@@ -9,7 +9,8 @@ import 'cache/cache.dart';
 /// When the value associated with a settings key changes, [ValueChangeObserver]
 /// triggers a [InternalWidgetBuilder] function call.
 typedef InternalWidgetBuilder<T> = Widget Function(
-    BuildContext, T, ValueChanged<T>);
+    BuildContext, T, ValueChanged<T>,
+    {ValueChanged<T> onChangeStart, ValueChanged<T> onChangeEnd});
 
 /// This function type is used for building a widget based on the value given to it.
 /// It is an alternate version of [WidgetBuilder].
@@ -45,8 +46,8 @@ class Settings {
   /// Public factory method to provide the
   factory Settings() {
     assert(
-    _cacheProvider != null,
-    'Must call Settings.init(cacheProvider)'
+        _cacheProvider != null,
+        'Must call Settings.init(cacheProvider)'
         ' before using settings!');
     return _instance;
   }
@@ -60,8 +61,8 @@ class Settings {
   /// value is set properly.
   static void ensureCacheProvider() {
     assert(
-    _cacheProvider != null,
-    'Must call Settings.init(cacheProvider)'
+        _cacheProvider != null,
+        'Must call Settings.init(cacheProvider)'
         ' before using settings!');
   }
 
@@ -123,11 +124,15 @@ class ValueChangeNotifier<T> extends ValueNotifier<T> {
   /// A String which represents a setting (assumed to be unique)
   final String key;
 
-  ValueChangeNotifier(this.key, value) : super(value);
+  final bool updateCache;
+
+  ValueChangeNotifier(this.key, value, this.updateCache) : super(value);
 
   @override
   set value(T newValue) {
-    Settings.setValue<T>(key, newValue);
+    if (updateCache == true) {
+      Settings.setValue<T>(key, newValue);
+    }
     super.value = newValue;
   }
 
@@ -147,8 +152,12 @@ class ValueChangeNotifier<T> extends ValueNotifier<T> {
 ///
 /// If a settings key is already added in the map, the new notifier
 /// is added to the list of notifiers
-Map<String, List<ValueChangeNotifier>> _notifiers =
-Map<String, List<ValueChangeNotifier>>();
+Map<String, List<ValueChangeNotifier>> _onChangedNotifiers =
+    Map<String, List<ValueChangeNotifier>>();
+
+Map<String, List<ValueChangeNotifier>> _onChangeStartNotifiers;
+
+Map<String, List<ValueChangeNotifier>> _onChangeEndNotifiers;
 
 /// A Stateful widget which Takes in a [cacheKey], a [defaultValue]
 /// and a [builder]
@@ -157,6 +166,9 @@ Map<String, List<ValueChangeNotifier>>();
 /// [cacheKey]
 class ValueChangeObserver<T> extends StatefulWidget {
   final String cacheKey;
+  final bool updateCacheOnChanged;
+  final bool updateCacheOnChangeStart;
+  final bool updateCacheOnChangeEnd;
   final T defaultValue;
   final InternalWidgetBuilder<T> builder;
 
@@ -164,6 +176,9 @@ class ValueChangeObserver<T> extends StatefulWidget {
     @required this.cacheKey,
     @required this.defaultValue,
     @required this.builder,
+    this.updateCacheOnChanged = true,
+    this.updateCacheOnChangeStart,
+    this.updateCacheOnChangeEnd,
   });
 
   @override
@@ -175,9 +190,19 @@ class _ValueChangeObserverState<T> extends State<ValueChangeObserver<T>> {
 
   String get cacheKey => widget.cacheKey;
 
+  bool get updateCacheOnChanged => widget.updateCacheOnChanged;
+
+  bool get updateCacheOnChangeStart => widget.updateCacheOnChangeStart;
+
+  bool get updateCacheOnChangeEnd => widget.updateCacheOnChangeEnd;
+
   T get defaultValue => widget.defaultValue;
 
-  ValueChangeNotifier<T> notifier;
+  ValueChangeNotifier<T> onChangedNotifier;
+
+  ValueChangeNotifier<T> onChangeStartNotifier;
+
+  ValueChangeNotifier<T> onChangeEndNotifier;
 
   @override
   void initState() {
@@ -190,30 +215,72 @@ class _ValueChangeObserverState<T> extends State<ValueChangeObserver<T>> {
     // get cache value from the [cacheProvider]
     value = Settings.getValue<T>(cacheKey, defaultValue);
 
-    // assign a notifier
-    notifier = ValueChangeNotifier<T>(cacheKey, value);
-
-    // add notifier to [_notifiers] map
-    if (!_notifiers.containsKey(cacheKey)) {
-      _notifiers[cacheKey] = List<ValueChangeNotifier<T>>();
+    // assign notifiers
+    onChangedNotifier =
+        ValueChangeNotifier<T>(cacheKey, value, updateCacheOnChanged);
+    if (updateCacheOnChangeStart != null) {
+      onChangeStartNotifier =
+          ValueChangeNotifier<T>(cacheKey, value, updateCacheOnChangeStart);
     }
-    _notifiers[cacheKey].add(notifier);
+    if (updateCacheOnChangeEnd != null) {
+      onChangeEndNotifier =
+          ValueChangeNotifier<T>(cacheKey, value, updateCacheOnChangeEnd);
+    }
+
+    // add notifiers to [_notifiers] maps
+    if (!_onChangedNotifiers.containsKey(cacheKey)) {
+      _onChangedNotifiers[cacheKey] = List<ValueChangeNotifier<T>>();
+    }
+    _onChangedNotifiers[cacheKey].add(onChangedNotifier);
+
+    if (onChangeStartNotifier != null) {
+      if (_onChangeStartNotifiers == null) {
+        _onChangeStartNotifiers = Map<String, List<ValueChangeNotifier>>();
+      }
+      if (!_onChangeStartNotifiers.containsKey(cacheKey)) {
+        _onChangeStartNotifiers[cacheKey] = List<ValueChangeNotifier<T>>();
+      }
+      _onChangeStartNotifiers[cacheKey].add(onChangeStartNotifier);
+    }
+
+    if (onChangeEndNotifier != null) {
+      if (_onChangeEndNotifiers == null) {
+        _onChangeEndNotifiers = Map<String, List<ValueChangeNotifier>>();
+      }
+      if (!_onChangeEndNotifiers.containsKey(cacheKey)) {
+        _onChangeEndNotifiers[cacheKey] = List<ValueChangeNotifier<T>>();
+      }
+      _onChangeEndNotifiers[cacheKey].add(onChangeEndNotifier);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<T>(
-      valueListenable: notifier,
+      valueListenable: onChangedNotifier,
       builder: (BuildContext context, T value, Widget child) {
-        return widget.builder(context, value, onChange);
+        return widget.builder(context, value, onChanged,
+            onChangeStart: onChangeStart, onChangeEnd: onChangeEnd);
       },
     );
   }
 
   /// This method is used to trigger all the associated notifiers
   /// when associated value is changed in cache
-  void onChange(T newValue) {
-    _notifiers[cacheKey].forEach((notifier) {
+  void onChanged(T newValue) {
+    _onChangedNotifiers[cacheKey].forEach((notifier) {
+      notifier.value = newValue;
+    });
+  }
+
+  void onChangeStart(T newValue) {
+    _onChangeStartNotifiers[cacheKey].forEach((notifier) {
+      notifier.value = newValue;
+    });
+  }
+
+  void onChangeEnd(T newValue) {
+    _onChangeEndNotifiers[cacheKey].forEach((notifier) {
       notifier.value = newValue;
     });
   }

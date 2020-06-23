@@ -567,6 +567,12 @@ class _SettingsSlider extends StatelessWidget {
   /// on change callback to handle the value change
   final OnChanged<double> onChanged;
 
+  /// on change start callback to handle the value change
+  final OnChanged<double> onChangeStart;
+
+  /// on change end callback to handle the value change
+  final OnChanged<double> onChangeEnd;
+
   /// flag which represents the state of the settings, if false the the tile will
   /// ignore all the user inputs
   final bool enabled;
@@ -576,8 +582,10 @@ class _SettingsSlider extends StatelessWidget {
     @required this.min,
     @required this.max,
     @required this.step,
-    @required this.onChanged,
     @required this.enabled,
+    @required this.onChanged,
+    this.onChangeStart,
+    this.onChangeEnd,
   });
 
   @override
@@ -588,6 +596,8 @@ class _SettingsSlider extends StatelessWidget {
       max: max,
       divisions: (max - min) ~/ (step),
       onChanged: enabled ? onChanged : null,
+      onChangeStart: enabled ? onChangeStart : null,
+      onChangeEnd: enabled ? onChangeEnd : null,
     );
   }
 }
@@ -1136,8 +1146,8 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
     return ValueChangeObserver<String>(
       cacheKey: widget.settingKey,
       defaultValue: widget.initialValue,
-      builder:
-          (BuildContext context, String value, OnChanged<String> onChanged) {
+      builder: (BuildContext context, String value, OnChanged<String> onChanged,
+          {OnChanged<String> onChangeStart, OnChanged<String> onChangeEnd}) {
         _controller.text = value;
         return _ModalSettingsTile(
           title: widget.title,
@@ -1300,7 +1310,8 @@ class SwitchSettingsTile extends StatelessWidget {
     return ValueChangeObserver<bool>(
       cacheKey: settingKey,
       defaultValue: defaultValue,
-      builder: (BuildContext context, bool value, OnChanged<bool> onChanged) {
+      builder: (BuildContext context, bool value, OnChanged<bool> onChanged,
+          {OnChanged<bool> onChangeStart, OnChanged<bool> onChangeEnd}) {
         Widget mainWidget = _SettingsTile(
           leading: leading,
           title: title,
@@ -1432,7 +1443,8 @@ class CheckboxSettingsTile extends StatelessWidget {
     return ValueChangeObserver<bool>(
       cacheKey: settingKey,
       defaultValue: defaultValue,
-      builder: (BuildContext context, bool value, OnChanged<bool> onChanged) {
+      builder: (BuildContext context, bool value, OnChanged<bool> onChanged,
+          {OnChanged<bool> onChangeStart, OnChanged<bool> onChangeEnd}) {
         var mainWidget = _SettingsTile(
           leading: leading,
           title: title,
@@ -1580,7 +1592,8 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
     return ValueChangeObserver<T>(
       cacheKey: widget.settingKey,
       defaultValue: selectedValue,
-      builder: (BuildContext context, T value, OnChanged<T> onChanged) {
+      builder: (BuildContext context, T value, OnChanged<T> onChanged,
+          {OnChanged<T> onChangeStart, OnChanged<T> onChangeEnd}) {
         return SettingsContainer(
           children: <Widget>[
             Visibility(
@@ -1704,7 +1717,8 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
     return ValueChangeObserver<T>(
       cacheKey: widget.settingKey,
       defaultValue: selectedValue,
-      builder: (BuildContext context, T value, OnChanged<T> onChanged) {
+      builder: (BuildContext context, T value, OnChanged<T> onChanged,
+          {OnChanged<T> onChangeStart, OnChanged<T> onChangeEnd}) {
         return SettingsContainer(
           children: <Widget>[
             _SettingsTile(
@@ -1771,6 +1785,11 @@ class SliderSettingsTile extends StatefulWidget {
   final double max;
   final double step;
   final OnChanged<double> onChange;
+  final OnChanged<double> onChangeStart;
+  final OnChanged<double> onChangeEnd;
+  final bool updateCacheOnChanged;
+  final bool updateCacheOnChangeStart;
+  final bool updateCacheOnChangeEnd;
   final Widget leading;
 
   SliderSettingsTile({
@@ -1782,6 +1801,11 @@ class SliderSettingsTile extends StatefulWidget {
     @required this.max,
     this.step = 1.0,
     this.onChange,
+    this.onChangeStart,
+    this.onChangeEnd,
+    this.updateCacheOnChanged,
+    this.updateCacheOnChangeStart,
+    this.updateCacheOnChangeEnd,
     this.leading,
     this.subtitle = '',
   });
@@ -1803,9 +1827,12 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
   Widget build(BuildContext context) {
     return ValueChangeObserver<double>(
       cacheKey: widget.settingKey,
+      updateCacheOnChanged: widget.updateCacheOnChanged,
+      updateCacheOnChangeStart: widget.updateCacheOnChangeStart,
+      updateCacheOnChangeEnd: widget.updateCacheOnChangeEnd,
       defaultValue: currentValue,
-      builder:
-          (BuildContext context, double value, OnChanged<double> onChanged) {
+      builder: (BuildContext context, double value, OnChanged<double> onChanged,
+          {OnChanged<double> onChangeStart, OnChanged<double> onChangeEnd}) {
         debugPrint('creating settings Tile: ${widget.settingKey}');
         return SettingsContainer(
           children: <Widget>[
@@ -1820,6 +1847,13 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
               onChanged: widget.enabled
                   ? (double newValue) =>
                   _handleSliderChanged(newValue, onChanged)
+                  : null,
+              onChangeStart: widget.enabled
+                  ? (double newValue) =>
+                      _handleSliderStart(newValue, onChangeStart)
+                  : null,
+              onChangeEnd: widget.enabled
+                  ? (double newValue) => _handleSliderEnd(newValue, onChangeEnd)
                   : null,
               enabled: widget.enabled,
               value: value,
@@ -1839,6 +1873,22 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
     onChanged(newValue);
     if (widget.onChange != null) {
       widget.onChange(newValue);
+    }
+  }
+
+  void _handleSliderStart(double newValue, OnChanged<double> onChangeStart) {
+    currentValue = newValue;
+    onChangeStart?.call(newValue);
+    if (widget.onChangeStart != null) {
+      widget.onChangeStart(newValue);
+    }
+  }
+
+  void _handleSliderEnd(double newValue, OnChanged<double> onChangeEnd) {
+    currentValue = newValue;
+    onChangeEnd?.call(newValue);
+    if (widget.onChangeEnd != null) {
+      widget.onChangeEnd(newValue);
     }
   }
 }
@@ -1910,8 +1960,8 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
     return ValueChangeObserver<String>(
       cacheKey: widget.settingKey,
       defaultValue: currentValue,
-      builder:
-          (BuildContext context, String value, OnChanged<String> onChanged) {
+      builder: (BuildContext context, String value, OnChanged<String> onChanged,
+          {OnChanged<String> onChangeStart, OnChanged<String> onChangeEnd}) {
         debugPrint('creating settings Tile: ${widget.settingKey}');
         return _SettingsColorPicker(
           title: widget.title,
@@ -2011,7 +2061,8 @@ class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
     return ValueChangeObserver<T>(
       cacheKey: widget.settingKey,
       defaultValue: selectedValue,
-      builder: (BuildContext context, T value, OnChanged<T> onChanged) {
+      builder: (BuildContext context, T value, OnChanged<T> onChanged,
+          {OnChanged<T> onChangeStart, OnChanged<T> onChangeEnd}) {
         return _ModalSettingsTile(
           children: <Widget>[
             RadioSettingsTile(
@@ -2069,6 +2120,11 @@ class SliderModalSettingsTile extends StatefulWidget {
   final double max;
   final double step;
   final OnChanged<double> onChange;
+  final OnChanged<double> onChangeStart;
+  final OnChanged<double> onChangeEnd;
+  final bool updateCacheOnChanged;
+  final bool updateCacheOnChangeStart;
+  final bool updateCacheOnChangeEnd;
 
   SliderModalSettingsTile({
     @required this.title,
@@ -2079,6 +2135,11 @@ class SliderModalSettingsTile extends StatefulWidget {
     @required this.max,
     this.step = 0.0,
     this.onChange,
+    this.onChangeStart,
+    this.onChangeEnd,
+    this.updateCacheOnChanged,
+    this.updateCacheOnChangeStart,
+    this.updateCacheOnChangeEnd,
     this.subtitle = '',
   });
 
@@ -2100,9 +2161,12 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
   Widget build(BuildContext context) {
     return ValueChangeObserver<double>(
       cacheKey: widget.settingKey,
+      updateCacheOnChanged: widget.updateCacheOnChanged,
+      updateCacheOnChangeStart: widget.updateCacheOnChangeStart,
+      updateCacheOnChangeEnd: widget.updateCacheOnChangeEnd,
       defaultValue: currentValue,
-      builder:
-          (BuildContext context, double value, OnChanged<double> onChanged) {
+      builder: (BuildContext context, double value, OnChanged<double> onChanged,
+          {OnChanged<double> onChangeStart, OnChanged<double> onChangeEnd}) {
         debugPrint('creating settings Tile: ${widget.settingKey}');
         return SettingsContainer(
           children: <Widget>[
@@ -2116,6 +2180,14 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
                   onChanged: widget.enabled
                       ? (double newValue) =>
                       _handleSliderChanged(newValue, onChanged)
+                      : null,
+                  onChangeStart: widget.enabled
+                      ? (double newValue) =>
+                          _handleSliderStart(newValue, onChangeStart)
+                      : null,
+                  onChangeEnd: widget.enabled
+                      ? (double newValue) =>
+                          _handleSliderEnd(newValue, onChangeEnd)
                       : null,
                   enabled: widget.enabled,
                   value: value,
@@ -2136,6 +2208,22 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
     onChanged(newValue);
     if (widget.onChange != null) {
       widget.onChange(newValue);
+    }
+  }
+
+  void _handleSliderStart(double newValue, OnChanged<double> onChangeStart) {
+    currentValue = newValue;
+    onChangeStart?.call(newValue);
+    if (widget.onChangeStart != null) {
+      widget.onChangeStart(newValue);
+    }
+  }
+
+  void _handleSliderEnd(double newValue, OnChanged<double> onChangeEnd) {
+    currentValue = newValue;
+    onChangeEnd?.call(newValue);
+    if (widget.onChangeEnd != null) {
+      widget.onChangeEnd(newValue);
     }
   }
 }
