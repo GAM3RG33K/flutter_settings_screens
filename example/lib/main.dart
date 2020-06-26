@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
@@ -64,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         Text('Shared Pref'),
-        Switch(
+        Switch.adaptive(
             value: _isUsingHive,
             onChanged: (newVal) {
               if (kIsWeb) {
@@ -85,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         Text('Light Theme'),
-        Switch(
+        Switch.adaptive(
             value: _isDarkTheme,
             onChanged: (newVal) {
               _isDarkTheme = newVal;
@@ -147,9 +148,7 @@ void showSnackBar(BuildContext context, String message) {
           color: Colors.white,
         ),
       ),
-      backgroundColor: Theme
-          .of(context)
-          .primaryColor,
+      backgroundColor: Theme.of(context).primaryColor,
     ),
   );
 }

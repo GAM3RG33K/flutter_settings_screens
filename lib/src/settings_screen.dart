@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
@@ -75,22 +78,47 @@ import 'settings.dart';
 /// ```
 class SettingsScreen extends StatelessWidget {
   /// Appbar title in Scaffold.
+  /// when setting `isMainScreen` to `false` the title will be ignored,
   final String title;
 
   /// Content of the screen, body of the Scaffold.
   final List<Widget> children;
 
+  ///drawer for the setting screen.
+  final Drawer drawer;
+
+  ///end drawer for the setting screen.
+  final Drawer endDrawer;
+
+  ///`isMainScreen` is used when you want to use your custom `scaffold` and `appBar`.
+  ///default is `true`, when equals `false` the `title` is ignored.
+  final bool isMainScreen;
+
   SettingsScreen({
     this.title = 'Settings',
     @required this.children,
+    this.isMainScreen = true,
+    this.drawer,
+    this.endDrawer,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (!isMainScreen) {
+      return ListView.builder(
+        shrinkWrap: true,
+        itemCount: children.length,
+        itemBuilder: (BuildContext context, int index) {
+          return children[index];
+        },
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
       ),
+      drawer: drawer,
+      endDrawer: endDrawer,
       body: ListView.builder(
         shrinkWrap: true,
         itemCount: children.length,
@@ -220,9 +248,9 @@ class __SimpleHeaderTileState extends State<_SimpleHeaderTile> {
         ),
         subtitle: widget.subtitle.isNotEmpty
             ? Text(
-          widget.subtitle,
-          style: subtitleTextStyle(context),
-        )
+                widget.subtitle,
+                style: subtitleTextStyle(context),
+              )
             : null,
         leading: widget.leading,
       ),
@@ -348,7 +376,7 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
         ),
         enabled: widget.enabled,
         onTap:
-        widget.enabled ? () => _showWidget(context, widget.children) : null,
+            widget.enabled ? () => _showWidget(context, widget.children) : null,
         dense: true,
       ),
     );
@@ -369,8 +397,8 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
         });
   }
 
-  List<Widget> _finalWidgets(BuildContext dialogContext,
-      List<Widget> children) {
+  List<Widget> _finalWidgets(
+      BuildContext dialogContext, List<Widget> children) {
     if (widget.showConfirmation == null || !widget.showConfirmation) {
       return children;
     }
@@ -380,16 +408,16 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
   Widget getTitle() {
     return widget.leading != null
         ? Row(
-      children: <Widget>[
-        widget.leading,
-        Text(widget.title, style: headerTextStyle(context)),
-      ],
-    )
+            children: <Widget>[
+              widget.leading,
+              Text(widget.title, style: headerTextStyle(context)),
+            ],
+          )
         : Text(widget.title, style: headerTextStyle(context));
   }
 
-  List<Widget> _addActionWidgets(BuildContext dialogContext,
-      List<Widget> children) {
+  List<Widget> _addActionWidgets(
+      BuildContext dialogContext, List<Widget> children) {
     final finalList = List<Widget>.from(children);
     finalList.add(Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -485,7 +513,7 @@ class _SettingsSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Switch(
+    return Switch.adaptive(
       value: value,
       onChanged: enabled ? onChanged : null,
     );
@@ -552,6 +580,7 @@ class _SettingsDropDown<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     return Wrap(
       alignment: WrapAlignment.end,
       children: <Widget>[
@@ -561,7 +590,7 @@ class _SettingsDropDown<T> extends StatelessWidget {
           onChanged: onChanged,
           underline: Container(),
           items: values.map<DropdownMenuItem<T>>(
-                (T val) {
+            (T val) {
               return DropdownMenuItem<T>(
                 child: itemBuilder(val),
                 value: val,
@@ -606,7 +635,7 @@ class _SettingsSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Slider(
+    return Slider.adaptive(
       value: value,
       min: min,
       max: max,
@@ -1037,9 +1066,7 @@ class SettingsGroup extends StatelessWidget {
 
   TextStyle groupStyle(BuildContext context) {
     return TextStyle(
-      color: Theme
-          .of(context)
-          .accentColor,
+      color: Theme.of(context).accentColor,
       fontSize: 12.0,
       fontWeight: FontWeight.bold,
     );
@@ -1183,8 +1210,8 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
     );
   }
 
-  Widget _buildTextField(BuildContext context, String value,
-      OnChanged<String> onChanged) {
+  Widget _buildTextField(
+      BuildContext context, String value, OnChanged<String> onChanged) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Form(
@@ -1337,7 +1364,7 @@ class SwitchSettingsTile extends StatelessWidget {
           child: _SettingsSwitch(
             value: value,
             onChanged:
-            enabled ? (value) => _onSwitchChange(value, onChanged) : null,
+                enabled ? (value) => _onSwitchChange(value, onChanged) : null,
             enabled: enabled,
           ),
         );
@@ -1469,7 +1496,7 @@ class CheckboxSettingsTile extends StatelessWidget {
           child: _SettingsCheckbox(
             value: value,
             onChanged:
-            enabled ? (value) => _onCheckboxChange(value, onChanged) : null,
+                enabled ? (value) => _onCheckboxChange(value, onChanged) : null,
             enabled: enabled,
           ),
         );
@@ -1630,20 +1657,20 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
 
   bool get showTitles => widget.showTitles ?? true;
 
-  Widget _buildRadioTiles(BuildContext context, T groupValue,
-      OnChanged<T> onChanged) {
+  Widget _buildRadioTiles(
+      BuildContext context, T groupValue, OnChanged<T> onChanged) {
     List<Widget> radioList =
-    widget.values.entries.map<Widget>((MapEntry<T, String> entry) {
+        widget.values.entries.map<Widget>((MapEntry<T, String> entry) {
       return _SettingsTile(
         title: entry.value,
         onTap:
-        widget.enabled ? () => _onRadioChange(entry.key, onChanged) : null,
+            widget.enabled ? () => _onRadioChange(entry.key, onChanged) : null,
         child: _SettingsRadio<T>(
           value: entry.key,
           onChanged: widget.enabled
               ? (T newValue) {
-            _onRadioChange(newValue, onChanged);
-          }
+                  _onRadioChange(newValue, onChanged);
+                }
               : null,
           enabled: widget.enabled,
           groupValue: groupValue,
@@ -1743,8 +1770,8 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
                 values: widget.values.keys.toList().cast<T>(),
                 onChanged: widget.enabled
                     ? (T newValue) {
-                  _handleDropDownChange(newValue, onChanged);
-                }
+                        _handleDropDownChange(newValue, onChanged);
+                      }
                     : null,
                 enabled: widget.enabled,
                 itemBuilder: (T value) {
@@ -1822,6 +1849,7 @@ class SliderSettingsTile extends StatefulWidget {
 
 class _SliderSettingsTileState extends State<SliderSettingsTile> {
   double currentValue;
+  bool isMuted = false;
 
   @override
   void initState() {
@@ -1843,13 +1871,13 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
               title: widget.title,
               subtitle: widget.subtitle != null && widget.subtitle.isNotEmpty
                   ? widget.subtitle
-                  : value.toString(),
+                  : (isMuted ? "Silent" : value.toStringAsFixed(0)),
               leading: widget.leading,
             ),
             _SettingsSlider(
               onChanged: widget.enabled
                   ? (double newValue) =>
-                  _handleSliderChanged(newValue, onChanged)
+                      _handleSliderChanged(newValue, onChanged)
                   : null,
               enabled: widget.enabled,
               value: value,
@@ -1866,6 +1894,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
 
   void _handleSliderChanged(double newValue, OnChanged<double> onChanged) {
     currentValue = newValue;
+    isMuted = currentValue == 0;
     onChanged(newValue);
     if (widget.onChange != null) {
       widget.onChange(newValue);
@@ -2145,7 +2174,7 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
                 _SettingsSlider(
                   onChanged: widget.enabled
                       ? (double newValue) =>
-                      _handleSliderChanged(newValue, onChanged)
+                          _handleSliderChanged(newValue, onChanged)
                       : null,
                   enabled: widget.enabled,
                   value: value,
@@ -2303,15 +2332,9 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
 }
 
 TextStyle headerTextStyle(BuildContext context) =>
-    Theme
-        .of(context)
-        .textTheme
-        .headline6
-        .copyWith(fontSize: 16.0);
+    Theme.of(context).textTheme.headline6.copyWith(fontSize: 16.0);
 
-TextStyle subtitleTextStyle(BuildContext context) =>
-    Theme
-        .of(context)
-        .textTheme
-        .subtitle2
-        .copyWith(fontSize: 13.0, fontWeight: FontWeight.normal);
+TextStyle subtitleTextStyle(BuildContext context) => Theme.of(context)
+    .textTheme
+    .subtitle2
+    .copyWith(fontSize: 13.0, fontWeight: FontWeight.normal);
