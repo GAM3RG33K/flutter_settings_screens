@@ -166,7 +166,7 @@ class __SettingsTileState extends State<_SettingsTile> {
                     style: subtitleTextStyle(context),
                   ),
             enabled: widget.enabled,
-            onTap: widget.enabled ? widget.onTap : null,
+            onTap: widget.onTap,
             trailing: Visibility(
               visible: !widget.showChildBelow,
               child: widget.child,
@@ -347,8 +347,7 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
           style: subtitleTextStyle(context),
         ),
         enabled: widget.enabled,
-        onTap:
-        widget.enabled ? () => _showWidget(context, widget.children) : null,
+        onTap: () => _showWidget(context, widget.children),
         dense: true,
       ),
     );
@@ -398,9 +397,7 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
           padding: EdgeInsets.zero,
           child: Text('Cancel'),
           onPressed: () {
-            if (widget.onCancel != null) {
-              widget.onCancel();
-            }
+            widget.onCancel?.call();
             _disposeDialog(dialogContext);
           },
         ),
@@ -558,7 +555,7 @@ class _SettingsDropDown<T> extends StatelessWidget {
         DropdownButton<T>(
           isDense: true,
           value: this.selected,
-          onChanged: onChanged,
+          onChanged: enabled ? onChanged : null,
           underline: Container(),
           items: values.map<DropdownMenuItem<T>>(
                 (T val) {
@@ -588,8 +585,14 @@ class _SettingsSlider extends StatelessWidget {
   /// current value of the slider
   final double value;
 
+  /// on change callback to handle the value change when slider starts moving
+  final OnChanged<double> onChangeStart;
+
   /// on change callback to handle the value change
   final OnChanged<double> onChanged;
+
+  /// on change callback to handle the value change when slider stops moving
+  final OnChanged<double> onChangeEnd;
 
   /// flag which represents the state of the settings, if false then the tile will
   /// ignore all the user inputs
@@ -600,8 +603,10 @@ class _SettingsSlider extends StatelessWidget {
     @required this.min,
     @required this.max,
     @required this.step,
-    @required this.onChanged,
     @required this.enabled,
+    this.onChangeStart,
+    this.onChanged,
+    this.onChangeEnd,
   });
 
   @override
@@ -611,7 +616,9 @@ class _SettingsSlider extends StatelessWidget {
       min: min,
       max: max,
       divisions: (max - min) ~/ (step),
+      onChangeStart: enabled ? onChangeStart : null,
       onChanged: enabled ? onChanged : null,
+      onChangeEnd: enabled ? onChangeEnd : null,
     );
   }
 }
@@ -648,7 +655,7 @@ class _SettingsColorPicker extends StatelessWidget {
       title: title,
       subtitle: subtitle != null && subtitle.isNotEmpty ? subtitle : value,
       enabled: enabled,
-      onTap: enabled ? () => _showColorPicker(context, value) : null,
+      onTap: () => _showColorPicker(context, value),
       child: FloatingActionButton(
         backgroundColor: Utils.colorFromString(value),
         elevation: 0,
@@ -730,7 +737,7 @@ class SimpleSettingsTile extends StatelessWidget {
       subtitle: subtitle,
       enabled: enabled,
       child: child != null ? getIcon(context) : Text(''),
-      onTap: enabled ? () => _handleTap(context) : null,
+      onTap: () => _handleTap(context),
     );
   }
 
@@ -742,9 +749,7 @@ class SimpleSettingsTile extends StatelessWidget {
   }
 
   void _handleTap(BuildContext context) {
-    if (onTap != null) {
-      onTap();
-    }
+    onTap?.call();
 
     if (child != null) {
       Navigator.of(context).push(MaterialPageRoute(
@@ -1333,11 +1338,11 @@ class SwitchSettingsTile extends StatelessWidget {
           leading: leading,
           title: title,
           subtitle: getSubtitle(value),
-          onTap: enabled ? () => onChanged(!value) : null,
+          onTap: () => onChanged(!value),
+          enabled: enabled,
           child: _SettingsSwitch(
             value: value,
-            onChanged:
-            enabled ? (value) => _onSwitchChange(value, onChanged) : null,
+            onChanged: (value) => _onSwitchChange(value, onChanged),
             enabled: enabled,
           ),
         );
@@ -1464,12 +1469,12 @@ class CheckboxSettingsTile extends StatelessWidget {
         var mainWidget = _SettingsTile(
           leading: leading,
           title: title,
+          enabled: enabled,
           subtitle: getSubtitle(value),
-          onTap: enabled ? () => _onCheckboxChange(!value, onChanged) : null,
+          onTap: () => _onCheckboxChange(!value, onChanged),
           child: _SettingsCheckbox(
             value: value,
-            onChanged:
-            enabled ? (value) => _onCheckboxChange(value, onChanged) : null,
+            onChanged: (value) => _onCheckboxChange(value, onChanged),
             enabled: enabled,
           ),
         );
@@ -1598,9 +1603,7 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
   void _onRadioChange(T value, OnChanged<T> onChanged) {
     selectedValue = value;
     onChanged(value);
-    if (widget.onChange != null) {
-      widget.onChange(value);
-    }
+    widget.onChange?.call(value);
   }
 
   @override
@@ -1636,15 +1639,13 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
     widget.values.entries.map<Widget>((MapEntry<T, String> entry) {
       return _SettingsTile(
         title: entry.value,
-        onTap:
-        widget.enabled ? () => _onRadioChange(entry.key, onChanged) : null,
+        onTap: () => _onRadioChange(entry.key, onChanged),
+        enabled: widget.enabled,
         child: _SettingsRadio<T>(
           value: entry.key,
-          onChanged: widget.enabled
-              ? (T newValue) {
+          onChanged: (T newValue) {
             _onRadioChange(newValue, onChanged);
-          }
-              : null,
+          },
           enabled: widget.enabled,
           groupValue: groupValue,
         ),
@@ -1738,14 +1739,13 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
             _SettingsTile(
               title: widget.title,
               subtitle: widget.subtitle,
+              enabled: widget.enabled,
               child: _SettingsDropDown<T>(
                 selected: value,
                 values: widget.values.keys.toList().cast<T>(),
-                onChanged: widget.enabled
-                    ? (T newValue) {
+                onChanged: (T newValue) {
                   _handleDropDownChange(newValue, onChanged);
-                }
-                    : null,
+                },
                 enabled: widget.enabled,
                 itemBuilder: (T value) {
                   return Text(widget.values[value]);
@@ -1761,9 +1761,7 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
   void _handleDropDownChange(T value, OnChanged<T> onChanged) {
     selectedValue = value;
     onChanged(value);
-    if (widget.onChange != null) {
-      widget.onChange(value);
-    }
+    widget.onChange?.call(value);
   }
 }
 
@@ -1800,6 +1798,8 @@ class SliderSettingsTile extends StatefulWidget {
   final double max;
   final double step;
   final OnChanged<double> onChange;
+  final OnChanged<double> onChangeStart;
+  final OnChanged<double> onChangeEnd;
   final Widget leading;
 
   SliderSettingsTile({
@@ -1812,6 +1812,8 @@ class SliderSettingsTile extends StatefulWidget {
     @required this.max,
     this.step = 1.0,
     this.onChange,
+    this.onChangeStart,
+    this.onChangeEnd,
     this.leading,
     this.subtitle = '',
   });
@@ -1847,10 +1849,12 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
               leading: widget.leading,
             ),
             _SettingsSlider(
-              onChanged: widget.enabled
-                  ? (double newValue) =>
-                  _handleSliderChanged(newValue, onChanged)
-                  : null,
+              onChanged: (newValue) =>
+                  _handleSliderChanged(newValue, onChanged),
+              onChangeStart: (newValue) =>
+                  _handleSliderChangeStart(newValue, onChanged),
+              onChangeEnd: (newValue) =>
+                  _handleSliderChangeEnd(newValue, onChanged),
               enabled: widget.enabled,
               value: value,
               max: widget.max,
@@ -1860,16 +1864,28 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
             _SettingsTileDivider(),
           ],
         );
-      },
+          },
     );
   }
 
-  void _handleSliderChanged(double newValue, OnChanged<double> onChanged) {
+  void _updateWidget(double newValue, OnChanged<double> onChanged) {
     currentValue = newValue;
     onChanged(newValue);
-    if (widget.onChange != null) {
-      widget.onChange(newValue);
-    }
+  }
+
+  void _handleSliderChanged(double newValue, OnChanged<double> onChanged) {
+    _updateWidget(newValue, onChanged);
+    widget.onChange?.call(newValue);
+  }
+
+  void _handleSliderChangeStart(double newValue, OnChanged<double> onChanged) {
+    _updateWidget(newValue, onChanged);
+    widget.onChangeStart?.call(newValue);
+  }
+
+  void _handleSliderChangeEnd(double newValue, OnChanged<double> onChanged) {
+    _updateWidget(newValue, onChanged);
+    widget.onChangeEnd?.call(newValue);
   }
 }
 
@@ -1947,9 +1963,7 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
           title: widget.title,
           value: value,
           enabled: widget.enabled,
-          onChanged: widget.enabled
-              ? (color) => _handleColorChanged(color, onChanged)
-              : null,
+          onChanged: (color) => _handleColorChanged(color, onChanged),
         );
       },
     );
@@ -2031,9 +2045,7 @@ class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
   void _onRadioChange(T value, OnChanged<T> onChanged) {
     selectedValue = value;
     onChanged(value);
-    if (widget.onChange != null) {
-      widget.onChange(value);
-    }
+    widget.onChange?.call(value);
   }
 
   @override
@@ -2099,6 +2111,8 @@ class SliderModalSettingsTile extends StatefulWidget {
   final double max;
   final double step;
   final OnChanged<double> onChange;
+  final OnChanged<double> onChangeStart;
+  final OnChanged<double> onChangeEnd;
 
   SliderModalSettingsTile({
     @required this.title,
@@ -2109,6 +2123,8 @@ class SliderModalSettingsTile extends StatefulWidget {
     @required this.max,
     this.step = 0.0,
     this.onChange,
+    this.onChangeStart,
+    this.onChangeEnd,
     this.subtitle = '',
   });
 
@@ -2143,10 +2159,12 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
                   : value.toString(),
               children: <Widget>[
                 _SettingsSlider(
-                  onChanged: widget.enabled
-                      ? (double newValue) =>
-                      _handleSliderChanged(newValue, onChanged)
-                      : null,
+                  onChanged: (double newValue) =>
+                      _handleSliderChanged(newValue, onChanged),
+                  onChangeStart: (double newValue) =>
+                      _handleSliderChangeStart(newValue, onChanged),
+                  onChangeEnd: (double newValue) =>
+                      _handleSliderChangeEnd(newValue, onChanged),
                   enabled: widget.enabled,
                   value: value,
                   max: widget.max,
@@ -2162,11 +2180,23 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
   }
 
   void _handleSliderChanged(double newValue, OnChanged<double> onChanged) {
+    _updateWidget(newValue, onChanged);
+    widget.onChange?.call(newValue);
+  }
+
+  void _handleSliderChangeStart(double newValue, OnChanged<double> onChanged) {
+    _updateWidget(newValue, onChanged);
+    widget.onChangeStart?.call(newValue);
+  }
+
+  void _handleSliderChangeEnd(double newValue, OnChanged<double> onChanged) {
+    _updateWidget(newValue, onChanged);
+    widget.onChangeEnd?.call(newValue);
+  }
+
+  void _updateWidget(double newValue, OnChanged<double> onChanged) {
     currentValue = newValue;
     onChanged(newValue);
-    if (widget.onChange != null) {
-      widget.onChange(newValue);
-    }
   }
 }
 

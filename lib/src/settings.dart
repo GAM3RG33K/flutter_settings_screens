@@ -45,8 +45,8 @@ class Settings {
   /// Public factory method to provide the
   factory Settings() {
     assert(
-    _cacheProvider != null,
-    'Must call Settings.init(cacheProvider)'
+        _cacheProvider != null,
+        'Must call Settings.init(cacheProvider)'
         ' before using settings!');
     return _instance;
   }
