@@ -60,8 +60,8 @@ class Settings {
   /// value is set properly.
   static void ensureCacheProvider() {
     assert(
-    _cacheProvider != null,
-    'Must call Settings.init(cacheProvider)'
+        _cacheProvider != null,
+        'Must call Settings.init(cacheProvider)'
         ' before using settings!');
   }
 
@@ -148,7 +148,7 @@ class ValueChangeNotifier<T> extends ValueNotifier<T> {
 /// If a settings key is already added in the map, the new notifier
 /// is added to the list of notifiers
 Map<String, List<ValueChangeNotifier>> _notifiers =
-Map<String, List<ValueChangeNotifier>>();
+    Map<String, List<ValueChangeNotifier>>();
 
 /// A Stateful widget which Takes in a [cacheKey], a [defaultValue]
 /// and a [builder]

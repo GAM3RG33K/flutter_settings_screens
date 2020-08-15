@@ -1,8 +1,8 @@
 name: flutter_settings_screens
-description: A Simple plugin to implement settings UI screens for your flutter apps. Customize what you want, From UI elements to underlying storage library.
+description: A Simple plugin to implement settings UI screens for your flutter apps. Customize what you want, From UI elements, behaviour or underlying storage library.
 repository: https://github.com/GAM3RG33K/flutter_settings_screens
 homepage: https://github.com/GAM3RG33K/flutter_settings_screens
-version: 0.2.0+1
+version: 0.2.1
 
 
 environment:
@@ -40,13 +40,12 @@ flutter:
   # The androidPackage and pluginClass identifiers should not ordinarily
   # be modified. They are used by the tooling to maintain consistency when
   # adding or updating assets for this project.
-  plugin:
-    platforms:
-      android:
-        package: com.happyworks.flutter_settings_screens
-        pluginClass: FlutterSettingsScreensPlugin
-      ios:
-        pluginClass: FlutterSettingsScreensPlugin
+  # plugin:
+  #   platforms:
+  #     android:
+  #       pluginClass: FlutterSettingsScreensPlugin
+  #     ios:
+  #       pluginClass: FlutterSettingsScreensPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

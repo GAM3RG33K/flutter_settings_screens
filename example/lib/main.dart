@@ -51,6 +51,9 @@ class _MyHomePageState extends State<MyHomePage> {
             children: <Widget>[
               _buildThemeSwitch(context),
               _buildPreferenceSwitch(context),
+              SizedBox(
+                height: 50.0,
+              ),
               AppBody(),
             ],
           ),
@@ -108,8 +111,11 @@ class _AppBodyState extends State<AppBody> {
     return Column(
       children: <Widget>[
         _buildClearCacheButton(context),
+        SizedBox(
+          height: 25.0,
+        ),
         RaisedButton(
-          child: Text('open settings'),
+          child: Text('Start Demo'),
           onPressed: () {
             openAppSettings(context);
           },

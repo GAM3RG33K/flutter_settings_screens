@@ -1,3 +1,14 @@
+## 0.2.1
+* `SimpleSettingsTile` will take any widget as `child` instead of only `SettingsScreen`
+  - **Breaking**: parameter name changed from `screen` to `child` for consistancy  
+* Added `subtitle` property for most settings tiles to allow a describing how this setting may introduce change in behaviour of the app
+* Improved Settings title and subtitle text style for consistancy in UI
+* `SliderSettings` now have 2 additional callbacks:
+  - onChangeStart - allows detecting drag start event
+  - onChangeEnd - allows detecting drag end event
+     - Using this allows changing the slider value only when user stops sliding
+* Updated Example code to reflect latest features 
+
 ## 0.2.0+1
 * improved plugin initialization, now supports async method call
 * resolved a bug where Radio Settings was not reflecting changes

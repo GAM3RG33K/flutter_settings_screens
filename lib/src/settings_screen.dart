@@ -220,9 +220,9 @@ class __SimpleHeaderTileState extends State<_SimpleHeaderTile> {
         ),
         subtitle: widget.subtitle.isNotEmpty
             ? Text(
-          widget.subtitle,
-          style: subtitleTextStyle(context),
-        )
+                widget.subtitle,
+                style: subtitleTextStyle(context),
+              )
             : null,
         leading: widget.leading,
       ),
@@ -368,8 +368,8 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
         });
   }
 
-  List<Widget> _finalWidgets(BuildContext dialogContext,
-      List<Widget> children) {
+  List<Widget> _finalWidgets(
+      BuildContext dialogContext, List<Widget> children) {
     if (widget.showConfirmation == null || !widget.showConfirmation) {
       return children;
     }
@@ -379,16 +379,16 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
   Widget getTitle() {
     return widget.leading != null
         ? Row(
-      children: <Widget>[
-        widget.leading,
-        Text(widget.title, style: headerTextStyle(context)),
-      ],
-    )
+            children: <Widget>[
+              widget.leading,
+              Text(widget.title, style: headerTextStyle(context)),
+            ],
+          )
         : Text(widget.title, style: headerTextStyle(context));
   }
 
-  List<Widget> _addActionWidgets(BuildContext dialogContext,
-      List<Widget> children) {
+  List<Widget> _addActionWidgets(
+      BuildContext dialogContext, List<Widget> children) {
     final finalList = List<Widget>.from(children);
     finalList.add(Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -558,7 +558,7 @@ class _SettingsDropDown<T> extends StatelessWidget {
           onChanged: enabled ? onChanged : null,
           underline: Container(),
           items: values.map<DropdownMenuItem<T>>(
-                (T val) {
+            (T val) {
               return DropdownMenuItem<T>(
                 child: itemBuilder(val),
                 value: val,
@@ -1042,9 +1042,7 @@ class SettingsGroup extends StatelessWidget {
 
   TextStyle groupStyle(BuildContext context) {
     return TextStyle(
-      color: Theme
-          .of(context)
-          .accentColor,
+      color: Theme.of(context).accentColor,
       fontSize: 12.0,
       fontWeight: FontWeight.bold,
     );
@@ -1188,8 +1186,8 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
     );
   }
 
-  Widget _buildTextField(BuildContext context, String value,
-      OnChanged<String> onChanged) {
+  Widget _buildTextField(
+      BuildContext context, String value, OnChanged<String> onChanged) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Form(
@@ -1633,10 +1631,10 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
 
   bool get showTitles => widget.showTitles ?? true;
 
-  Widget _buildRadioTiles(BuildContext context, T groupValue,
-      OnChanged<T> onChanged) {
+  Widget _buildRadioTiles(
+      BuildContext context, T groupValue, OnChanged<T> onChanged) {
     List<Widget> radioList =
-    widget.values.entries.map<Widget>((MapEntry<T, String> entry) {
+        widget.values.entries.map<Widget>((MapEntry<T, String> entry) {
       return _SettingsTile(
         title: entry.value,
         onTap: () => _onRadioChange(entry.key, onChanged),
@@ -1864,7 +1862,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
             _SettingsTileDivider(),
           ],
         );
-          },
+      },
     );
   }
 
@@ -2333,15 +2331,9 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
 }
 
 TextStyle headerTextStyle(BuildContext context) =>
-    Theme
-        .of(context)
-        .textTheme
-        .headline6
-        .copyWith(fontSize: 16.0);
+    Theme.of(context).textTheme.headline6.copyWith(fontSize: 16.0);
 
-TextStyle subtitleTextStyle(BuildContext context) =>
-    Theme
-        .of(context)
-        .textTheme
-        .subtitle2
-        .copyWith(fontSize: 13.0, fontWeight: FontWeight.normal);
+TextStyle subtitleTextStyle(BuildContext context) => Theme.of(context)
+    .textTheme
+    .subtitle2
+    .copyWith(fontSize: 13.0, fontWeight: FontWeight.normal);
