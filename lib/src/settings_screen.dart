@@ -14,7 +14,7 @@ import 'settings.dart';
 /// SettingsScreen(
 ///   title: 'Application Settings',
 ///   children: <Widget>[
-///     SettingsTileGroup(
+///     SettingsGroup(
 ///            title: 'Single Choice Settings',
 ///            children: <Widget>[
 ///              SwitchSettingsTile(
@@ -295,6 +295,7 @@ class _ExpansionSettingsTileState extends State<_ExpansionSettingsTile> {
         ),
         children: <Widget>[widget.child],
         initiallyExpanded: widget.expanded,
+        childrenPadding: EdgeInsets.only(left: 8.0),
       ),
     );
   }
@@ -915,11 +916,14 @@ class SettingsContainer extends StatelessWidget {
   /// flag to represent if this Container allows internal scrolling of the widgets
   /// along with the outer settings screen/container,
   /// if true, the list of widget inside are made scrollable
-  final bool scrollable;
+  final bool allowScrollInternally;
+
+  final double leftPadding;
 
   SettingsContainer({
     this.children,
-    this.scrollable = false,
+    this.allowScrollInternally = false,
+    this.leftPadding = 0.0,
   });
 
   @override
@@ -928,14 +932,15 @@ class SettingsContainer extends StatelessWidget {
   }
 
   Widget _buildChild() {
-    Widget child = scrollable ? getList(children) : getColumn(children);
+    Widget child =
+        allowScrollInternally ? getList(children) : getColumn(children);
     return Padding(
       padding: EdgeInsets.only(
         top: 16.0,
       ),
       child: Material(
         child: Container(
-          padding: EdgeInsets.only(left: 4.0),
+          padding: EdgeInsets.only(left: leftPadding),
           child: child,
         ),
       ),
@@ -1381,15 +1386,14 @@ class SwitchSettingsTile extends StatelessWidget {
       bool currentValue, List<Widget> childrenIfEnabled) {
     if (childrenIfEnabled == null || !currentValue) {
       return SettingsContainer(
-        children: <Widget>[
-          mainWidget,
-        ],
+        children: [mainWidget],
       );
     }
-    List<Widget> children = <Widget>[mainWidget];
-    children.addAll(childrenIfEnabled);
+    List<Widget> _children = _getPaddedParentChildrenList(childrenIfEnabled);
+    _children.insert(0, mainWidget);
+
     return SettingsContainer(
-      children: children,
+      children: _children,
     );
   }
 }
@@ -1514,13 +1518,14 @@ class CheckboxSettingsTile extends StatelessWidget {
       bool currentValue, List<Widget> childrenIfEnabled) {
     if (childrenIfEnabled == null || !currentValue) {
       return SettingsContainer(
-        children: <Widget>[mainWidget],
+        children: [mainWidget],
       );
     }
-    List<Widget> children = <Widget>[mainWidget];
-    children.addAll(childrenIfEnabled);
+    List<Widget> _children = _getPaddedParentChildrenList(childrenIfEnabled);
+    _children.insert(0, mainWidget);
+
     return SettingsContainer(
-      children: children,
+      children: _children,
     );
   }
 }
@@ -2330,10 +2335,32 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
   }
 }
 
-TextStyle headerTextStyle(BuildContext context) =>
-    Theme.of(context).textTheme.headline6.copyWith(fontSize: 16.0);
+List<Widget> _getPaddedParentChildrenList(List<Widget> childrenIfEnabled) {
+  List<Widget> children = <Widget>[];
+  var _paddedChildren = _getPaddedChildren(childrenIfEnabled);
+  children.addAll(_paddedChildren);
+  return children;
+}
 
-TextStyle subtitleTextStyle(BuildContext context) => Theme.of(context)
-    .textTheme
-    .subtitle2
-    .copyWith(fontSize: 13.0, fontWeight: FontWeight.normal);
+List<Widget> _getPaddedChildren(List<Widget> childrenIfEnabled) {
+  return childrenIfEnabled.map<Widget>((childWidget) {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0),
+      child: childWidget,
+    );
+  }).toList();
+}
+
+TextStyle headerTextStyle(BuildContext context) =>
+    Theme
+        .of(context)
+        .textTheme
+        .headline6
+        .copyWith(fontSize: 16.0);
+
+TextStyle subtitleTextStyle(BuildContext context) =>
+    Theme
+        .of(context)
+        .textTheme
+        .subtitle2
+        .copyWith(fontSize: 13.0, fontWeight: FontWeight.normal);
