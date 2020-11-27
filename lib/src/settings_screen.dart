@@ -657,6 +657,7 @@ class _SettingsColorPicker extends StatelessWidget {
       enabled: enabled,
       onTap: () => _showColorPicker(context, value),
       child: FloatingActionButton(
+        heroTag: null,
         backgroundColor: Utils.colorFromString(value),
         elevation: 0,
         onPressed: enabled ? () => _showColorPicker(context, value) : null,
