@@ -14,7 +14,7 @@ import 'settings.dart';
 /// SettingsScreen(
 ///   title: 'Application Settings',
 ///   children: <Widget>[
-///     SettingsTileGroup(
+///     SettingsGroup(
 ///            title: 'Single Choice Settings',
 ///            children: <Widget>[
 ///              SwitchSettingsTile(
@@ -172,8 +172,9 @@ class __SettingsTileState extends State<_SettingsTile> {
               child: widget.child,
             ),
             dense: true,
+            // wrap only if the subtitle is longer than 70 characters
             isThreeLine: (widget.subtitle?.isNotEmpty ?? false) &&
-                widget.subtitle.length > 20,
+                widget.subtitle.length > 70,
           ),
           Visibility(
             visible: widget.showChildBelow,
@@ -295,6 +296,7 @@ class _ExpansionSettingsTileState extends State<_ExpansionSettingsTile> {
         ),
         children: <Widget>[widget.child],
         initiallyExpanded: widget.expanded,
+        childrenPadding: EdgeInsets.only(left: 8.0),
       ),
     );
   }
@@ -916,11 +918,14 @@ class SettingsContainer extends StatelessWidget {
   /// flag to represent if this Container allows internal scrolling of the widgets
   /// along with the outer settings screen/container,
   /// if true, the list of widget inside are made scrollable
-  final bool scrollable;
+  final bool allowScrollInternally;
+
+  final double leftPadding;
 
   SettingsContainer({
     this.children,
-    this.scrollable = false,
+    this.allowScrollInternally = false,
+    this.leftPadding = 0.0,
   });
 
   @override
@@ -929,14 +934,15 @@ class SettingsContainer extends StatelessWidget {
   }
 
   Widget _buildChild() {
-    Widget child = scrollable ? getList(children) : getColumn(children);
+    Widget child =
+        allowScrollInternally ? getList(children) : getColumn(children);
     return Padding(
       padding: EdgeInsets.only(
         top: 16.0,
       ),
       child: Material(
         child: Container(
-          padding: EdgeInsets.only(left: 4.0),
+          padding: EdgeInsets.only(left: leftPadding),
           child: child,
         ),
       ),
@@ -1111,6 +1117,14 @@ class TextInputSettingsTile extends StatefulWidget {
   /// otherwise it will only happen if the `OK` button is clicked
   final bool autoValidate;
 
+  /// Validation mode helps use customize the way the input text field is
+  /// validated for proper input values.
+  ///
+  /// [AutovalidateMode.disabled] - Never auto validate, equivalent of `autoValidate = false`
+  /// [AutovalidateMode.always] - Always auto validate, equivalent of `autoValidate = true`
+  /// [AutovalidateMode.onUserInteraction] - Only auto validate if user interacts with it
+  final AutovalidateMode autoValidateMode;
+
   /// flag which represents if the text field will be focused by default
   /// or not
   /// if true, then the text field will be in focus other wise it will not be
@@ -1138,14 +1152,20 @@ class TextInputSettingsTile extends StatefulWidget {
     @required this.settingKey,
     this.initialValue = '',
     this.enabled = true,
-    this.autoValidate = false,
+    @Deprecated('Use autoValidateMode parameter which provide more specific '
+        'behaviour related to auto validation. '
+        'This feature was deprecated in accordance to flutter update v1.19.0 ') this.autoValidate = false,
+    this.autoValidateMode,
     this.autoFocus = true,
     this.onChange,
     this.validator,
     this.obscureText = false,
     this.borderColor,
     this.errorColor,
-  });
+  }) : assert(
+  autoValidate == false ||
+      autoValidate == true && autoValidateMode == null,
+  'autoValidate and autoValidateMode should not be used together.');
 
   @override
   _TextInputSettingsTileState createState() => _TextInputSettingsTileState();
@@ -1198,6 +1218,7 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
           controller: _controller,
           focusNode: _focusNode,
           autovalidate: widget.autoValidate,
+          autovalidateMode: autoValidateMode,
           enabled: widget.enabled,
           validator: widget.enabled ? widget.validator : null,
           onSaved: widget.enabled ? (value) => _onSave(value, onChanged) : null,
@@ -1231,6 +1252,14 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
         ),
       ),
     );
+  }
+
+  AutovalidateMode get autoValidateMode {
+    var autoValidateMode = widget.autoValidateMode;
+    autoValidateMode ??= widget.autoValidate
+        ? AutovalidateMode.always
+        : AutovalidateMode.disabled;
+    return autoValidateMode;
   }
 
   bool _submitText(String newValue) {
@@ -1382,15 +1411,14 @@ class SwitchSettingsTile extends StatelessWidget {
       bool currentValue, List<Widget> childrenIfEnabled) {
     if (childrenIfEnabled == null || !currentValue) {
       return SettingsContainer(
-        children: <Widget>[
-          mainWidget,
-        ],
+        children: [mainWidget],
       );
     }
-    List<Widget> children = <Widget>[mainWidget];
-    children.addAll(childrenIfEnabled);
+    List<Widget> _children = _getPaddedParentChildrenList(childrenIfEnabled);
+    _children.insert(0, mainWidget);
+
     return SettingsContainer(
-      children: children,
+      children: _children,
     );
   }
 }
@@ -1515,13 +1543,14 @@ class CheckboxSettingsTile extends StatelessWidget {
       bool currentValue, List<Widget> childrenIfEnabled) {
     if (childrenIfEnabled == null || !currentValue) {
       return SettingsContainer(
-        children: <Widget>[mainWidget],
+        children: [mainWidget],
       );
     }
-    List<Widget> children = <Widget>[mainWidget];
-    children.addAll(childrenIfEnabled);
+    List<Widget> _children = _getPaddedParentChildrenList(childrenIfEnabled);
+    _children.insert(0, mainWidget);
+
     return SettingsContainer(
-      children: children,
+      children: _children,
     );
   }
 }
@@ -2331,10 +2360,32 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
   }
 }
 
-TextStyle headerTextStyle(BuildContext context) =>
-    Theme.of(context).textTheme.headline6.copyWith(fontSize: 16.0);
+List<Widget> _getPaddedParentChildrenList(List<Widget> childrenIfEnabled) {
+  List<Widget> children = <Widget>[];
+  var _paddedChildren = _getPaddedChildren(childrenIfEnabled);
+  children.addAll(_paddedChildren);
+  return children;
+}
 
-TextStyle subtitleTextStyle(BuildContext context) => Theme.of(context)
-    .textTheme
-    .subtitle2
-    .copyWith(fontSize: 13.0, fontWeight: FontWeight.normal);
+List<Widget> _getPaddedChildren(List<Widget> childrenIfEnabled) {
+  return childrenIfEnabled.map<Widget>((childWidget) {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0),
+      child: childWidget,
+    );
+  }).toList();
+}
+
+TextStyle headerTextStyle(BuildContext context) =>
+    Theme
+        .of(context)
+        .textTheme
+        .headline6
+        .copyWith(fontSize: 16.0);
+
+TextStyle subtitleTextStyle(BuildContext context) =>
+    Theme
+        .of(context)
+        .textTheme
+        .subtitle2
+        .copyWith(fontSize: 13.0, fontWeight: FontWeight.normal);
