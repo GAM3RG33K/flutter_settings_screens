@@ -172,8 +172,9 @@ class __SettingsTileState extends State<_SettingsTile> {
               child: widget.child,
             ),
             dense: true,
+            // wrap only if the subtitle is longer than 70 characters
             isThreeLine: (widget.subtitle?.isNotEmpty ?? false) &&
-                widget.subtitle.length > 20,
+                widget.subtitle.length > 70,
           ),
           Visibility(
             visible: widget.showChildBelow,
@@ -1115,6 +1116,14 @@ class TextInputSettingsTile extends StatefulWidget {
   /// otherwise it will only happen if the `OK` button is clicked
   final bool autoValidate;
 
+  /// Validation mode helps use customize the way the input text field is
+  /// validated for proper input values.
+  ///
+  /// [AutovalidateMode.disabled] - Never auto validate, equivalent of `autoValidate = false`
+  /// [AutovalidateMode.always] - Always auto validate, equivalent of `autoValidate = true`
+  /// [AutovalidateMode.onUserInteraction] - Only auto validate if user interacts with it
+  final AutovalidateMode autoValidateMode;
+
   /// flag which represents if the text field will be focused by default
   /// or not
   /// if true, then the text field will be in focus other wise it will not be
@@ -1142,14 +1151,20 @@ class TextInputSettingsTile extends StatefulWidget {
     @required this.settingKey,
     this.initialValue = '',
     this.enabled = true,
-    this.autoValidate = false,
+    @Deprecated('Use autoValidateMode parameter which provide more specific '
+        'behaviour related to auto validation. '
+        'This feature was deprecated in accordance to flutter update v1.19.0 ') this.autoValidate = false,
+    this.autoValidateMode,
     this.autoFocus = true,
     this.onChange,
     this.validator,
     this.obscureText = false,
     this.borderColor,
     this.errorColor,
-  });
+  }) : assert(
+  autoValidate == false ||
+      autoValidate == true && autoValidateMode == null,
+  'autoValidate and autoValidateMode should not be used together.');
 
   @override
   _TextInputSettingsTileState createState() => _TextInputSettingsTileState();
@@ -1202,6 +1217,7 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
           controller: _controller,
           focusNode: _focusNode,
           autovalidate: widget.autoValidate,
+          autovalidateMode: autoValidateMode,
           enabled: widget.enabled,
           validator: widget.enabled ? widget.validator : null,
           onSaved: widget.enabled ? (value) => _onSave(value, onChanged) : null,
@@ -1235,6 +1251,14 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
         ),
       ),
     );
+  }
+
+  AutovalidateMode get autoValidateMode {
+    var autoValidateMode = widget.autoValidateMode;
+    autoValidateMode ??= widget.autoValidate
+        ? AutovalidateMode.always
+        : AutovalidateMode.disabled;
+    return autoValidateMode;
   }
 
   bool _submitText(String newValue) {
