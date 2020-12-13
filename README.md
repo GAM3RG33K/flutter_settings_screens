@@ -102,7 +102,7 @@ Get value:
 ```
 Set value:
 ```dart
- Settings.setValue<T>(cacheKey, newValue);
+ await Settings.setValue<T>(cacheKey, newValue);
 ```
 
 T represents any of the following:
@@ -119,7 +119,7 @@ Get value:
 ```
 Set value:
 ```dart
- Settings.setValue<String>(cacheKey, newValue);
+ await Settings.setValue<String>(cacheKey, newValue);
 ```
 
 

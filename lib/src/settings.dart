@@ -100,7 +100,7 @@ class Settings {
   }
 
   /// method to set [value] using the [cacheProvider] for given [key]
-  static void setValue<T>(String key, T value) {
+  static Future<void> setValue<T>(String key, T value) async {
     ensureCacheProvider();
     if (value == null) {
       return _cacheProvider.remove(key);

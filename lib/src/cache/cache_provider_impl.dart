@@ -58,22 +58,18 @@ class SharePreferenceCache extends CacheProvider {
   }
 
   @override
-  void setObject<T>(String key, T value) {
+  Future<void> setObject<T>(String key, T value) {
     if (value is int) {
-      _preferences.setInt(key, value);
-      return;
+      return _preferences.setInt(key, value);
     }
     if (value is double) {
-      _preferences.setDouble(key, value);
-      return;
+      return _preferences.setDouble(key, value);
     }
     if (value is bool) {
-      _preferences.setBool(key, value);
-      return;
+      return _preferences.setBool(key, value);
     }
     if (value is String) {
-      _preferences.setString(key, value);
-      return;
+      return _preferences.setString(key, value);
     }
     throw Exception('No Implementation Found');
   }
