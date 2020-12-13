@@ -1,8 +1,14 @@
+## 0.2.1+1
+* improved overall alignment of settings tiles
+* update cache provide code to make asynchronous calls to setter methods
+  - autoValidated parameter in text input settings is now deprecated and will be removed soon. User `autoValidateMode` parameter instead.
+* removed native platform dependency code as this library does not depend on native features. At least not directly.
+
 ## 0.2.1
 * `SimpleSettingsTile` will take any widget as `child` instead of only `SettingsScreen`
-  - **Breaking**: parameter name changed from `screen` to `child` for consistancy  
+  - **Breaking**: parameter name changed from `screen` to `child` for consistency
 * Added `subtitle` property for most settings tiles to allow a describing how this setting may introduce change in behaviour of the app
-* Improved Settings title and subtitle text style for consistancy in UI
+* Improved Settings title and subtitle text style for consistency in UI
 * `SliderSettings` now have 2 additional callbacks:
   - onChangeStart - allows detecting drag start event
   - onChangeEnd - allows detecting drag end event
