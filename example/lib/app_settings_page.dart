@@ -72,7 +72,7 @@ class _AppSettingsState extends State<AppSettings> {
                   SimpleSettingsTile(
                     title: 'Custom Settings',
                     subtitle: 'Tap to execute custom callback',
-                    onTap: () => debugPrint('Snackbar action'),
+                    onTap: () => debugPrint('Custom action'),
                   ),
                 ],
               ),
