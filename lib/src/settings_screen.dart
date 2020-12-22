@@ -392,19 +392,19 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
   List<Widget> _addActionWidgets(
       BuildContext dialogContext, List<Widget> children) {
     final finalList = List<Widget>.from(children);
-    finalList.add(Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+    finalList.add(ButtonBar(
+      alignment: MainAxisAlignment.end,
       children: <Widget>[
         FlatButton(
           padding: EdgeInsets.zero,
-          child: Text('Cancel'),
+          child: Text(MaterialLocalizations.of(dialogContext).cancelButtonLabel),
           onPressed: () {
             widget.onCancel?.call();
             _disposeDialog(dialogContext);
           },
         ),
         FlatButton(
-          child: Text('OK'),
+          child: Text(MaterialLocalizations.of(dialogContext).okButtonLabel),
           padding: EdgeInsets.zero,
           onPressed: () {
             bool closeDialog = true;
