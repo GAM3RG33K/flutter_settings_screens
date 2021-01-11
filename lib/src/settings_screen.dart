@@ -397,7 +397,8 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
       children: <Widget>[
         FlatButton(
           padding: EdgeInsets.zero,
-          child: Text(MaterialLocalizations.of(dialogContext).cancelButtonLabel),
+          child:
+              Text(MaterialLocalizations.of(dialogContext).cancelButtonLabel),
           onPressed: () {
             widget.onCancel?.call();
             _disposeDialog(dialogContext);
@@ -1148,13 +1149,16 @@ class TextInputSettingsTile extends StatefulWidget {
   final Color errorColor;
 
   TextInputSettingsTile({
-    @required this.title,
-    @required this.settingKey,
+    @required
+        this.title,
+    @required
+        this.settingKey,
     this.initialValue = '',
     this.enabled = true,
     @Deprecated('Use autoValidateMode parameter which provide more specific '
         'behaviour related to auto validation. '
-        'This feature was deprecated in accordance to flutter update v1.19.0 ') this.autoValidate = false,
+        'This feature was deprecated in accordance to flutter update v1.19.0 ')
+        this.autoValidate = false,
     this.autoValidateMode,
     this.autoFocus = true,
     this.onChange,
@@ -1163,9 +1167,9 @@ class TextInputSettingsTile extends StatefulWidget {
     this.borderColor,
     this.errorColor,
   }) : assert(
-  autoValidate == false ||
-      autoValidate == true && autoValidateMode == null,
-  'autoValidate and autoValidateMode should not be used together.');
+            autoValidate == false ||
+                autoValidate == true && autoValidateMode == null,
+            'autoValidate and autoValidateMode should not be used together.');
 
   @override
   _TextInputSettingsTileState createState() => _TextInputSettingsTileState();
@@ -1337,6 +1341,7 @@ class SwitchSettingsTile extends StatelessWidget {
   final String title;
   final String subtitle;
   final bool enabled;
+  final bool value;
   final OnChanged<bool> onChange;
   final Widget leading;
   final String enabledLabel;
@@ -1346,6 +1351,7 @@ class SwitchSettingsTile extends StatelessWidget {
   SwitchSettingsTile({
     @required this.title,
     @required this.settingKey,
+    this.value,
     this.defaultValue = false,
     this.enabled = true,
     this.onChange,
@@ -1369,7 +1375,7 @@ class SwitchSettingsTile extends StatelessWidget {
           onTap: () => onChanged(!value),
           enabled: enabled,
           child: _SettingsSwitch(
-            value: value,
+            value: this.value ?? value,
             onChanged: (value) => _onSwitchChange(value, onChanged),
             enabled: enabled,
           ),
@@ -1378,7 +1384,7 @@ class SwitchSettingsTile extends StatelessWidget {
         Widget finalWidget = getFinalWidget(
           context,
           mainWidget,
-          value,
+          this.value ?? value,
           childrenIfEnabled,
         );
         return finalWidget;
@@ -1386,7 +1392,7 @@ class SwitchSettingsTile extends StatelessWidget {
     );
   }
 
-  void _onSwitchChange(bool value, OnChanged<bool> onChanged) {
+  void _onSwitchChange(bool value, OnChanged<bool> onChanged) async {
     onChanged(value);
     if (onChange != null) {
       onChange(value);
@@ -1467,6 +1473,7 @@ class CheckboxSettingsTile extends StatelessWidget {
   final bool defaultValue;
   final String title;
   final String subtitle;
+  final bool value;
   final bool enabled;
   final OnChanged<bool> onChange;
   final Widget leading;
@@ -1478,6 +1485,7 @@ class CheckboxSettingsTile extends StatelessWidget {
     @required this.title,
     @required this.settingKey,
     this.defaultValue = false,
+    this.value,
     this.enabled = true,
     this.onChange,
     this.leading,
@@ -1500,7 +1508,7 @@ class CheckboxSettingsTile extends StatelessWidget {
           subtitle: getSubtitle(value),
           onTap: () => _onCheckboxChange(!value, onChanged),
           child: _SettingsCheckbox(
-            value: value,
+            value: this.value ?? value,
             onChanged: (value) => _onCheckboxChange(value, onChanged),
             enabled: enabled,
           ),
@@ -1509,7 +1517,7 @@ class CheckboxSettingsTile extends StatelessWidget {
         Widget finalWidget = getFinalWidget(
           context,
           mainWidget,
-          value,
+          this.value ?? value,
           childrenIfEnabled,
         );
         return finalWidget;
@@ -1877,12 +1885,15 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
               leading: widget.leading,
             ),
             _SettingsSlider(
-              onChanged: (newValue) =>
-                  _handleSliderChanged(newValue, onChanged),
-              onChangeStart: (newValue) =>
-                  _handleSliderChangeStart(newValue, onChanged),
-              onChangeEnd: (newValue) =>
-                  _handleSliderChangeEnd(newValue, onChanged),
+              onChanged: (newValue) {
+                _handleSliderChanged(newValue, onChanged);
+              },
+              onChangeStart: (newValue) {
+                _handleSliderChangeStart(newValue, onChanged);
+              },
+              onChangeEnd: (newValue) {
+                _handleSliderChangeEnd(newValue, onChanged);
+              },
               enabled: widget.enabled,
               value: value,
               max: widget.max,
@@ -1991,7 +2002,9 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
           title: widget.title,
           value: value,
           enabled: widget.enabled,
-          onChanged: (color) => _handleColorChanged(color, onChanged),
+          onChanged: (color) {
+            _handleColorChanged(color, onChanged);
+          },
         );
       },
     );
@@ -2187,12 +2200,15 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
                   : value.toString(),
               children: <Widget>[
                 _SettingsSlider(
-                  onChanged: (double newValue) =>
-                      _handleSliderChanged(newValue, onChanged),
-                  onChangeStart: (double newValue) =>
-                      _handleSliderChangeStart(newValue, onChanged),
-                  onChangeEnd: (double newValue) =>
-                      _handleSliderChangeEnd(newValue, onChanged),
+                  onChanged: (double newValue) {
+                    _handleSliderChanged(newValue, onChanged);
+                  },
+                  onChangeStart: (double newValue) {
+                    _handleSliderChangeStart(newValue, onChanged);
+                  },
+                  onChangeEnd: (double newValue) {
+                    _handleSliderChangeEnd(newValue, onChanged);
+                  },
                   enabled: widget.enabled,
                   value: value,
                   max: widget.max,
@@ -2377,15 +2393,9 @@ List<Widget> _getPaddedChildren(List<Widget> childrenIfEnabled) {
 }
 
 TextStyle headerTextStyle(BuildContext context) =>
-    Theme
-        .of(context)
-        .textTheme
-        .headline6
-        .copyWith(fontSize: 16.0);
+    Theme.of(context).textTheme.headline6.copyWith(fontSize: 16.0);
 
-TextStyle subtitleTextStyle(BuildContext context) =>
-    Theme
-        .of(context)
-        .textTheme
-        .subtitle2
-        .copyWith(fontSize: 13.0, fontWeight: FontWeight.normal);
+TextStyle subtitleTextStyle(BuildContext context) => Theme.of(context)
+    .textTheme
+    .subtitle2
+    .copyWith(fontSize: 13.0, fontWeight: FontWeight.normal);
