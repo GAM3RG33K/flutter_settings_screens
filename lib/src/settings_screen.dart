@@ -1885,15 +1885,12 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
               leading: widget.leading,
             ),
             _SettingsSlider(
-              onChanged: (newValue) {
-                _handleSliderChanged(newValue, onChanged);
-              },
-              onChangeStart: (newValue) {
-                _handleSliderChangeStart(newValue, onChanged);
-              },
-              onChangeEnd: (newValue) {
-                _handleSliderChangeEnd(newValue, onChanged);
-              },
+              onChanged: (newValue) =>
+                  _handleSliderChanged(newValue, onChanged),
+              onChangeStart: (newValue) =>
+                  _handleSliderChangeStart(newValue, onChanged),
+              onChangeEnd: (newValue) =>
+                  _handleSliderChangeEnd(newValue, onChanged),
               enabled: widget.enabled,
               value: value,
               max: widget.max,
@@ -2002,9 +1999,7 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
           title: widget.title,
           value: value,
           enabled: widget.enabled,
-          onChanged: (color) {
-            _handleColorChanged(color, onChanged);
-          },
+          onChanged: (color) => _handleColorChanged(color, onChanged),
         );
       },
     );
@@ -2200,15 +2195,12 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
                   : value.toString(),
               children: <Widget>[
                 _SettingsSlider(
-                  onChanged: (double newValue) {
-                    _handleSliderChanged(newValue, onChanged);
-                  },
-                  onChangeStart: (double newValue) {
-                    _handleSliderChangeStart(newValue, onChanged);
-                  },
-                  onChangeEnd: (double newValue) {
-                    _handleSliderChangeEnd(newValue, onChanged);
-                  },
+                  onChanged: (double newValue) =>
+                      _handleSliderChanged(newValue, onChanged),
+                  onChangeStart: (double newValue) =>
+                      _handleSliderChangeStart(newValue, onChanged),
+                  onChangeEnd: (double newValue) =>
+                      _handleSliderChangeEnd(newValue, onChanged),
                   enabled: widget.enabled,
                   value: value,
                   max: widget.max,
