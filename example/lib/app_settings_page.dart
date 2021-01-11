@@ -27,6 +27,13 @@ class _AppSettingsState extends State<AppSettings> {
                 onChange: (value) {
                   debugPrint('key-wifi: $value');
                 },
+                confirmChangeCallback: () async {
+                  var confirmChange = await showConfirmationDialog(
+                      context: context,
+                      confirmationMessage:
+                          'Do you really want to change this?');
+                  return confirmChange;
+                },
               ),
               CheckboxSettingsTile(
                 settingKey: 'key-blue-tooth',
@@ -38,6 +45,13 @@ class _AppSettingsState extends State<AppSettings> {
                 leading: Icon(Icons.bluetooth),
                 onChange: (value) {
                   debugPrint('key-blue-tooth: $value');
+                },
+                confirmChangeCallback: () async {
+                  var confirmChange = await showConfirmationDialog(
+                      context: context,
+                      confirmationMessage:
+                      'Do you really want to change this?');
+                  return confirmChange;
                 },
               ),
               SwitchSettingsTile(
@@ -89,6 +103,13 @@ class _AppSettingsState extends State<AppSettings> {
                       onChange: (bool value) {
                         debugPrint('Developer Mode ${value ? 'on' : 'off'}');
                       },
+                      confirmChangeCallback: () async {
+                        var confirmChange = await showConfirmationDialog(
+                            context: context,
+                            confirmationMessage:
+                            'Do you really want to change this?');
+                        return confirmChange;
+                      },
                     ),
                     SwitchSettingsTile(
                       leading: Icon(Icons.usb),
@@ -96,6 +117,12 @@ class _AppSettingsState extends State<AppSettings> {
                       title: 'USB Debugging',
                       onChange: (value) {
                         debugPrint('USB Debugging: $value');
+                      },
+                      confirmChangeCallback: () async {
+                        var confirmChange = await showConfirmationDialog(
+                          context: context,
+                        );
+                        return confirmChange;
                       },
                     ),
                   ],
@@ -361,4 +388,41 @@ class _AppSettingsState extends State<AppSettings> {
       ),
     );
   }
+}
+
+Future<bool> showConfirmationDialog({
+  BuildContext context,
+  String confirmationMessage,
+  String okButtonText,
+  String cancelButtonText,
+}) {
+  confirmationMessage ??= 'Please confirm the change';
+  cancelButtonText ??= MaterialLocalizations
+      .of(context)
+      .cancelButtonLabel;
+  okButtonText ??= MaterialLocalizations
+      .of(context)
+      .okButtonLabel;
+  return showDialog(
+    context: context,
+    builder: (dialogContext) {
+      return AlertDialog(
+        content: Text(confirmationMessage),
+        actions: [
+          FlatButton(
+            child: Text(cancelButtonText.toUpperCase()),
+            onPressed: () {
+              Navigator.of(dialogContext).pop(false);
+            },
+          ),
+          FlatButton(
+            child: Text(okButtonText.toUpperCase()),
+            onPressed: () {
+              Navigator.of(dialogContext).pop(true);
+            },
+          )
+        ],
+      );
+    },
+  );
 }

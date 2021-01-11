@@ -315,7 +315,7 @@ class _ModalSettingsTile extends StatefulWidget {
   final List<Widget> children;
   final bool showConfirmation;
   final GestureTapCallback onCancel;
-  final OnConfirmedCallback onConfirm;
+  final OnConfirmCallback onConfirm;
 
   _ModalSettingsTile({
     @required this.title,
@@ -397,7 +397,8 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
       children: <Widget>[
         FlatButton(
           padding: EdgeInsets.zero,
-          child: Text(MaterialLocalizations.of(dialogContext).cancelButtonLabel),
+          child:
+              Text(MaterialLocalizations.of(dialogContext).cancelButtonLabel),
           onPressed: () {
             widget.onCancel?.call();
             _disposeDialog(dialogContext);
@@ -406,10 +407,10 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
         FlatButton(
           child: Text(MaterialLocalizations.of(dialogContext).okButtonLabel),
           padding: EdgeInsets.zero,
-          onPressed: () {
+          onPressed: () async {
             bool closeDialog = true;
             if (widget.onConfirm != null) {
-              closeDialog = widget.onConfirm();
+              closeDialog = await widget.onConfirm();
             }
             if (closeDialog) {
               _disposeDialog(dialogContext);
@@ -1198,7 +1199,7 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
             _buildTextField(context, value, onChanged),
           ],
           showConfirmation: true,
-          onConfirm: () => _submitText(_controller.text),
+          onConfirm: () => Future.value(_submitText(_controller.text)),
           onCancel: () {
             _controller.text = Settings.getValue(widget.settingKey, '');
           },
@@ -1343,6 +1344,20 @@ class SwitchSettingsTile extends StatelessWidget {
   final String disabledLabel;
   final List<Widget> childrenIfEnabled;
 
+  /// This callback is used to allow custom interaction to confirm the changes
+  /// made by the user, which by default is considered as an async operation
+  /// so the return value must be a `Future<bool>`
+  ///
+  ///
+  /// It can be used like this,
+  /// ```dart
+  /// confirmChangeCallback: () async {
+  ///   var confirmChange = await showConfirmationDialog();
+  ///   return confirmChange;
+  /// },
+  /// ```
+  final OnConfirmCallback confirmChangeCallback;
+
   SwitchSettingsTile({
     @required this.title,
     @required this.settingKey,
@@ -1354,6 +1369,7 @@ class SwitchSettingsTile extends StatelessWidget {
     this.disabledLabel = '',
     this.childrenIfEnabled,
     this.subtitle = '',
+    this.confirmChangeCallback,
   });
 
   @override
@@ -1370,7 +1386,7 @@ class SwitchSettingsTile extends StatelessWidget {
           enabled: enabled,
           child: _SettingsSwitch(
             value: value,
-            onChanged: (value) => _onSwitchChange(value, onChanged),
+            onChanged: (value) => _onSwitchChange(context, value, onChanged),
             enabled: enabled,
           ),
         );
@@ -1386,7 +1402,10 @@ class SwitchSettingsTile extends StatelessWidget {
     );
   }
 
-  void _onSwitchChange(bool value, OnChanged<bool> onChanged) {
+  Future<void> _onSwitchChange(BuildContext context, bool value,
+      OnChanged<bool> onChanged) async {
+    bool allowChange = await _processConfirmation(confirmChangeCallback);
+    if (!allowChange) return;
     onChanged(value);
     if (onChange != null) {
       onChange(value);
@@ -1474,6 +1493,21 @@ class CheckboxSettingsTile extends StatelessWidget {
   final String disabledLabel;
   final List<Widget> childrenIfEnabled;
 
+
+  /// This callback is used to allow custom interaction to confirm the changes
+  /// made by the user, which by default is considered as an async operation
+  /// so the return value must be a `Future<bool>`
+  ///
+  ///
+  /// It can be used like this,
+  /// ```dart
+  /// confirmChangeCallback: () async {
+  ///   var confirmChange = await showConfirmationDialog();
+  ///   return confirmChange;
+  /// },
+  /// ```
+  final OnConfirmCallback confirmChangeCallback;
+
   CheckboxSettingsTile({
     @required this.title,
     @required this.settingKey,
@@ -1485,6 +1519,7 @@ class CheckboxSettingsTile extends StatelessWidget {
     this.disabledLabel = '',
     this.childrenIfEnabled,
     this.subtitle = '',
+    this.confirmChangeCallback,
   });
 
   @override
@@ -1517,7 +1552,9 @@ class CheckboxSettingsTile extends StatelessWidget {
     );
   }
 
-  void _onCheckboxChange(bool value, OnChanged<bool> onChanged) {
+  Future<void> _onCheckboxChange(bool value, OnChanged<bool> onChanged) async {
+    bool allowChange = await _processConfirmation(confirmChangeCallback);
+    if (!allowChange) return;
     onChanged(value);
     if (onChange != null) {
       onChange(value);
@@ -1603,6 +1640,21 @@ class RadioSettingsTile<T> extends StatefulWidget {
   final OnChanged<T> onChange;
   final Widget leading;
 
+
+  /// This callback is used to allow custom interaction to confirm the changes
+  /// made by the user, which by default is considered as an async operation
+  /// so the return value must be a `Future<bool>`
+  ///
+  ///
+  /// It can be used like this,
+  /// ```dart
+  /// confirmChangeCallback: () async {
+  ///   var confirmChange = await showConfirmationDialog();
+  ///   return confirmChange;
+  /// },
+  /// ```
+  final OnConfirmCallback confirmChangeCallback;
+
   RadioSettingsTile({
     @required this.title,
     @required this.settingKey,
@@ -1613,6 +1665,7 @@ class RadioSettingsTile<T> extends StatefulWidget {
     this.leading,
     this.showTitles,
     this.subtitle = '',
+    this.confirmChangeCallback,
   });
 
   @override
@@ -1628,7 +1681,9 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
     selectedValue = widget.selected;
   }
 
-  void _onRadioChange(T value, OnChanged<T> onChanged) {
+  Future<void> _onRadioChange(T value, OnChanged<T> onChanged) async {
+    bool allowChange = await _processConfirmation(widget.confirmChangeCallback);
+    if (!allowChange) return;
     selectedValue = value;
     onChanged(value);
     widget.onChange?.call(value);
@@ -1732,6 +1787,21 @@ class DropDownSettingsTile<T> extends StatefulWidget {
   final bool enabled;
   final OnChanged<T> onChange;
 
+
+  /// This callback is used to allow custom interaction to confirm the changes
+  /// made by the user, which by default is considered as an async operation
+  /// so the return value must be a `Future<bool>`
+  ///
+  ///
+  /// It can be used like this,
+  /// ```dart
+  /// confirmChangeCallback: () async {
+  ///   var confirmChange = await showConfirmationDialog();
+  ///   return confirmChange;
+  /// },
+  /// ```
+  final OnConfirmCallback confirmChangeCallback;
+
   DropDownSettingsTile({
     @required this.title,
     @required this.settingKey,
@@ -1740,6 +1810,7 @@ class DropDownSettingsTile<T> extends StatefulWidget {
     this.enabled = true,
     this.onChange,
     this.subtitle = '',
+    this.confirmChangeCallback,
   });
 
   @override
@@ -1786,7 +1857,9 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
     );
   }
 
-  void _handleDropDownChange(T value, OnChanged<T> onChanged) {
+  Future<void> _handleDropDownChange(T value, OnChanged<T> onChanged) async {
+    bool allowChange = await _processConfirmation(widget.confirmChangeCallback);
+    if (!allowChange) return;
     selectedValue = value;
     onChanged(value);
     widget.onChange?.call(value);
@@ -1950,6 +2023,21 @@ class ColorPickerSettingsTile extends StatefulWidget {
   final bool enabled;
   final OnChanged<Color> onChange;
 
+
+  /// This callback is used to allow custom interaction to confirm the changes
+  /// made by the user, which by default is considered as an async operation
+  /// so the return value must be a `Future<bool>`
+  ///
+  ///
+  /// It can be used like this,
+  /// ```dart
+  /// confirmChangeCallback: () async {
+  ///   var confirmChange = await showConfirmationDialog();
+  ///   return confirmChange;
+  /// },
+  /// ```
+  final OnConfirmCallback confirmChangeCallback;
+
   ColorPickerSettingsTile({
     @required this.title,
     @required this.settingKey,
@@ -1958,6 +2046,7 @@ class ColorPickerSettingsTile extends StatefulWidget {
     this.onChange,
     this.defaultStringValue = '#ff000000',
     this.subtitle = '',
+    this.confirmChangeCallback,
   });
 
   @override
@@ -1997,7 +2086,10 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
     );
   }
 
-  void _handleColorChanged(String color, OnChanged<String> onChanged) {
+  Future<void> _handleColorChanged(String color,
+      OnChanged<String> onChanged) async {
+    bool allowChange = await _processConfirmation(widget.confirmChangeCallback);
+    if (!allowChange) return;
     currentValue = color;
     onChanged(color);
     if (widget.onChange != null) {
@@ -2045,6 +2137,21 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
   final bool showTitles;
   final OnChanged<T> onChange;
 
+
+  /// This callback is used to allow custom interaction to confirm the changes
+  /// made by the user, which by default is considered as an async operation
+  /// so the return value must be a `Future<bool>`
+  ///
+  ///
+  /// It can be used like this,
+  /// ```dart
+  /// confirmChangeCallback: () async {
+  ///   var confirmChange = await showConfirmationDialog();
+  ///   return confirmChange;
+  /// },
+  /// ```
+  final OnConfirmCallback confirmChangeCallback;
+
   RadioModalSettingsTile({
     @required this.title,
     @required this.settingKey,
@@ -2054,6 +2161,7 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
     this.showTitles = false,
     this.onChange,
     this.subtitle = '',
+    this.confirmChangeCallback,
   });
 
   @override
@@ -2070,7 +2178,9 @@ class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
     selectedValue = widget.selected;
   }
 
-  void _onRadioChange(T value, OnChanged<T> onChanged) {
+  Future<void> _onRadioChange(T value, OnChanged<T> onChanged) async {
+    bool allowChange = await _processConfirmation(widget.confirmChangeCallback);
+    if (!allowChange) return;
     selectedValue = value;
     onChanged(value);
     widget.onChange?.call(value);
@@ -2261,6 +2371,21 @@ class SimpleRadioSettingsTile extends StatelessWidget {
   final bool enabled;
   final OnChanged<String> onChange;
 
+
+  /// This callback is used to allow custom interaction to confirm the changes
+  /// made by the user, which by default is considered as an async operation
+  /// so the return value must be a `Future<bool>`
+  ///
+  ///
+  /// It can be used like this,
+  /// ```dart
+  /// confirmChangeCallback: () async {
+  ///   var confirmChange = await showConfirmationDialog();
+  ///   return confirmChange;
+  /// },
+  /// ```
+  final OnConfirmCallback confirmChangeCallback;
+
   SimpleRadioSettingsTile({
     @required this.title,
     @required this.settingKey,
@@ -2269,6 +2394,7 @@ class SimpleRadioSettingsTile extends StatelessWidget {
     this.enabled = true,
     this.onChange,
     this.subtitle = '',
+    this.confirmChangeCallback,
   });
 
   @override
@@ -2281,6 +2407,7 @@ class SimpleRadioSettingsTile extends StatelessWidget {
       enabled: enabled,
       onChange: onChange,
       values: getValues(values),
+      confirmChangeCallback: confirmChangeCallback,
     );
   }
 
@@ -2328,6 +2455,21 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
   final bool enabled;
   final OnChanged<String> onChange;
 
+
+  /// This callback is used to allow custom interaction to confirm the changes
+  /// made by the user, which by default is considered as an async operation
+  /// so the return value must be a `Future<bool>`
+  ///
+  ///
+  /// It can be used like this,
+  /// ```dart
+  /// confirmChangeCallback: () async {
+  ///   var confirmChange = await showConfirmationDialog();
+  ///   return confirmChange;
+  /// },
+  /// ```
+  final OnConfirmCallback confirmChangeCallback;
+
   SimpleDropDownSettingsTile({
     @required this.title,
     @required this.settingKey,
@@ -2336,6 +2478,7 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
     this.enabled = true,
     this.onChange,
     this.subtitle = '',
+    this.confirmChangeCallback,
   });
 
   @override
@@ -2348,6 +2491,7 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
       enabled: enabled,
       onChange: onChange,
       values: getValues(values),
+      confirmChangeCallback: confirmChangeCallback,
     );
   }
 
@@ -2389,3 +2533,13 @@ TextStyle subtitleTextStyle(BuildContext context) =>
         .textTheme
         .subtitle2
         .copyWith(fontSize: 13.0, fontWeight: FontWeight.normal);
+
+Future<bool> _processConfirmation(
+    OnConfirmCallback confirmChangeCallback,) async {
+  var allowChange = true;
+  if (confirmChangeCallback != null) {
+    allowChange = await confirmChangeCallback?.call();
+    allowChange ??= false; // in case use dismissed the pop up dialog
+  }
+  return allowChange;
+}

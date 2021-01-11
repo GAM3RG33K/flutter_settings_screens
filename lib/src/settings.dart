@@ -23,7 +23,20 @@ typedef OnChanged<T> = void Function(T);
 /// widget is to be closed or not.
 ///
 /// if true, the widget will be closed
+@Deprecated(
+    'Use OnConfirmCallback which allows doing async processes while making a decision'
+    'This callback will be removed soon from the widgets that are using this')
 typedef OnConfirmedCallback = bool Function();
+
+/// This function type is used for verifying that the dialog/modal
+/// widget is to be closed or not.
+///
+/// if true, the widget will be closed
+///
+/// This callback should also support async operations like
+/// waiting for confirmation from user or any other asynchronous waiting
+/// which is why it returns Future of bool instead of just boolean
+typedef OnConfirmCallback = Future<bool> Function();
 
 /// This class behaves as a bridge between the settings screen widgets and the
 /// underlying storage mechanism.
