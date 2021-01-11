@@ -1392,7 +1392,7 @@ class SwitchSettingsTile extends StatelessWidget {
     );
   }
 
-  void _onSwitchChange(bool value, OnChanged<bool> onChanged) async {
+  void _onSwitchChange(bool value, OnChanged<bool> onChanged) {
     onChanged(value);
     if (onChange != null) {
       onChange(value);
