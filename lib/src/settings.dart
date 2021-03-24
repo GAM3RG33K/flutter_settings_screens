@@ -60,10 +60,13 @@ class Settings {
   /// value is set properly.
   static void ensureCacheProvider() {
     assert(
-        _cacheProvider != null,
+        isInitialized,
         'Must call Settings.init(cacheProvider)'
         ' before using settings!');
   }
+
+  /// A getter to know if the settings are already initialized or not
+  static bool get isInitialized => _cacheProvider != null;
 
   /// This method is used for initializing the [_cacheProvider]
   /// instance.
@@ -105,7 +108,7 @@ class Settings {
     if (value == null) {
       return _cacheProvider.remove(key);
     }
-    _cacheProvider.setObject<T>(key, value);
+    await _cacheProvider.setObject<T>(key, value);
   }
 
   /// method to clear all the cached data using the [cacheProvider]
@@ -148,7 +151,7 @@ class ValueChangeNotifier<T> extends ValueNotifier<T> {
 /// If a settings key is already added in the map, the new notifier
 /// is added to the list of notifiers
 Map<String, List<ValueChangeNotifier>> _notifiers =
-    Map<String, List<ValueChangeNotifier>>();
+    <String, List<ValueChangeNotifier>>{};
 
 /// A Stateful widget which Takes in a [cacheKey], a [defaultValue]
 /// and a [builder]
@@ -181,8 +184,7 @@ class _ValueChangeObserverState<T> extends State<ValueChangeObserver<T>> {
 
   @override
   void initState() {
-    super.initState();
-    //if [cacheKey] is not found ,add new cache in the [cacheProvider] with [defaultValue]
+    //if [cacheKey] is not found, add new cache in the [cacheProvider] with [defaultValue]
     if (!Settings.containsKey(cacheKey)) {
       Settings.setValue<T>(cacheKey, defaultValue);
     }
@@ -195,9 +197,10 @@ class _ValueChangeObserverState<T> extends State<ValueChangeObserver<T>> {
 
     // add notifier to [_notifiers] map
     if (!_notifiers.containsKey(cacheKey)) {
-      _notifiers[cacheKey] = List<ValueChangeNotifier<T>>();
+      _notifiers[cacheKey] = List<ValueChangeNotifier<T>>.empty(growable: true);
     }
     _notifiers[cacheKey].add(notifier);
+    super.initState();
   }
 
   @override

@@ -11,7 +11,7 @@ class _AppSettingsState extends State<AppSettings> {
   Widget build(BuildContext context) {
     return Container(
       child: SettingsScreen(
-        title: "Application Settings",
+        title: 'Application Settings',
         children: [
           SettingsGroup(
             title: 'Single Choice Settings',
@@ -80,7 +80,7 @@ class _AppSettingsState extends State<AppSettings> {
                 title: 'More Settings',
                 subtitle: 'General App Settings',
                 child: SettingsScreen(
-                  title: "App Settings",
+                  title: 'App Settings',
                   children: <Widget>[
                     CheckboxSettingsTile(
                       leading: Icon(Icons.adb),

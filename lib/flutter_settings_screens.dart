@@ -8,4 +8,4 @@ library flutter_settings_screens;
 
 export 'package:flutter_settings_screens/src/cache/cache.dart';
 export 'package:flutter_settings_screens/src/settings.dart';
-export 'package:flutter_settings_screens/src/settings_screen.dart';
+export 'package:flutter_settings_screens/src/widgets/settings_widgets.dart';

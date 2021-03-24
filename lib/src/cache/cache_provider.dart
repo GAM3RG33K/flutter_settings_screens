@@ -67,7 +67,7 @@ abstract class CacheProvider {
 
   bool containsKey(String key);
 
-  Set<E> getKeys<E>();
+  Set getKeys();
 
   Future<void> remove(String key);
 

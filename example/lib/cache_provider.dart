@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
@@ -15,13 +13,13 @@ class HiveCache extends CacheProvider {
   Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
     if (!kIsWeb) {
-      Directory defaultDirectory = await getApplicationDocumentsDirectory();
+      var defaultDirectory = await getApplicationDocumentsDirectory();
       Hive.init(defaultDirectory.path);
     }
     _preferences = await Hive.openBox(keyName);
   }
 
-  get keys => getKeys();
+  Set get keys => getKeys();
 
   @override
   bool getBool(String key) {
@@ -74,8 +72,8 @@ class HiveCache extends CacheProvider {
   }
 
   @override
-  Set<E> getKeys<E>() {
-    return _preferences.keys.cast<E>().toSet();
+  Set getKeys() {
+    return _preferences.keys.toSet();
   }
 
   @override

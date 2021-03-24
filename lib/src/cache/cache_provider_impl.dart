@@ -15,7 +15,7 @@ class SharePreferenceCache extends CacheProvider {
     _preferences = await SharedPreferences.getInstance();
   }
 
-  get keys => getKeys();
+  Set get keys => getKeys();
 
   @override
   bool getBool(String key) {
@@ -80,9 +80,8 @@ class SharePreferenceCache extends CacheProvider {
   }
 
   @override
-  Set<E> getKeys<E>() {
-    var storedValue = _preferences.getKeys();
-    return storedValue.cast<E>();
+  Set getKeys() {
+    return _preferences.getKeys();
   }
 
   @override
