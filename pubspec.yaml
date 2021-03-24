@@ -18,13 +18,13 @@ dependencies:
   # library for showing a color picker
   flutter_material_color_picker: ^1.0.5
 
-  #library to access storage directories
+  # library to access storage directories
   path_provider: ^2.0.1
 
-  #library to use Provider widgets
+  # library to use Provider widgets
   provider: ^5.0.0
 
-  #library to store the preference/settings using shared_preferences library
+  # library to store the preference/settings using shared_preferences library
   shared_preferences: ^2.0.4
 
   # to enforce dart coding standard
