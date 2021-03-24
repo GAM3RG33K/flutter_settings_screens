@@ -477,6 +477,9 @@ class TextInputSettingsTile extends StatefulWidget {
   /// or input is not passed through the validation
   final Color errorColor;
 
+  /// [TextInputType] of the [TextFormField] to set the keyboard type to name, phone, etc.
+  final TextInputType keyboardType;
+
   TextInputSettingsTile({
     @required this.title,
     @required this.settingKey,
@@ -489,6 +492,7 @@ class TextInputSettingsTile extends StatefulWidget {
     this.obscureText = false,
     this.borderColor,
     this.errorColor,
+    this.keyboardType,
   });
 
   @override
@@ -546,6 +550,7 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
           validator: widget.enabled ? widget.validator : null,
           onSaved: widget.enabled ? (value) => _onSave(value, onChanged) : null,
           obscureText: widget.obscureText,
+          keyboardType: widget.keyboardType,
           decoration: InputDecoration(
               errorStyle: TextStyle(
                 color: widget.errorColor ?? Colors.red,
