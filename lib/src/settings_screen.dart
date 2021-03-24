@@ -1165,7 +1165,7 @@ class TextInputSettingsTile extends StatefulWidget {
     this.obscureText = false,
     this.borderColor,
     this.errorColor,
-    this.keyboardType = TextInputType.text,
+    this.keyboardType,
   }) : assert(
   autoValidate == false ||
       autoValidate == true && autoValidateMode == null,
@@ -1227,7 +1227,7 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
           validator: widget.enabled ? widget.validator : null,
           onSaved: widget.enabled ? (value) => _onSave(value, onChanged) : null,
           obscureText: widget.obscureText,
-          keyboardType: widget.keyboardType??TextInputType.text,
+          keyboardType: widget.keyboardType,
           decoration: InputDecoration(
               errorStyle: TextStyle(
                 color: widget.errorColor ?? Colors.red,
