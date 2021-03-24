@@ -1147,7 +1147,7 @@ class TextInputSettingsTile extends StatefulWidget {
   /// or input is not passed through the validation
   final Color errorColor;
 
-  /// [KeyboardType] of the [TextFormField]
+  /// [TextInputType] of the [TextFormField] to set the keyboard type to name, phone, etc.
   final TextInputType keyboardType;
 
   TextInputSettingsTile({
