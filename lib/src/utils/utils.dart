@@ -4,12 +4,12 @@ class Utils {
   static Color colorFromString(String colorString) {
     colorString = colorString.replaceFirst('#', '');
     colorString = colorString.length == 6 ? 'ff' + colorString : colorString;
-    var colorHexInt = int.parse(colorString, radix: 16);
+    final colorHexInt = int.parse(colorString, radix: 16);
     return Color(colorHexInt);
   }
 
   static int intFromString(String value) {
-    var alphaString = 'ff000000';
+    final alphaString = 'ff000000';
     return int.parse(value, radix: 16) & int.parse(alphaString, radix: 16);
   }
 

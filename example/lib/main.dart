@@ -156,7 +156,7 @@ class _AppBodyState extends State<AppBody> {
 }
 
 void showSnackBar(BuildContext context, String message) {
-  Scaffold.of(context).showSnackBar(
+  ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(
         message,
