@@ -77,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
       children: <Widget>[
         Text('Shared Pref'),
         Switch(
+            activeColor: Theme.of(context).accentColor,
             value: _isUsingHive,
             onChanged: (newVal) {
               if (kIsWeb) {
@@ -98,6 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
       children: <Widget>[
         Text('Light Theme'),
         Switch(
+            activeColor: Theme.of(context).accentColor,
             value: _isDarkTheme,
             onChanged: (newVal) {
               _isDarkTheme = newVal;
@@ -154,7 +156,7 @@ class _AppBodyState extends State<AppBody> {
 }
 
 void showSnackBar(BuildContext context, String message) {
-  ScaffoldMessenger.of(context).showSnackBar(
+  Scaffold.of(context).showSnackBar(
     SnackBar(
       content: Text(
         message,
