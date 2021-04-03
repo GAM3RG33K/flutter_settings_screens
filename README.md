@@ -558,7 +558,7 @@ SimpleRadioSettingsTile(
   ],
   selected: 'Daily',
   onChange: (value) {
-    debugPrint('key-radio-sync-settins: $value');
+    debugPrint('key-radio-sync-settings: $value');
   },
 );
 ```
@@ -590,10 +590,11 @@ SimpleDropDownSettingsTile(
 );
 ```
 
-
-
 ## Contribution/Support
+    - File an issue on the repository, if something is not working as expected.
+       - Please follow the issue template used in flutter-sdk's repository, may be we'll integrate that here as well.
+    - File an issue in the repository, If you have any suggestions and/or feature requests, use `[Suggestion]` or `[FeatureRequest]` tags in issue titles.
+    - To support you just have to help out fellow developers on of the filed issues in this repository.
+    - To contribute, just follow the standard open source contributions instructions, maybe we can follow the ones used in the flutter sdk. We'll see how it goes.
 
-File an issue on GitHub repo, if something is not working as expected or you want a new feature to be added.
-
-All help and Pull requests are most welcome.
+**All help, issues, support and contributions are most welcome.**
