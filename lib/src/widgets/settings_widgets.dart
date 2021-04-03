@@ -537,6 +537,9 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
 
   Widget _buildTextField(
       BuildContext context, String value, OnChanged<String> onChanged) {
+    final borderColor = widget.borderColor ?? Colors.blue;
+    final errorColor = widget.errorColor ?? Colors.red;
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Form(
@@ -551,22 +554,23 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
           onSaved: widget.enabled ? (value) => _onSave(value, onChanged) : null,
           obscureText: widget.obscureText,
           keyboardType: widget.keyboardType,
+          cursorColor: borderColor,
           decoration: InputDecoration(
               errorStyle: TextStyle(
-                color: widget.errorColor ?? Colors.red,
+                color: errorColor,
               ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(5.0),
                 ),
-                borderSide: BorderSide(color: widget.errorColor ?? Colors.red),
+                borderSide: BorderSide(color: errorColor),
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(5.0),
                 ),
                 borderSide: BorderSide(
-                  color: widget.borderColor ?? Colors.blue,
+                  color: borderColor,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
@@ -574,7 +578,7 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
                   Radius.circular(5.0),
                 ),
                 borderSide: BorderSide(
-                  color: widget.borderColor ?? Colors.blue,
+                  color: borderColor,
                 ),
               )),
         ),
