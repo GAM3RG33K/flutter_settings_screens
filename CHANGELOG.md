@@ -1,3 +1,6 @@
+## 0.2.2+1
+ - complete dependency update to latest
+
 ## 0.2.2
  - remove autovalidate option to comply with new sdk changes
  - remove unnecessary use of Generic cache provider interface
