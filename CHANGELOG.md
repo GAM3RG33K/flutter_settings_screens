@@ -1,6 +1,9 @@
+## 0.2.2+1
+ - complete dependency update to latest
+
 ## 0.2.2
  - remove autovalidate option to comply with new sdk changes
- - remove uncessary use of Generic cache provider interface
+ - remove unnecessary use of Generic cache provider interface
     `Set<E> getKeys<E>()` -> `Set getKeys()`
 	- reason for this is that generics may restrict some implementation in some way
 	- to achieve the same effect as the generics implementation, one can just `cast` the set as they want
