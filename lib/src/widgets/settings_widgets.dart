@@ -588,7 +588,7 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
   }
 
   AutovalidateMode get autoValidateMode {
-    var autoValidateMode = widget.autoValidateMode ?? AutovalidateMode.disabled;
+    final autoValidateMode = widget.autoValidateMode;
     return autoValidateMode;
   }
 
@@ -609,7 +609,7 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
 
   void _onSave(String? newValue, OnChanged<String> onChanged) {
     if (newValue == null) return;
-    WidgetsBinding?.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
       onChanged(newValue);
       widget.onChange?.call(newValue);
     });
@@ -1052,7 +1052,7 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
     );
   }
 
-  bool get showTitles => widget.showTitles ?? true;
+  bool get showTitles => widget.showTitles;
 
   Widget _buildRadioTiles(
       BuildContext context, T groupValue, OnChanged<T> onChanged) {
