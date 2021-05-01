@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
+import 'color_picker/material_color_picker.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:flutter_settings_screens/src/utils/utils.dart';
 import 'package:flutter_settings_screens/src/utils/widget_utils.dart';
