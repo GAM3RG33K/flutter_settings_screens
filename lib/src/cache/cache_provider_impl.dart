@@ -7,7 +7,7 @@ import 'cache_provider.dart';
 ///
 /// This cache provider implementation is used by default, if non is provided explicitly.
 class SharePreferenceCache extends CacheProvider {
-  SharedPreferences _preferences;
+  late SharedPreferences _preferences;
 
   @override
   Future<void> init() async {
@@ -18,43 +18,44 @@ class SharePreferenceCache extends CacheProvider {
   Set get keys => getKeys();
 
   @override
-  bool getBool(String key) {
+  bool? getBool(String key) {
     return _preferences.getBool(key);
   }
 
   @override
-  double getDouble(String key) {
+  double? getDouble(String key) {
     return _preferences.getDouble(key);
   }
 
   @override
-  int getInt(String key) {
+  int? getInt(String key) {
     return _preferences.getInt(key);
   }
 
   @override
-  String getString(String key) {
+  String? getString(String key) {
     return _preferences.getString(key);
   }
 
   @override
-  Future<void> setBool(String key, bool value) {
-    return _preferences.setBool(key, value);
+  Future<void> setBool(String key, bool? value, {bool? defaultValue = false}) {
+    return _preferences.setBool(key, value ?? defaultValue!);
   }
 
   @override
-  Future<void> setDouble(String key, double value) {
-    return _preferences.setDouble(key, value);
+  Future<void> setDouble(String key, double? value,
+      {double? defaultValue = 0.0}) {
+    return _preferences.setDouble(key, value ?? defaultValue!);
   }
 
   @override
-  Future<void> setInt(String key, int value) {
-    return _preferences.setInt(key, value);
+  Future<void> setInt(String key, int? value, {int? defaultValue = 0}) {
+    return _preferences.setInt(key, value ?? defaultValue!);
   }
 
   @override
-  Future<void> setString(String key, String value) {
-    return _preferences.setString(key, value);
+  Future<void> setString(String key, String? value, {String? defaultValue}) {
+    return _preferences.setString(key, value ?? defaultValue!);
   }
 
   @override
