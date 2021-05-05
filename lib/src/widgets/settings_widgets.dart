@@ -362,7 +362,7 @@ class SettingsGroup extends StatelessWidget {
       ),
     ];
 
-    if (subtitle != null) {
+    if (subtitle.isNotEmpty) {
       elements.addAll([
         Container(
           padding: const EdgeInsets.all(16.0),
