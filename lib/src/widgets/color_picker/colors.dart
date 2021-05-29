@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const List<ColorSwatch> materialColors = const <ColorSwatch>[
+const List<ColorSwatch> materialColors = <ColorSwatch>[
   Colors.red,
   Colors.pink,
   Colors.purple,
@@ -22,7 +22,7 @@ const List<ColorSwatch> materialColors = const <ColorSwatch>[
   Colors.blueGrey
 ];
 
-const List<ColorSwatch> accentColors = const <ColorSwatch>[
+const List<ColorSwatch> accentColors = <ColorSwatch>[
   Colors.redAccent,
   Colors.pinkAccent,
   Colors.purpleAccent,
@@ -41,9 +41,9 @@ const List<ColorSwatch> accentColors = const <ColorSwatch>[
   Colors.deepOrangeAccent,
 ];
 
-const List<ColorSwatch> fullMaterialColors = const <ColorSwatch>[
-  const ColorSwatch(0xFFFFFFFF, {500: Colors.white}),
-  const ColorSwatch(0xFF000000, {500: Colors.black}),
+const List<ColorSwatch> fullMaterialColors = <ColorSwatch>[
+  ColorSwatch(0xFFFFFFFF, {500: Colors.white}),
+  ColorSwatch(0xFF000000, {500: Colors.black}),
   Colors.red,
   Colors.redAccent,
   Colors.pink,

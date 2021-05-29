@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
+
 import 'circle_color.dart';
 import 'colors.dart';
-import 'package:flutter/material.dart';
 
 class MaterialColorPicker extends StatefulWidget {
   final Color? selectedColor;
@@ -54,16 +55,17 @@ class _MaterialColorPickerState extends State<MaterialColorPicker> {
   }
 
   @protected
+  @override
   void didUpdateWidget(covariant MaterialColorPicker oldWidget) {
-    super.didUpdateWidget(oldWidget);
     _initSelectedValue();
+    super.didUpdateWidget(oldWidget);
   }
 
   void _initSelectedValue() {
     if (widget.colors != null) _colors = widget.colors;
 
     Color? shadeColor = widget.selectedColor ?? _defaultValue;
-    ColorSwatch? mainColor = _findMainColor(shadeColor);
+    var mainColor = _findMainColor(shadeColor);
 
     if (mainColor == null) {
       mainColor = _colors![0];
@@ -78,8 +80,9 @@ class _MaterialColorPickerState extends State<MaterialColorPicker> {
   }
 
   ColorSwatch? _findMainColor(Color? shadeColor) {
-    for (final mainColor in _colors!)
+    for (final mainColor in _colors!) {
       if (_isShadeOfMain(mainColor, shadeColor)) return mainColor;
+    }
 
     return (shadeColor is ColorSwatch && _colors!.contains(shadeColor))
         ? shadeColor
@@ -106,8 +109,9 @@ class _MaterialColorPickerState extends State<MaterialColorPicker> {
     if (widget.onlyShadeSelection && !_isMainSelection) {
       return;
     }
-    if (widget.allowShades && widget.onColorChange != null)
+    if (widget.allowShades && widget.onColorChange != null) {
       widget.onColorChange!(shadeColor);
+    }
   }
 
   void _onShadeColorSelected(Color? color) {
@@ -175,9 +179,9 @@ class _MaterialColorPickerState extends State<MaterialColorPicker> {
         : _buildListShadesColor(_mainColor!);
 
     // Size of dialog
-    final double width = MediaQuery.of(context).size.width * .80;
+    final width = MediaQuery.of(context).size.width * .80;
     // Number of circle per line, depend on width and circleSize
-    final int nbrCircleLine = width ~/ (widget.circleSize + widget.spacing);
+    final nbrCircleLine = width ~/ (widget.circleSize + widget.spacing);
 
     return Container(
       width: width,

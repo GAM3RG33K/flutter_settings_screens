@@ -746,7 +746,7 @@ class SwitchSettingsTile extends StatelessWidget {
   }
 
   String getSubtitle(bool currentStatus) {
-    if (subtitle != null && subtitle.isNotEmpty) {
+    if (subtitle.isNotEmpty) {
       return subtitle;
     }
     var label = '';
@@ -899,7 +899,7 @@ class CheckboxSettingsTile extends StatelessWidget {
   }
 
   String getSubtitle(bool currentStatus) {
-    if (subtitle != null && subtitle.isNotEmpty) {
+    if (subtitle.isNotEmpty) {
       return subtitle;
     }
 
@@ -1039,7 +1039,7 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
               visible: showTitles,
               child: _SimpleHeaderTile(
                 title: widget.title,
-                subtitle: widget.subtitle != null && widget.subtitle.isNotEmpty
+                subtitle: widget.subtitle.isNotEmpty
                     ? widget.subtitle
                     : widget.values[selectedValue],
                 leading: widget.leading,
@@ -1319,7 +1319,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
           children: <Widget>[
             _SimpleHeaderTile(
               title: widget.title,
-              subtitle: widget.subtitle != null && widget.subtitle.isNotEmpty
+              subtitle: widget.subtitle.isNotEmpty
                   ? widget.subtitle
                   : value.toString(),
               leading: widget.leading,
