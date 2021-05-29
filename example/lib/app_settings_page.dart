@@ -301,9 +301,10 @@ class _AppSettingsState extends State<AppSettings> {
                 defaultValue: 20,
                 min: 0,
                 max: 100,
-                step: 5,
+                step: 1,
                 leading: Icon(Icons.volume_up),
-                onChangeEnd: (value) {
+                decimalPrecision: 0,
+                onChange: (value) {
                   debugPrint('\n===== on change end =====\n'
                       'key-slider-volume: $value'
                       '\n==========\n');
@@ -330,6 +331,7 @@ class _AppSettingsState extends State<AppSettings> {
                 min: 1,
                 max: 5,
                 step: 0.1,
+                decimalPrecision: 1,
                 leading: Icon(Icons.aspect_ratio),
                 onChange: (value) {
                   debugPrint('\n===== on change =====\n'

@@ -42,22 +42,22 @@ class HiveCache extends CacheProvider {
   }
 
   @override
-  Future<void> setBool(String key, bool value) {
+  Future<void> setBool(String key, bool value, {bool defaultValue}) {
     return _preferences.put(key, value);
   }
 
   @override
-  Future<void> setDouble(String key, double value) {
+  Future<void> setDouble(String key, double value, {double defaultValue}) {
     return _preferences.put(key, value);
   }
 
   @override
-  Future<void> setInt(String key, int value) {
+  Future<void> setInt(String key, int value, {int defaultValue}) {
     return _preferences.put(key, value);
   }
 
   @override
-  Future<void> setString(String key, String value) {
+  Future<void> setString(String key, String value, {String defaultValue}) {
     return _preferences.put(key, value);
   }
 
