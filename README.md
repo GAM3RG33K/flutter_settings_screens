@@ -8,6 +8,8 @@ The unique thing about this library is that it is not dependent upon any specifi
 
 Inspired by the [shared_preferences_settings](https://pub.dev/packages/shared_preferences_settings) plugin.
 
+**Now with Null-safety.**
+
 ## Features
   - A collection of settings widgets to make a settings page in a few seconds and get going.
     - **Normal**:

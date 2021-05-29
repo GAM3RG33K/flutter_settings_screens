@@ -1,3 +1,7 @@
+## 0.3.0-null-safety
+ - null-safety migration
+ - bug-fix for slider not respecting step value in decimal points
+
 ## 0.2.2+1
  - complete dependency update to latest
 

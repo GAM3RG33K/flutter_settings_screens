@@ -1346,7 +1346,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
       defaultValue: currentValue,
       builder:
           (BuildContext context, double value, OnChanged<double> onChanged) {
-            // debugPrint('creating settings Tile: ${widget.settingKey}');
+        // debugPrint('creating settings Tile: ${widget.settingKey}');
         return SettingsContainer(
           children: <Widget>[
             _SimpleHeaderTile(
