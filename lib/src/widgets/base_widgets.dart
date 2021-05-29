@@ -676,13 +676,11 @@ class _SettingsSlider extends StatelessWidget {
       max: max,
       divisions: (max - min) ~/ (step),
       onChangeStart: enabled && !eagerUpdate
-          ? (value) => onChangeStart?.call(value.roundToDouble())
+          ? (value) => onChangeStart?.call(value)
           : null,
-      onChanged:
-          enabled ? (value) => onChanged?.call(value.roundToDouble()) : null,
-      onChangeEnd: enabled && !eagerUpdate
-          ? (value) => onChangeEnd?.call(value.roundToDouble())
-          : null,
+      onChanged: enabled ? (value) => onChanged?.call(value) : null,
+      onChangeEnd:
+          enabled && !eagerUpdate ? (value) => onChangeEnd?.call(value) : null,
     );
   }
 }

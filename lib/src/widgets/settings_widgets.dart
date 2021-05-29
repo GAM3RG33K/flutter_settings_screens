@@ -1202,8 +1202,6 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
 /// subtitle and default value which determines what the slider's position
 /// will be set initially.
 ///
-/// This widget supports double and integer type of values which should be put in the preference.
-///
 /// Example:
 ///
 /// ```dart
@@ -1278,6 +1276,39 @@ class SliderSettingsTile extends StatefulWidget {
   /// callback for fetching the value slider movement starts
   final Widget? leading;
 
+  /// Value to be used as precision when printing the current value in widget
+  ///
+  /// Basically this value is used for input in [double.toStringAsFixed] method
+  /// while printing display value
+  ///
+  /// default = 2, you'll need to adjust the precision according to step value
+  ///
+  /// Note:
+  /// However this does not affect the actual value in the onChange callbacks
+  ///
+  /// For example:
+  ///  case 1:
+  ///   current value: 5.2500001
+  ///   decimalPrecision: 0
+  ///   result:
+  ///     callback value: 5.2500001
+  ///     display value: 5
+  ///
+  ///  case 2:
+  ///   current value: 5.2500001
+  ///   decimalPrecision: 1
+  ///   result:
+  ///     callback value: 5.2500001
+  ///     display value: 5.2
+  ///
+  ///  case 3:
+  ///   current value: 5.2500001
+  ///   decimalPrecision: 2
+  ///   result:
+  ///     callback value: 5.2500001
+  ///     display value: 5.25
+  final int decimalPrecision;
+
   SliderSettingsTile({
     required this.title,
     required this.settingKey,
@@ -1292,6 +1323,7 @@ class SliderSettingsTile extends StatefulWidget {
     this.onChangeStart,
     this.onChangeEnd,
     this.leading,
+    this.decimalPrecision = 2,
   });
 
   @override
@@ -1314,14 +1346,14 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
       defaultValue: currentValue,
       builder:
           (BuildContext context, double value, OnChanged<double> onChanged) {
-        debugPrint('creating settings Tile: ${widget.settingKey}');
+            // debugPrint('creating settings Tile: ${widget.settingKey}');
         return SettingsContainer(
           children: <Widget>[
             _SimpleHeaderTile(
               title: widget.title,
               subtitle: widget.subtitle.isNotEmpty
                   ? widget.subtitle
-                  : value.toString(),
+                  : value.toStringAsFixed(widget.decimalPrecision),
               leading: widget.leading,
             ),
             _SettingsSlider(
@@ -1450,7 +1482,7 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
       defaultValue: currentValue,
       builder:
           (BuildContext context, String value, OnChanged<String> onChanged) {
-        debugPrint('creating settings Tile: ${widget.settingKey}');
+            // debugPrint('creating settings Tile: ${widget.settingKey}');
         return _SettingsColorPicker(
           title: widget.title,
           value: value,
@@ -1700,7 +1732,7 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
       defaultValue: currentValue,
       builder:
           (BuildContext context, double value, OnChanged<double> onChanged) {
-        debugPrint('creating settings Tile: ${widget.settingKey}');
+            // debugPrint('creating settings Tile: ${widget.settingKey}');
         return SettingsContainer(
           children: <Widget>[
             _ModalSettingsTile<double>(
