@@ -718,7 +718,7 @@ class SwitchSettingsTile extends StatelessWidget {
           leading: leading,
           title: title,
           subtitle: getSubtitle(value),
-          onTap: () => onChanged(!value),
+          onTap: () => _onSwitchChange(context, !value, onChanged),
           enabled: enabled,
           child: _SettingsSwitch(
             value: value,
