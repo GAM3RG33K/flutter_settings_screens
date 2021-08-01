@@ -1469,7 +1469,7 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
     super.initState();
 
     if (widget.defaultValue != null) {
-      currentValue = Utils.stringFromColor(widget.defaultValue!);
+      currentValue = ConversionUtils.stringFromColor(widget.defaultValue!);
     } else {
       currentValue = widget.defaultStringValue;
     }
@@ -1497,7 +1497,7 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
       String color, OnChanged<String> onChanged) async {
     currentValue = color;
     onChanged(color);
-    final colorFromString = Utils.colorFromString(color);
+    final colorFromString = ConversionUtils.colorFromString(color);
     widget.onChange?.call(colorFromString);
   }
 }

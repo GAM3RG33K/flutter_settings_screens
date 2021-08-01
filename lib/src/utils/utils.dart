@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-class Utils {
+class ConversionUtils {
   static Color colorFromString(String colorString) {
     colorString = colorString.replaceFirst('#', '');
     colorString = colorString.length == 6 ? 'ff' + colorString : colorString;

@@ -1,3 +1,18 @@
+## 0.3.1-null-safety
+ - added functionality to update the specific SettingsUI by updating it's value
+   by calling setValue with `notify` as `true`.
+
+   Example:
+   ```dart
+    await Settings.setValue<T>(cacheKey, newValue, notify: true);
+   ```
+
+ - Fix - Unresponsive tapping of the switch tile, fixed by @pascalwils
+ - Updated ReadMe content to match new updates
+ - Updated example app code to demo the UI update functionality
+    - Checkout Auto adjusting Volume slider
+
+
 ## 0.3.0-null-safety
  - null-safety migration
  - bug-fix for slider not respecting step value in decimal points

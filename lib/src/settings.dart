@@ -94,19 +94,28 @@ class Settings {
   /// is returned.
   static T getValue<T>(String key, T defaultValue) {
     ensureCacheProvider();
-    if (_cacheProvider?.containsKey(key) ?? false) {
-      return _cacheProvider?.getValue<T>(key, defaultValue) ?? defaultValue;
+    final containsKey = _cacheProvider?.containsKey(key);
+    if (containsKey ?? false) {
+      final _prefValue = _cacheProvider?.getValue<T>(key, defaultValue);
+      return _prefValue ?? defaultValue;
     }
     return defaultValue;
   }
 
   /// method to set [value] using the [cacheProvider] for given [key]
-  static Future<void> setValue<T>(String key, T value) async {
+  static Future<void> setValue<T>(
+    String key,
+    T value, {
+    bool notify = false,
+  }) async {
     ensureCacheProvider();
     if (value == null) {
       return _cacheProvider?.remove(key);
     }
     await _cacheProvider?.setObject<T>(key, value);
+    if (notify) {
+      _notifyGlobally<T>(key, value);
+    }
   }
 
   /// method to clear all the cached data using the [cacheProvider]
@@ -130,6 +139,7 @@ class ValueChangeNotifier<T> extends ValueNotifier<T> {
   set value(T newValue) {
     Settings.setValue<T>(key, newValue);
     super.value = newValue;
+    _notifyGlobally(key, newValue);
   }
 
   @override
@@ -141,6 +151,24 @@ class ValueChangeNotifier<T> extends ValueNotifier<T> {
   String toString() {
     return '\n{VCN: \n\tkey: $key  \n\tvalue: $value\n}';
   }
+}
+
+void _notifyGlobally<T>(String key, T newValue) {
+  final notifiers = _fetchNotifiersForKey(key);
+  if (notifiers == null || notifiers.isEmpty) return;
+
+  notifiers.forEach((notifier) {
+    final currentValue = notifier.value;
+    if (currentValue != newValue) {
+      notifier.value = newValue;
+      print(': _notifyGlobally: updating $key notifier');
+    }
+  });
+}
+
+List<ValueChangeNotifier>? _fetchNotifiersForKey<T>(String key) {
+  final finalKey = key.toLowerCase().trim();
+  return _notifiers[finalKey];
 }
 
 /// This map is used for keeping the track of the notifier(s) associated with

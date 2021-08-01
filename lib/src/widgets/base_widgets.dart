@@ -720,7 +720,7 @@ class _SettingsColorPicker extends StatelessWidget {
       onTap: () => _showColorPicker(context, value),
       child: FloatingActionButton(
         heroTag: null,
-        backgroundColor: Utils.colorFromString(value),
+        backgroundColor: ConversionUtils.colorFromString(value),
         elevation: 0,
         onPressed: enabled ? () => _showColorPicker(context, value) : null,
       ),
@@ -730,10 +730,10 @@ class _SettingsColorPicker extends StatelessWidget {
   void _showColorPicker(BuildContext context, String value) {
     Widget dialogContent = MaterialColorPicker(
       shrinkWrap: true,
-      selectedColor: Utils.colorFromString(value),
+      selectedColor: ConversionUtils.colorFromString(value),
       onColorChange: (Color? color) {
         if (color == null) return;
-        onChanged(Utils.stringFromColor(color));
+        onChanged(ConversionUtils.stringFromColor(color));
       },
     );
 

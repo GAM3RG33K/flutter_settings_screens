@@ -16,7 +16,11 @@ class HiveCache extends CacheProvider {
       final defaultDirectory = await getApplicationDocumentsDirectory();
       Hive.init(defaultDirectory.path);
     }
-    _preferences = await Hive.openBox(keyName);
+    if (Hive.isBoxOpen(keyName)) {
+      _preferences = Hive.box(keyName);
+    } else {
+      _preferences = await Hive.openBox(keyName);
+    }
   }
 
   Set get keys => getKeys();

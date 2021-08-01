@@ -102,9 +102,14 @@ Get value:
 ```dart
  Settings.getValue<T>(cacheKey, defaultValue);
 ```
-Set value:
+Set value(no UI updates):
 ```dart
  await Settings.setValue<T>(cacheKey, newValue);
+```
+
+Set value(with UI updates):
+```dart
+ await Settings.setValue<T>(cacheKey, newValue, notify: true);
 ```
 
 T represents any of the following:
@@ -121,7 +126,22 @@ Get value:
 ```
 Set value:
 ```dart
- await Settings.setValue<String>(cacheKey, newValue);
+ await Settings.setValue<String>(cacheKey, newValue, notify: true);
+```
+
+### Special-Note:
+Since, `Color` or `MaterialColor` is a Flutter object, we need to convert it to string version of the color before saving it to cache & convert string version to color while fetching it from the cache.
+
+For that the plugin exposes `ConversionUtils` class with utility method to do that needed.
+
+From color to string:
+```dart
+ String colorString = ConversionUtils.stringFromColor(Colors.blue);
+```
+
+From string to color:
+```dart
+ Color color = ConversionUtils.colorFromString('#0000ff');
 ```
 
 

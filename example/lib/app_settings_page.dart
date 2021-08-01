@@ -52,6 +52,7 @@ class _AppSettingsState extends State<AppSettings> {
                     leading: Icon(Icons.adb),
                     settingKey: 'key-is-developer',
                     title: 'Developer Mode',
+                    defaultValue: true,
                     onChange: (value) {
                       debugPrint('key-is-developer: $value');
                     },
@@ -296,7 +297,7 @@ class _AppSettingsState extends State<AppSettings> {
             title: 'Other settings',
             children: <Widget>[
               SliderSettingsTile(
-                title: 'Volume',
+                title: 'Volume [Auto-Adusting to 20]',
                 settingKey: 'key-slider-volume',
                 defaultValue: 20,
                 min: 0,
@@ -308,6 +309,9 @@ class _AppSettingsState extends State<AppSettings> {
                   debugPrint('\n===== on change end =====\n'
                       'key-slider-volume: $value'
                       '\n==========\n');
+                  Future.delayed(Duration(seconds: 1), () {
+                    Settings.setValue('key-slider-volume', 20.0, notify: true);
+                  });
                 },
               ),
               ColorPickerSettingsTile(
