@@ -226,6 +226,7 @@ class ExpandableSettingsTile extends StatelessWidget {
       title: title,
       subtitle: subtitle,
       enabled: enabled,
+      expanded: expanded,
       child: SettingsContainer(
         children: children,
       ),
