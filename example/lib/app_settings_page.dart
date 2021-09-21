@@ -157,6 +157,7 @@ class _AppSettingsState extends State<AppSettings> {
               ExpandableSettingsTile(
                 title: 'Quick setting 2',
                 subtitle: 'Expandable Settings',
+                expanded: true,
                 children: <Widget>[
                   CheckboxSettingsTile(
                     settingKey: 'key-day-light-savings-2',

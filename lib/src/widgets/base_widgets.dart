@@ -507,7 +507,7 @@ class _SettingsCheckbox extends StatelessWidget {
     return Checkbox(
       value: value,
       onChanged: enabled ? onChanged : null,
-      activeColor: Theme.of(context).accentColor,
+      activeColor: Theme.of(context).colorScheme.secondary,
     );
   }
 }
@@ -535,7 +535,7 @@ class _SettingsSwitch extends StatelessWidget {
     return Switch.adaptive(
       value: value,
       onChanged: enabled ? onChanged : null,
-      activeColor: Theme.of(context).accentColor,
+      activeColor: Theme.of(context).colorScheme.secondary,
     );
   }
 }

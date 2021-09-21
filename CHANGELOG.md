@@ -1,3 +1,8 @@
+## 0.3.2-null-safety
+ - Provider version updated to 6.0.0, thanks to @Pawelek55
+ - ExpandedSettingTile were not using the provided expanded status, fixed by @Colton127
+ - Updated theme changes in the source code & in the example to resolve analyzer warnings
+
 ## 0.3.1-null-safety
  - added functionality to update the specific SettingsUI by updating it's value
    by calling setValue with `notify` as `true`.
@@ -11,7 +16,6 @@
  - Updated ReadMe content to match new updates
  - Updated example app code to demo the UI update functionality
     - Checkout Auto adjusting Volume slider
-
 
 ## 0.3.0-null-safety
  - null-safety migration
