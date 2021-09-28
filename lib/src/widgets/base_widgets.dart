@@ -577,6 +577,9 @@ class _SettingsDropDown<T> extends StatelessWidget {
   /// value of the selected in this dropdown
   final T selected;
 
+  /// Alignment of the dropdown. Defaults to [AlignmentDirectional.centerEnd].
+  final AlignmentGeometry alignment;
+
   /// List of values for this dropdown
   final List<T> values;
 
@@ -595,6 +598,7 @@ class _SettingsDropDown<T> extends StatelessWidget {
     required this.values,
     required this.onChanged,
     required this.itemBuilder,
+    this.alignment = AlignmentDirectional.centerEnd,
     this.enabled = true,
   });
 
@@ -606,6 +610,7 @@ class _SettingsDropDown<T> extends StatelessWidget {
         DropdownButton<T>(
           isDense: true,
           value: selected,
+          alignment: alignment,
           onChanged: enabled ? onChanged : null,
           underline: Container(),
           items: values.map<DropdownMenuItem<T>>(
@@ -693,6 +698,9 @@ class _SettingsColorPicker extends StatelessWidget {
 
   final String subtitle;
 
+  /// The widget shown in front of the title
+  final Widget? leading;
+
   /// current value of the slider
   final String value;
 
@@ -709,6 +717,7 @@ class _SettingsColorPicker extends StatelessWidget {
     required this.enabled,
     required this.title,
     this.subtitle = '',
+    this.leading,
   });
 
   @override
@@ -716,6 +725,7 @@ class _SettingsColorPicker extends StatelessWidget {
     return _SettingsTile(
       title: title,
       subtitle: subtitle.isNotEmpty ? subtitle : value,
+      leading: leading,
       enabled: enabled,
       onTap: () => _showColorPicker(context, value),
       child: FloatingActionButton(

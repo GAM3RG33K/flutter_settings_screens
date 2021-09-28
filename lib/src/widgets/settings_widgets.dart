@@ -1131,6 +1131,12 @@ class DropDownSettingsTile<T> extends StatefulWidget {
   /// subtitle for the settings tile, default = ''
   final String subtitle;
 
+  /// The widget shown in front of the title
+  final Widget? leading;
+
+  /// Alignment of the dropdown. Defaults to [AlignmentDirectional.centerEnd].
+  final AlignmentGeometry alignment;
+
   /// flag which represents the state of the settings, if false the the tile will
   /// ignore all the user inputs, default = true
   final bool enabled;
@@ -1146,6 +1152,8 @@ class DropDownSettingsTile<T> extends StatefulWidget {
     this.enabled = true,
     this.onChange,
     this.subtitle = '',
+    this.leading,
+    this.alignment = AlignmentDirectional.centerEnd,
   });
 
   @override
@@ -1173,9 +1181,11 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
             _SettingsTile(
               title: widget.title,
               subtitle: widget.subtitle,
+              leading: widget.leading,
               enabled: widget.enabled,
               child: _SettingsDropDown<T>(
                 selected: value,
+                alignment: widget.alignment,
                 values: widget.values.keys.toList().cast<T>(),
                 onChanged: (newValue) =>
                     _handleDropDownChange(newValue, onChanged),
@@ -1440,6 +1450,9 @@ class ColorPickerSettingsTile extends StatefulWidget {
   /// subtitle for the settings tile, default = ''
   final String subtitle;
 
+  /// The widget shown in front of the title
+  final Widget? leading;
+
   /// flag which represents the state of the settings, if false the the tile will
   /// ignore all the user inputs, default = true
   final bool enabled;
@@ -1455,6 +1468,7 @@ class ColorPickerSettingsTile extends StatefulWidget {
     this.onChange,
     this.defaultStringValue = '#ff000000',
     this.subtitle = '',
+    this.leading,
   });
 
   @override
@@ -1487,6 +1501,7 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
         return _SettingsColorPicker(
           title: widget.title,
           value: value,
+          leading: widget.leading,
           enabled: widget.enabled,
           onChanged: (color) => _handleColorChanged(color, onChanged),
         );
@@ -1547,6 +1562,9 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
   /// subtitle for the settings tile, default = ''
   final String subtitle;
 
+  /// The widget shown in front of the title
+  final Widget? leading;
+
   /// flag which represents the state of the settings, if false the the tile will
   /// ignore all the user inputs, default = true
   final bool enabled;
@@ -1566,6 +1584,7 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
     this.showTitles = false,
     this.onChange,
     this.subtitle = '',
+    this.leading,
   });
 
   @override
@@ -1600,6 +1619,7 @@ class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
           subtitle: widget.subtitle.isNotEmpty
               ? widget.subtitle
               : widget.values[value],
+          leading: widget.leading,
           children: <Widget>[
             RadioSettingsTile<T>(
               title: '',
@@ -1656,6 +1676,9 @@ class SliderModalSettingsTile extends StatefulWidget {
   /// subtitle for the settings tile, default = ''
   final String subtitle;
 
+  /// The widget shown in front of the title
+  final Widget? leading;
+
   /// flag which represents the state of the settings, if false the the tile will
   /// ignore all the user inputs, default = true
   final bool enabled;
@@ -1709,6 +1732,7 @@ class SliderModalSettingsTile extends StatefulWidget {
     this.onChangeStart,
     this.onChangeEnd,
     this.subtitle = '',
+    this.leading,
     this.eagerUpdate = true,
   });
 
@@ -1741,6 +1765,7 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
               subtitle: widget.subtitle.isNotEmpty
                   ? widget.subtitle
                   : value.toString(),
+              leading: widget.leading,
               children: <Widget>[
                 _SettingsSlider(
                   onChanged: (double newValue) =>
@@ -1825,6 +1850,9 @@ class SimpleRadioSettingsTile extends StatelessWidget {
   /// subtitle for the settings tile, default = ''
   final String subtitle;
 
+  /// The widget shown in front of the title
+  final Widget? leading;
+
   /// flag which represents the state of the settings, if false the the tile will
   /// ignore all the user inputs, default = true
   final bool enabled;
@@ -1840,6 +1868,7 @@ class SimpleRadioSettingsTile extends StatelessWidget {
     this.enabled = true,
     this.onChange,
     this.subtitle = '',
+    this.leading,
   });
 
   @override
@@ -1847,6 +1876,7 @@ class SimpleRadioSettingsTile extends StatelessWidget {
     return RadioSettingsTile<String>(
       title: title,
       subtitle: subtitle,
+      leading: leading,
       settingKey: settingKey,
       selected: selected,
       enabled: enabled,
@@ -1906,6 +1936,9 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
   /// subtitle for the settings tile, default = ''
   final String subtitle;
 
+  /// The widget shown in front of the title
+  final Widget? leading;
+
   /// flag which represents the state of the settings, if false the the tile will
   /// ignore all the user inputs, default = true
   final bool enabled;
@@ -1921,6 +1954,7 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
     this.enabled = true,
     this.onChange,
     this.subtitle = '',
+    this.leading,
   });
 
   @override
@@ -1928,6 +1962,7 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
     return DropDownSettingsTile<String>(
       title: title,
       subtitle: subtitle,
+      leading: leading,
       settingKey: settingKey,
       selected: selected,
       enabled: enabled,
