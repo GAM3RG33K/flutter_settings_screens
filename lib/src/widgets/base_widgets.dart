@@ -109,6 +109,12 @@ class _SettingsTile extends StatefulWidget {
   /// subtitle string for the tile
   final String? subtitle;
 
+  /// title text style
+  final TextStyle? titleTextStyle;
+
+  /// subtitle text style
+  final TextStyle? subtitleTextStyle;
+
   /// flag to represent if the tile is accessible or not, if false user input is ignored
   final bool enabled;
 
@@ -125,6 +131,8 @@ class _SettingsTile extends StatefulWidget {
     required this.title,
     required this.child,
     this.subtitle = '',
+    this.titleTextStyle,
+    this.subtitleTextStyle,
     this.onTap,
     this.enabled = true,
     this.showChildBelow = false,
@@ -151,13 +159,14 @@ class __SettingsTileState extends State<_SettingsTile> {
             leading: widget.leading,
             title: Text(
               widget.title,
-              style: headerTextStyle(context),
+              style: widget.titleTextStyle ?? headerTextStyle(context),
             ),
             subtitle: widget.subtitle!.isEmpty
                 ? null
                 : Text(
                     widget.subtitle!,
-                    style: subtitleTextStyle(context),
+                    style:
+                        widget.subtitleTextStyle ?? subtitleTextStyle(context),
                   ),
             enabled: widget.enabled,
             onTap: widget.onTap,
