@@ -36,6 +36,12 @@ class SimpleSettingsTile extends StatelessWidget {
   /// subtitle string for the tile
   final String? subtitle;
 
+  /// title text style
+  final TextStyle? titleTextStyle;
+
+  /// subtitle text style
+  final TextStyle? subtitleTextStyle;
+
   /// widget to be placed at first in the tile
   final Widget? leading;
 
@@ -51,6 +57,8 @@ class SimpleSettingsTile extends StatelessWidget {
   SimpleSettingsTile({
     required this.title,
     this.subtitle,
+    this.titleTextStyle,
+    this.subtitleTextStyle,
     this.child,
     this.enabled = true,
     this.leading,
@@ -63,6 +71,8 @@ class SimpleSettingsTile extends StatelessWidget {
       leading: leading,
       title: title,
       subtitle: subtitle,
+      titleTextStyle: titleTextStyle,
+      subtitleTextStyle: subtitleTextStyle,
       enabled: enabled,
       onTap: () => _handleTap(context),
       child: child != null ? getIcon(context) : Text(''),
