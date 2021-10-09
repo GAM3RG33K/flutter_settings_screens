@@ -18,7 +18,7 @@ part 'base_widgets.dart';
 /// SimpleSettingsTile(
 ///   title: 'Advanced',
 ///   subtitle: 'More, advanced settings.'
-///   screen: SettingsScreen(
+///   child: SettingsScreen(
 ///     title: 'Sub menu',
 ///     children: <Widget>[
 ///       CheckboxSettingsTile(
