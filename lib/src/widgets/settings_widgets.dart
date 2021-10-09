@@ -1483,7 +1483,7 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
       defaultValue: currentValue,
       builder:
           (BuildContext context, String value, OnChanged<String> onChanged) {
-            // debugPrint('creating settings Tile: ${widget.settingKey}');
+        // debugPrint('creating settings Tile: ${widget.settingKey}');
         return _SettingsColorPicker(
           title: widget.title,
           value: value,
