@@ -530,7 +530,9 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
       defaultValue: widget.initialValue,
       builder:
           (BuildContext context, String value, OnChanged<String> onChanged) {
-        _controller.text = value;
+        WidgetsBinding.instance?.addPostFrameCallback((_) {
+          _controller.text = value;
+        });
         return _ModalSettingsTile<String>(
           title: widget.title,
           subtitle: widget.obscureText ? '' : value,
