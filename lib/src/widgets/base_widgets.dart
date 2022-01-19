@@ -161,7 +161,7 @@ class __SettingsTileState extends State<_SettingsTile> {
               widget.title,
               style: widget.titleTextStyle ?? headerTextStyle(context),
             ),
-            subtitle: widget.subtitle == null
+            subtitle: widget.subtitle?.isEmpty ?? true
                 ? null
                 : Text(
                     widget.subtitle!,
