@@ -686,12 +686,6 @@ class SwitchSettingsTile extends StatelessWidget {
   /// subtitle for the settings tile, default = ''
   final String subtitle;
 
-  /// title text style
-  final TextStyle? titleTextStyle;
-
-  /// subtitle text style
-  final TextStyle? subtitleTextStyle;
-
   /// flag which represents the state of the settings, if false the the tile will
   /// ignore all the user inputs, default = true
   final bool enabled;
@@ -725,8 +719,6 @@ class SwitchSettingsTile extends StatelessWidget {
     this.disabledLabel = '',
     this.childrenIfEnabled,
     this.subtitle = '',
-    this.titleTextStyle,
-    this.subtitleTextStyle,
   });
 
   @override
@@ -746,8 +738,6 @@ class SwitchSettingsTile extends StatelessWidget {
             onChanged: (value) => _onSwitchChange(context, value, onChanged),
             enabled: enabled,
           ),
-          titleTextStyle: titleTextStyle,
-          subtitleTextStyle: subtitleTextStyle,
         );
 
         var finalWidget = getFinalWidget(
@@ -850,12 +840,6 @@ class CheckboxSettingsTile extends StatelessWidget {
   /// subtitle for the settings tile, default = ''
   final String subtitle;
 
-  /// title text style
-  final TextStyle? titleTextStyle;
-
-  /// subtitle text style
-  final TextStyle? subtitleTextStyle;
-
   /// flag which represents the state of the settings, if false the the tile will
   /// ignore all the user inputs, default = true
   final bool enabled;
@@ -889,8 +873,6 @@ class CheckboxSettingsTile extends StatelessWidget {
     this.disabledLabel = '',
     this.childrenIfEnabled,
     this.subtitle = '',
-    this.titleTextStyle,
-    this.subtitleTextStyle,
   });
 
   @override
@@ -910,8 +892,6 @@ class CheckboxSettingsTile extends StatelessWidget {
             onChanged: (value) => _onCheckboxChange(value, onChanged),
             enabled: enabled,
           ),
-          titleTextStyle: titleTextStyle,
-          subtitleTextStyle: subtitleTextStyle,
         );
 
         var finalWidget = getFinalWidget(
@@ -1015,12 +995,6 @@ class RadioSettingsTile<T> extends StatefulWidget {
   /// subtitle for the settings tile, default = ''
   final String subtitle;
 
-  /// title text style
-  final TextStyle? titleTextStyle;
-
-  /// subtitle text style
-  final TextStyle? subtitleTextStyle;
-
   /// flag which represents the state of the settings, if false the the tile will
   /// ignore all the user inputs, default = true
   final bool enabled;
@@ -1044,8 +1018,6 @@ class RadioSettingsTile<T> extends StatefulWidget {
     this.leading,
     this.showTitles = true,
     this.subtitle = '',
-    this.titleTextStyle,
-    this.subtitleTextStyle,
   });
 
   @override
@@ -1084,8 +1056,6 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
                     ? widget.subtitle
                     : widget.values[selectedValue],
                 leading: widget.leading,
-                titleTextStyle: widget.titleTextStyle,
-                subtitleTextStyle: widget.subtitleTextStyle,
               ),
             ),
             _buildRadioTiles(context, value, onChanged)
@@ -1173,12 +1143,6 @@ class DropDownSettingsTile<T> extends StatefulWidget {
   /// subtitle for the settings tile, default = ''
   final String subtitle;
 
-  /// title text style
-  final TextStyle? titleTextStyle;
-
-  /// subtitle text style
-  final TextStyle? subtitleTextStyle;
-
   /// The widget shown in front of the title
   final Widget? leading;
 
@@ -1202,8 +1166,6 @@ class DropDownSettingsTile<T> extends StatefulWidget {
     this.subtitle = '',
     this.leading,
     this.alignment = AlignmentDirectional.centerEnd,
-    this.titleTextStyle,
-    this.subtitleTextStyle,
   });
 
   @override
@@ -1244,8 +1206,6 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
                   return Text(widget.values[value]!);
                 },
               ),
-              titleTextStyle: widget.titleTextStyle,
-              subtitleTextStyle: widget.subtitleTextStyle,
             )
           ],
         );
@@ -1294,12 +1254,6 @@ class SliderSettingsTile extends StatefulWidget {
 
   /// subtitle for the settings tile, default = ''
   final String subtitle;
-
-  /// title text style
-  final TextStyle? titleTextStyle;
-
-  /// subtitle text style
-  final TextStyle? subtitleTextStyle;
 
   /// flag which represents the state of the settings, if false the the tile will
   /// ignore all the user inputs, default = true
@@ -1393,8 +1347,6 @@ class SliderSettingsTile extends StatefulWidget {
     this.onChangeEnd,
     this.leading,
     this.decimalPrecision = 2,
-    this.titleTextStyle,
-    this.subtitleTextStyle,
   });
 
   @override
@@ -1426,8 +1378,6 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
                   ? widget.subtitle
                   : value.toStringAsFixed(widget.decimalPrecision),
               leading: widget.leading,
-              titleTextStyle: widget.titleTextStyle,
-              subtitleTextStyle: widget.subtitleTextStyle,
             ),
             _SettingsSlider(
               onChanged: (newValue) =>
@@ -1512,12 +1462,6 @@ class ColorPickerSettingsTile extends StatefulWidget {
   /// subtitle for the settings tile, default = ''
   final String subtitle;
 
-  /// title text style
-  final TextStyle? titleTextStyle;
-
-  /// subtitle text style
-  final TextStyle? subtitleTextStyle;
-
   /// The widget shown in front of the title
   final Widget? leading;
 
@@ -1537,8 +1481,6 @@ class ColorPickerSettingsTile extends StatefulWidget {
     this.defaultStringValue = '#ff000000',
     this.subtitle = '',
     this.leading,
-    this.titleTextStyle,
-    this.subtitleTextStyle,
   });
 
   @override
@@ -1574,8 +1516,6 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
           leading: widget.leading,
           enabled: widget.enabled,
           onChanged: (color) => _handleColorChanged(color, onChanged),
-          titleTextStyle: widget.titleTextStyle,
-          subtitleTextStyle: widget.subtitleTextStyle,
         );
       },
     );
@@ -1634,12 +1574,6 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
   /// subtitle for the settings tile, default = ''
   final String subtitle;
 
-  /// title text style
-  final TextStyle? titleTextStyle;
-
-  /// subtitle text style
-  final TextStyle? subtitleTextStyle;
-
   /// The widget shown in front of the title
   final Widget? leading;
 
@@ -1663,8 +1597,6 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
     this.onChange,
     this.subtitle = '',
     this.leading,
-    this.titleTextStyle,
-    this.subtitleTextStyle,
   });
 
   @override
@@ -1711,8 +1643,6 @@ class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
               selected: value,
             ),
           ],
-          titleTextStyle: widget.titleTextStyle,
-          subtitleTextStyle: widget.subtitleTextStyle,
         );
       },
     );
@@ -1757,12 +1687,6 @@ class SliderModalSettingsTile extends StatefulWidget {
 
   /// subtitle for the settings tile, default = ''
   final String subtitle;
-
-  /// title text style
-  final TextStyle? titleTextStyle;
-
-  /// subtitle text style
-  final TextStyle? subtitleTextStyle;
 
   /// The widget shown in front of the title
   final Widget? leading;
@@ -1822,8 +1746,6 @@ class SliderModalSettingsTile extends StatefulWidget {
     this.subtitle = '',
     this.leading,
     this.eagerUpdate = true,
-    this.titleTextStyle,
-    this.subtitleTextStyle,
   });
 
   @override
@@ -1847,7 +1769,7 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
       defaultValue: currentValue,
       builder:
           (BuildContext context, double value, OnChanged<double> onChanged) {
-        // debugPrint('creating settings Tile: ${widget.settingKey}');
+            // debugPrint('creating settings Tile: ${widget.settingKey}');
         return SettingsContainer(
           children: <Widget>[
             _ModalSettingsTile<double>(
@@ -1872,8 +1794,6 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
                   step: widget.step,
                 )
               ],
-              titleTextStyle: widget.titleTextStyle,
-              subtitleTextStyle: widget.subtitleTextStyle,
             ),
           ],
         );
@@ -1942,12 +1862,6 @@ class SimpleRadioSettingsTile extends StatelessWidget {
   /// subtitle for the settings tile, default = ''
   final String subtitle;
 
-  /// title text style
-  final TextStyle? titleTextStyle;
-
-  /// subtitle text style
-  final TextStyle? subtitleTextStyle;
-
   /// The widget shown in front of the title
   final Widget? leading;
 
@@ -1967,8 +1881,6 @@ class SimpleRadioSettingsTile extends StatelessWidget {
     this.onChange,
     this.subtitle = '',
     this.leading,
-    this.titleTextStyle,
-    this.subtitleTextStyle,
   });
 
   @override
@@ -1982,8 +1894,6 @@ class SimpleRadioSettingsTile extends StatelessWidget {
       enabled: enabled,
       onChange: onChange,
       values: getValues(values),
-      titleTextStyle: titleTextStyle,
-      subtitleTextStyle: subtitleTextStyle,
     );
   }
 
@@ -2038,12 +1948,6 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
   /// subtitle for the settings tile, default = ''
   final String subtitle;
 
-  /// title text style
-  final TextStyle? titleTextStyle;
-
-  /// subtitle text style
-  final TextStyle? subtitleTextStyle;
-
   /// The widget shown in front of the title
   final Widget? leading;
 
@@ -2063,8 +1967,6 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
     this.onChange,
     this.subtitle = '',
     this.leading,
-    this.titleTextStyle,
-    this.subtitleTextStyle,
   });
 
   @override
@@ -2078,8 +1980,6 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
       enabled: enabled,
       onChange: onChange,
       values: getValues(values),
-      titleTextStyle: titleTextStyle,
-      subtitleTextStyle: subtitleTextStyle,
     );
   }
 

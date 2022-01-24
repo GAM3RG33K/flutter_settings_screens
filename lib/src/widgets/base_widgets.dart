@@ -199,12 +199,6 @@ class _SimpleHeaderTile extends StatefulWidget {
   /// subtitle string for the tile
   final String? subtitle;
 
-  /// title text style
-  final TextStyle? titleTextStyle;
-
-  /// subtitle text style
-  final TextStyle? subtitleTextStyle;
-
   /// widget to be placed at first in the tile
   final Widget? leading;
 
@@ -213,8 +207,6 @@ class _SimpleHeaderTile extends StatefulWidget {
     this.title,
     this.subtitle = '',
     this.leading,
-    this.titleTextStyle,
-    this.subtitleTextStyle,
   }) : super(key: key);
 
   @override
@@ -228,12 +220,12 @@ class __SimpleHeaderTileState extends State<_SimpleHeaderTile> {
       child: ListTile(
         title: Text(
           widget.title ?? '',
-          style: widget.titleTextStyle ?? headerTextStyle(context),
+          style: headerTextStyle(context),
         ),
         subtitle: (widget.subtitle?.isNotEmpty ?? false)
             ? Text(
                 widget.subtitle!,
-                style: widget.subtitleTextStyle ?? subtitleTextStyle(context),
+                style: subtitleTextStyle(context),
               )
             : null,
         leading: widget.leading,
@@ -339,12 +331,6 @@ class _ModalSettingsTile<T> extends StatefulWidget {
   /// subtitle string for the tile, default = ''
   final String? subtitle;
 
-  /// title text style
-  final TextStyle? titleTextStyle;
-
-  /// subtitle text style
-  final TextStyle? subtitleTextStyle;
-
   /// flag to represent if the tile is accessible or not, if false user input is ignored
   /// default = true
   final bool enabled;
@@ -390,8 +376,6 @@ class _ModalSettingsTile<T> extends StatefulWidget {
     this.showConfirmation = false,
     this.onCancel,
     this.onConfirm,
-    this.titleTextStyle,
-    this.subtitleTextStyle,
   });
 
   @override
@@ -409,11 +393,10 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
     return Material(
       child: ListTile(
         leading: widget.leading,
-        title: Text(widget.title,
-            style: widget.titleTextStyle ?? headerTextStyle(context)),
+        title: Text(widget.title, style: headerTextStyle(context)),
         subtitle: Text(
           widget.subtitle!,
-          style: widget.subtitleTextStyle ?? subtitleTextStyle(context),
+          style: subtitleTextStyle(context),
         ),
         enabled: widget.enabled,
         onTap: () => _showWidget(context, widget.children),
@@ -724,12 +707,6 @@ class _SettingsColorPicker extends StatelessWidget {
 
   final String subtitle;
 
-  /// title text style
-  final TextStyle? titleTextStyle;
-
-  /// subtitle text style
-  final TextStyle? subtitleTextStyle;
-
   /// The widget shown in front of the title
   final Widget? leading;
 
@@ -750,8 +727,6 @@ class _SettingsColorPicker extends StatelessWidget {
     required this.title,
     this.subtitle = '',
     this.leading,
-    this.titleTextStyle,
-    this.subtitleTextStyle,
   });
 
   @override
@@ -768,8 +743,6 @@ class _SettingsColorPicker extends StatelessWidget {
         elevation: 0,
         onPressed: enabled ? () => _showColorPicker(context, value) : null,
       ),
-      titleTextStyle: titleTextStyle,
-      subtitleTextStyle: subtitleTextStyle,
     );
   }
 
