@@ -273,12 +273,16 @@ class _ExpansionSettingsTile extends StatefulWidget {
   /// The widget shown in front of the title
   final Widget? leading;
 
+  /// A Callback for the change of the Expansion state
+  final Function(bool)? onExpansionChanged;
+
   _ExpansionSettingsTile({
     required this.title,
     required this.child,
     this.subtitle = '',
     this.enabled = true,
     this.expanded = false,
+    this.onExpansionChanged,
     this.leading,
   });
 
@@ -762,14 +766,14 @@ class _SettingsColorPicker extends StatelessWidget {
       leading: leading,
       enabled: enabled,
       onTap: () => _showColorPicker(context, value),
+      titleTextStyle: titleTextStyle,
+      subtitleTextStyle: subtitleTextStyle,
       child: FloatingActionButton(
         heroTag: null,
         backgroundColor: ConversionUtils.colorFromString(value),
         elevation: 0,
         onPressed: enabled ? () => _showColorPicker(context, value) : null,
       ),
-      titleTextStyle: titleTextStyle,
-      subtitleTextStyle: subtitleTextStyle,
     );
   }
 
