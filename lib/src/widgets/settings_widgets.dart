@@ -180,6 +180,9 @@ class ModalSettingsTile<T> extends StatelessWidget {
 ///  ExpandableSettingsTile(
 ///    title: 'Quick setting dialog2',
 ///    subtitle: 'Expandable Settings',
+///    onExpansionChanged: (state) {
+///      _bolusExpanded = state;
+///    },
 ///    children: <Widget>[
 ///      CheckboxSettingsTile(
 ///        settingKey: 'key-day-light-savings',
@@ -220,12 +223,16 @@ class ExpandableSettingsTile extends StatelessWidget {
   /// set to expanded initially, default = false
   final bool expanded;
 
+  /// A Callback for the change of the Expansion state
+  final Function(bool)? onExpansionChanged;
+
   ExpandableSettingsTile({
     required this.title,
     required this.children,
     this.subtitle = '',
     this.enabled = true,
     this.expanded = false,
+    this.onExpansionChanged,
     this.leading,
   });
 
@@ -237,6 +244,7 @@ class ExpandableSettingsTile extends StatelessWidget {
       subtitle: subtitle,
       enabled: enabled,
       expanded: expanded,
+      onExpansionChanged: onExpansionChanged,
       child: SettingsContainer(
         children: children,
       ),
@@ -741,13 +749,13 @@ class SwitchSettingsTile extends StatelessWidget {
           subtitle: getSubtitle(value),
           onTap: () => _onSwitchChange(context, !value, onChanged),
           enabled: enabled,
+          titleTextStyle: titleTextStyle,
+          subtitleTextStyle: subtitleTextStyle,
           child: _SettingsSwitch(
             value: value,
             onChanged: (value) => _onSwitchChange(context, value, onChanged),
             enabled: enabled,
           ),
-          titleTextStyle: titleTextStyle,
-          subtitleTextStyle: subtitleTextStyle,
         );
 
         var finalWidget = getFinalWidget(
@@ -905,13 +913,13 @@ class CheckboxSettingsTile extends StatelessWidget {
           enabled: enabled,
           subtitle: getSubtitle(value),
           onTap: () => _onCheckboxChange(!value, onChanged),
+          titleTextStyle: titleTextStyle,
+          subtitleTextStyle: subtitleTextStyle,
           child: _SettingsCheckbox(
             value: value,
             onChanged: (value) => _onCheckboxChange(value, onChanged),
             enabled: enabled,
           ),
-          titleTextStyle: titleTextStyle,
-          subtitleTextStyle: subtitleTextStyle,
         );
 
         var finalWidget = getFinalWidget(
@@ -1233,6 +1241,8 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
               subtitle: widget.subtitle,
               leading: widget.leading,
               enabled: widget.enabled,
+              titleTextStyle: widget.titleTextStyle,
+              subtitleTextStyle: widget.subtitleTextStyle,
               child: _SettingsDropDown<T>(
                 selected: value,
                 alignment: widget.alignment,
@@ -1244,8 +1254,6 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
                   return Text(widget.values[value]!);
                 },
               ),
-              titleTextStyle: widget.titleTextStyle,
-              subtitleTextStyle: widget.subtitleTextStyle,
             )
           ],
         );
@@ -1700,6 +1708,8 @@ class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
               ? widget.subtitle
               : widget.values[value],
           leading: widget.leading,
+          titleTextStyle: widget.titleTextStyle,
+          subtitleTextStyle: widget.subtitleTextStyle,
           children: <Widget>[
             RadioSettingsTile<T>(
               title: '',
@@ -1711,8 +1721,6 @@ class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
               selected: value,
             ),
           ],
-          titleTextStyle: widget.titleTextStyle,
-          subtitleTextStyle: widget.subtitleTextStyle,
         );
       },
     );
@@ -1856,6 +1864,8 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
                   ? widget.subtitle
                   : value.toString(),
               leading: widget.leading,
+              titleTextStyle: widget.titleTextStyle,
+              subtitleTextStyle: widget.subtitleTextStyle,
               children: <Widget>[
                 _SettingsSlider(
                   onChanged: (double newValue) =>
@@ -1872,8 +1882,6 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
                   step: widget.step,
                 )
               ],
-              titleTextStyle: widget.titleTextStyle,
-              subtitleTextStyle: widget.subtitleTextStyle,
             ),
           ],
         );
