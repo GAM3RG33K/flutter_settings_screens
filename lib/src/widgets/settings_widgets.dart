@@ -132,6 +132,12 @@ class ModalSettingsTile<T> extends StatelessWidget {
   /// subtitle string for the tile
   final String subtitle;
 
+  /// title text style
+  final TextStyle? titleTextStyle;
+
+  /// subtitle text style
+  final TextStyle? subtitleTextStyle;
+
   /// widget to be placed at first in the tile
   final Widget? leading;
 
@@ -155,6 +161,8 @@ class ModalSettingsTile<T> extends StatelessWidget {
     this.showConfirmation = false,
     this.onCancel,
     this.onConfirm,
+    this.titleTextStyle,
+    this.subtitleTextStyle,
   });
 
   @override
@@ -163,6 +171,8 @@ class ModalSettingsTile<T> extends StatelessWidget {
       leading: leading,
       title: title,
       subtitle: subtitle,
+      titleTextStyle: titleTextStyle,
+      subtitleTextStyle: subtitleTextStyle,
       enabled: enabled,
       onCancel: onCancel,
       onConfirm: onConfirm,
@@ -209,6 +219,12 @@ class ExpandableSettingsTile extends StatelessWidget {
   /// subtitle string for the tile
   final String subtitle;
 
+  /// title text style
+  final TextStyle? titleTextStyle;
+
+  /// subtitle text style
+  final TextStyle? subtitleTextStyle;
+
   /// widget to be placed at first in the tile
   final Widget? leading;
 
@@ -234,6 +250,8 @@ class ExpandableSettingsTile extends StatelessWidget {
     this.expanded = false,
     this.onExpansionChanged,
     this.leading,
+    this.titleTextStyle,
+    this.subtitleTextStyle,
   });
 
   @override
@@ -242,6 +260,8 @@ class ExpandableSettingsTile extends StatelessWidget {
       leading: leading,
       title: title,
       subtitle: subtitle,
+      titleTextStyle: titleTextStyle,
+      subtitleTextStyle: subtitleTextStyle,
       enabled: enabled,
       expanded: expanded,
       onExpansionChanged: onExpansionChanged,
@@ -357,6 +377,12 @@ class SettingsGroup extends StatelessWidget {
   /// subtitle string for the tile
   final String subtitle;
 
+  /// title text style
+  final TextStyle? titleTextStyle;
+
+  /// subtitle text style
+  final TextStyle? subtitleTextStyle;
+
   /// List of the widgets which are to be shown under the title as a group
   final List<Widget> children;
 
@@ -364,6 +390,8 @@ class SettingsGroup extends StatelessWidget {
     required this.title,
     required this.children,
     this.subtitle = '',
+    this.titleTextStyle,
+    this.subtitleTextStyle,
   });
 
   @override
@@ -375,7 +403,7 @@ class SettingsGroup extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text(
             title.toUpperCase(),
-            style: groupStyle(context),
+            style: titleTextStyle ?? groupStyle(context),
           ),
         ),
       ),
@@ -385,7 +413,13 @@ class SettingsGroup extends StatelessWidget {
       elements.addAll([
         Container(
           padding: const EdgeInsets.all(16.0),
-          child: Align(alignment: Alignment.centerLeft, child: Text(subtitle)),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              subtitle,
+              style: subtitleTextStyle,
+            ),
+          ),
         ),
         _SettingsTileDivider(),
       ]);
@@ -462,6 +496,12 @@ class TextInputSettingsTile extends StatefulWidget {
   /// title for the settings tile
   final String title;
 
+  /// title text style
+  final TextStyle? titleTextStyle;
+
+  /// subtitle text style
+  final TextStyle? subtitleTextStyle;
+
   /// flag which represents the state of the settings, if false the the tile will
   /// ignore all the user inputs, default = true
   final bool enabled;
@@ -513,6 +553,8 @@ class TextInputSettingsTile extends StatefulWidget {
     this.borderColor,
     this.errorColor,
     this.keyboardType,
+    this.titleTextStyle,
+    this.subtitleTextStyle,
   });
 
   @override
@@ -544,6 +586,8 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
         return _ModalSettingsTile<String>(
           title: widget.title,
           subtitle: widget.obscureText ? '' : value,
+          titleTextStyle: widget.titleTextStyle,
+          subtitleTextStyle: widget.subtitleTextStyle,
           showConfirmation: true,
           onConfirm: () => _submitText(_controller.text),
           onCancel: () {
@@ -1111,6 +1155,7 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
         widget.values.entries.map<Widget>((MapEntry<T, String> entry) {
       return _SettingsTile(
         title: entry.value,
+        titleTextStyle: widget.titleTextStyle,
         onTap: () => _onRadioChange(entry.key, onChanged),
         enabled: widget.enabled,
         child: _SettingsRadio<T>(
