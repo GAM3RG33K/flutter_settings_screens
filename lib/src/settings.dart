@@ -209,6 +209,12 @@ class _ValueChangeObserverState<T> extends State<ValueChangeObserver<T>> {
   late ValueChangeNotifier<T> notifier;
 
   @override
+  void dispose() {
+    super.dispose();
+    _notifiers.clear();
+  }
+
+  @override
   void initState() {
     //if [cacheKey] is not found, add new cache in the [cacheProvider] with [defaultValue]
     final containsKey = Settings.containsKey(cacheKey) ?? false;
