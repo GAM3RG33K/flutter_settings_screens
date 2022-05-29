@@ -96,7 +96,8 @@ class Settings {
     ensureCacheProvider();
     final containsKey = _cacheProvider?.containsKey(key);
     if (containsKey ?? false) {
-      final _prefValue = _cacheProvider?.getValue<T>(key, defaultValue);
+      final _prefValue =
+          _cacheProvider?.getValue<T>(key, defaultValue: defaultValue);
       return _prefValue ?? defaultValue;
     }
     return defaultValue;

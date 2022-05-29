@@ -6,7 +6,7 @@ version: 0.3.2-null-safety
 
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.15.0 <3.0.0"
 
   # Flutter versions prior to 1.12 did not support the
   # flutter.plugin.platforms map.
@@ -17,16 +17,16 @@ dependencies:
     sdk: flutter
 
   # library to access storage directories
-  path_provider: ^2.0.2
+  path_provider: ^2.0.10
 
   # library to use Provider widgets
-  provider: ^6.0.0
+  provider: ^6.0.3
 
   # library to store the preference/settings using shared_preferences library
-  shared_preferences: ^2.0.6
+  shared_preferences: ^2.0.15
 
   # to enforce dart coding standard
-  pedantic: ^1.11.0
+  pedantic: ^1.11.1
 
 dev_dependencies:
   flutter_test:
