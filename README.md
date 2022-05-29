@@ -59,7 +59,7 @@ It is recommended that `Settings.init()` should be called before `runApp()` is c
 ### Cache Provider Interface
 Cache Provider is an interface using which the plugin accesses the underlying caching storage.
 
-This plugin includes an implementation of the `CacheProvider` using the `SharedPrerefences` library by flutter. if `cacheProvider` parameter is not given explicitly then the default implementation will be used to store the settings.
+This plugin includes an implementation of the `CacheProvider` using the `SharedPreferences` library by flutter. if `cacheProvider` parameter is not given explicitly then the default implementation will be used to store the settings.
 
 However, If you wish to use other means for storing the data,  You can implement one by your self.
 
@@ -602,7 +602,7 @@ SimpleDropDownSettingsTile(
     'Little Special',
     'Special',
     'Extra Special',
-    'Bizzar',
+    'Bizarre',
     'Horrific',
   ],
   selected: 'Special',
