@@ -106,7 +106,7 @@ class _AppSettingsState extends State<AppSettings> {
                 title: 'User Name',
                 settingKey: 'key-user-name',
                 initialValue: 'admin',
-                validator: (String username) {
+                validator: (String? username) {
                   if (username != null && username.length > 3) {
                     return null;
                   }
@@ -119,7 +119,7 @@ class _AppSettingsState extends State<AppSettings> {
                 title: 'password',
                 settingKey: 'key-user-password',
                 obscureText: true,
-                validator: (String password) {
+                validator: (String? password) {
                   if (password != null && password.length > 6) {
                     return null;
                   }
