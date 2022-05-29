@@ -59,17 +59,17 @@ class SharePreferenceCache extends CacheProvider {
 
   @override
   Future<void> setObject<T>(String key, T? value) async {
-    if (value is int) {
-      await _preferences?.setInt(key, value);
+    if (T is int || value is int) {
+      await _preferences?.setInt(key, value as int);
     }
-    if (value is double) {
-      await _preferences?.setDouble(key, value);
+    if (T is double || value is double) {
+      await _preferences?.setDouble(key, value as double);
     }
-    if (value is bool) {
-      await _preferences?.setBool(key, value);
+    if (T is bool || value is bool) {
+      await _preferences?.setBool(key, value as bool);
     }
-    if (value is String) {
-      await _preferences?.setString(key, value);
+    if (T is String || value is String) {
+      await _preferences?.setString(key, value as String);
     }
     throw Exception('No Implementation Found');
   }
@@ -98,16 +98,16 @@ class SharePreferenceCache extends CacheProvider {
 
   @override
   T? getValue<T>(String key, {T? defaultValue}) {
-    if (defaultValue is int) {
+    if (T is int || defaultValue is int) {
       return _preferences?.getInt(key) as T;
     }
-    if (defaultValue is double) {
+    if (T is double || defaultValue is double) {
       return _preferences?.getDouble(key) as T;
     }
-    if (defaultValue is bool) {
+    if (T is bool || defaultValue is bool) {
       return _preferences?.getBool(key) as T;
     }
-    if (defaultValue is String) {
+    if (T is String || defaultValue is String) {
       return _preferences?.getString(key) as T;
     }
     throw Exception('No Implementation Found');
