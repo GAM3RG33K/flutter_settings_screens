@@ -63,12 +63,18 @@ class _MyHomePageState extends State<MyHomePage> {
           title: 'App Settings Demo',
           theme: _isDarkTheme
               ? _darkTheme.copyWith(
-                  colorScheme:
-                      _darkTheme.colorScheme.copyWith(secondary: color),
+                  colorScheme: _darkTheme.colorScheme.copyWith(
+                    secondary: color,
+                    primary: color,
+                  ),
+                  toggleableActiveColor: color,
                 )
               : _lightTheme.copyWith(
-                  colorScheme:
-                      _darkTheme.colorScheme.copyWith(secondary: color),
+                  colorScheme: _darkTheme.colorScheme.copyWith(
+                    secondary: color,
+                    primary: color,
+                  ),
+                  toggleableActiveColor: color,
                 ),
           home: Scaffold(
             appBar: AppBar(

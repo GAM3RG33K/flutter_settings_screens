@@ -1,3 +1,15 @@
+## 0.3.3-null-safety
+ - Breaking Changes:
+   - Cache Provider interface definition updated to allow asynchronous getter/setter
+   - Optional Default values are moved to getters instead of setters
+   - Flutter SDK version upgraded to 2.15.0 & upgraded the plugin dependencies
+   - Changed all getters & setters definitions to support null values
+   - Changed Settings implementation according to new changes
+ - Example app moved Flutter SDK to 2.15.0
+ - Updated example app implementation
+ - Updated Code documentation in cache provider interface
+
+
 ## 0.3.2-null-safety
  - Provider version updated to 6.0.0, thanks to @Pawelek55
  - ExpandedSettingTile were not using the provided expanded status, fixed by @Colton127
