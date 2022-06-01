@@ -92,11 +92,12 @@ class Settings {
   ///
   /// If there's no value found associated with the [key] then the [defaultValue]
   /// is returned.
-  static T getValue<T>(String key, T defaultValue) {
+  static T? getValue<T>(String key, {T? defaultValue}) {
     ensureCacheProvider();
     final containsKey = _cacheProvider?.containsKey(key);
     if (containsKey ?? false) {
-      final _prefValue = _cacheProvider?.getValue<T>(key, defaultValue);
+      final _prefValue =
+          _cacheProvider?.getValue<T>(key, defaultValue: defaultValue);
       return _prefValue ?? defaultValue;
     }
     return defaultValue;
@@ -209,6 +210,12 @@ class _ValueChangeObserverState<T> extends State<ValueChangeObserver<T>> {
   late ValueChangeNotifier<T> notifier;
 
   @override
+  void dispose() {
+    super.dispose();
+    _notifiers.clear();
+  }
+
+  @override
   void initState() {
     //if [cacheKey] is not found, add new cache in the [cacheProvider] with [defaultValue]
     final containsKey = Settings.containsKey(cacheKey) ?? false;
@@ -217,7 +224,7 @@ class _ValueChangeObserverState<T> extends State<ValueChangeObserver<T>> {
     }
 
     // get cache value from the [cacheProvider]
-    value = Settings.getValue<T>(cacheKey, defaultValue);
+    value = Settings.getValue<T>(cacheKey, defaultValue: defaultValue);
 
     // assign a notifier
     notifier = ValueChangeNotifier<T>(cacheKey, value);

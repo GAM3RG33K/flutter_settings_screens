@@ -106,7 +106,7 @@ class _AppSettingsState extends State<AppSettings> {
                 title: 'User Name',
                 settingKey: 'key-user-name',
                 initialValue: 'admin',
-                validator: (String username) {
+                validator: (String? username) {
                   if (username != null && username.length > 3) {
                     return null;
                   }
@@ -119,7 +119,7 @@ class _AppSettingsState extends State<AppSettings> {
                 title: 'password',
                 settingKey: 'key-user-password',
                 obscureText: true,
-                validator: (String password) {
+                validator: (String? password) {
                   if (password != null && password.length > 6) {
                     return null;
                   }
@@ -234,7 +234,7 @@ class _AppSettingsState extends State<AppSettings> {
                 ],
                 selected: 'Daily',
                 onChange: (value) {
-                  debugPrint('key-radio-sync-settins: $value');
+                  debugPrint('key-radio-sync-settings: $value');
                 },
               ),
               SimpleDropDownSettingsTile(
@@ -246,7 +246,7 @@ class _AppSettingsState extends State<AppSettings> {
                   'Little Special',
                   'Special',
                   'Extra Special',
-                  'Bizzar',
+                  'Bizarre',
                   'Horrific',
                 ],
                 selected: 'Special',
@@ -262,14 +262,14 @@ class _AppSettingsState extends State<AppSettings> {
             children: <Widget>[
               RadioSettingsTile<double>(
                 title: 'Beauty Filter',
-                settingKey: 'key-radio-beauty-filter-exapndable',
+                settingKey: 'key-radio-beauty-filter-expandable',
                 values: <double, String>{
                   1.0: 'Simple',
                   1.5: 'Normal',
                   2.0: 'Little Special',
                   2.5: 'Special',
                   3.0: 'Extra Special',
-                  3.5: 'Bizzar',
+                  3.5: 'Bizarre',
                   4.0: 'Horrific',
                 },
                 selected: 2.5,
@@ -298,7 +298,7 @@ class _AppSettingsState extends State<AppSettings> {
             title: 'Other settings',
             children: <Widget>[
               SliderSettingsTile(
-                title: 'Volume [Auto-Adusting to 20]',
+                title: 'Volume [Auto-Adjusting to 20]',
                 settingKey: 'key-slider-volume',
                 defaultValue: 20,
                 min: 0,
@@ -311,7 +311,14 @@ class _AppSettingsState extends State<AppSettings> {
                       'key-slider-volume: $value'
                       '\n==========\n');
                   Future.delayed(Duration(seconds: 1), () {
-                    Settings.setValue('key-slider-volume', 20.0, notify: true);
+                    // Reset value only if the current value is not 20
+                    if (Settings.getValue('key-slider-volume') != 20) {
+                      debugPrint('\n===== on change end =====\n'
+                          'Resetting value to 20'
+                          '\n==========\n');
+                      Settings.setValue('key-slider-volume', 20.0,
+                          notify: true);
+                    }
                   });
                 },
               ),
