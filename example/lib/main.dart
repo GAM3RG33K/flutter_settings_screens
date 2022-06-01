@@ -5,36 +5,47 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'app_settings_page.dart';
 import 'cache_provider.dart';
 
-ValueNotifier<Color> accentColor;
-
 void main() {
-  initSettings().then((_) {
-    runApp(MyApp());
+  initSettings().then((accentColor) {
+    runApp(MyApp(accentColor: accentColor));
   });
 }
 
-Future<void> initSettings() async {
+Future<ValueNotifier<Color>> initSettings() async {
   await Settings.init(
     cacheProvider: _isUsingHive ? HiveCache() : SharePreferenceCache(),
   );
-  accentColor = ValueNotifier(Colors.blueAccent);
+  final _accentColor = ValueNotifier(Colors.blueAccent);
+  return _accentColor;
 }
 
 bool _isDarkTheme = true;
 bool _isUsingHive = true;
 
 class MyApp extends StatelessWidget {
+  final ValueNotifier<Color> accentColor;
+
+  const MyApp({Key? key, required this.accentColor}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MyHomePage(title: 'Flutter Demo Home Page');
+    return MyHomePage(
+      title: 'Flutter Demo Home Page',
+      accentColor: accentColor,
+    );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   final String title;
+  final ValueNotifier<Color> accentColor;
 
-  const MyHomePage({Key key, this.title}) : super(key: key);
+  const MyHomePage({
+    Key? key,
+    required this.accentColor,
+    required this.title,
+  }) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -44,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Color>(
-      valueListenable: accentColor,
+      valueListenable: widget.accentColor,
       builder: (_, color, __) {
         final _darkTheme = ThemeData.dark();
         final _lightTheme = ThemeData.light();
@@ -52,12 +63,16 @@ class _MyHomePageState extends State<MyHomePage> {
           title: 'App Settings Demo',
           theme: _isDarkTheme
               ? _darkTheme.copyWith(
-                  colorScheme:
-                      _darkTheme.colorScheme.copyWith(secondary: color),
+                  colorScheme: _darkTheme.colorScheme.copyWith(
+                    secondary: color,
+                  ),
+                  toggleableActiveColor: color,
                 )
               : _lightTheme.copyWith(
-                  colorScheme:
-                      _darkTheme.colorScheme.copyWith(secondary: color),
+                  colorScheme: _darkTheme.colorScheme.copyWith(
+                    secondary: color,
+                  ),
+                  toggleableActiveColor: color,
                 ),
           home: Scaffold(
             appBar: AppBar(
