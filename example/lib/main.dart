@@ -65,14 +65,12 @@ class _MyHomePageState extends State<MyHomePage> {
               ? _darkTheme.copyWith(
                   colorScheme: _darkTheme.colorScheme.copyWith(
                     secondary: color,
-                    primary: color,
                   ),
                   toggleableActiveColor: color,
                 )
               : _lightTheme.copyWith(
                   colorScheme: _darkTheme.colorScheme.copyWith(
                     secondary: color,
-                    primary: color,
                   ),
                   toggleableActiveColor: color,
                 ),

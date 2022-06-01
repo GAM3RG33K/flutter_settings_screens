@@ -621,3 +621,5 @@ SimpleDropDownSettingsTile(
 
 
 **All help, issues, support and contributions are most welcome.**
+
+_If any one is interested in helping me maintain this library then please reach to me via comment on this [issue](https://github.com/GAM3RG33K/flutter_settings_screens/issues/86)._

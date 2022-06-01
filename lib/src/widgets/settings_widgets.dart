@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:flutter_settings_screens/src/utils/widget_utils.dart';
 
-import '../../flutter_settings_screens.dart';
-import '../utils/widget_utils.dart';
 import 'color_picker/material_color_picker.dart';
 
 part 'base_widgets.dart';
