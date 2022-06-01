@@ -258,6 +258,12 @@ class _ExpansionSettingsTile extends StatefulWidget {
   /// subtitle string for the tile, default = ''
   final String subtitle;
 
+  /// title text style
+  final TextStyle? titleTextStyle;
+
+  /// subtitle text style
+  final TextStyle? subtitleTextStyle;
+
   /// flag to represent if the tile is accessible or not, if false user input is ignored
   /// default = true
   final bool enabled;
@@ -280,6 +286,8 @@ class _ExpansionSettingsTile extends StatefulWidget {
     required this.title,
     required this.child,
     this.subtitle = '',
+    this.titleTextStyle,
+    this.subtitleTextStyle,
     this.enabled = true,
     this.expanded = false,
     this.onExpansionChanged,
@@ -316,12 +324,12 @@ class _ExpansionSettingsTileState extends State<_ExpansionSettingsTile> {
       child: ExpansionTile(
         title: Text(
           widget.title,
-          style: headerTextStyle(context),
+          style: widget.titleTextStyle ?? headerTextStyle(context),
         ),
         leading: widget.leading,
         subtitle: Text(
           widget.subtitle,
-          style: subtitleTextStyle(context),
+          style: widget.subtitleTextStyle ?? subtitleTextStyle(context),
         ),
         initiallyExpanded: widget.expanded,
         childrenPadding: EdgeInsets.only(left: 8.0),
