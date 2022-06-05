@@ -61,17 +61,15 @@ class SharePreferenceCache extends CacheProvider {
   Future<void> setObject<T>(String key, T? value) async {
     if (T is int || value is int) {
       await _preferences?.setInt(key, value as int);
-    }
-    if (T is double || value is double) {
+    } else if (T is double || value is double) {
       await _preferences?.setDouble(key, value as double);
-    }
-    if (T is bool || value is bool) {
+    } else if (T is bool || value is bool) {
       await _preferences?.setBool(key, value as bool);
-    }
-    if (T is String || value is String) {
+    } else if (T is String || value is String) {
       await _preferences?.setString(key, value as String);
+    } else {
+      throw Exception('No Implementation Found');
     }
-    throw Exception('No Implementation Found');
   }
 
   @override
