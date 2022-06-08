@@ -1,3 +1,8 @@
+## 0.3.3-null-safety+1
+ - Fix issue where implementation for setObject in default cache provider always throws exception
+ - Custom text style in all widgets
+ - Clear the notifiers map when the widget is disposed
+
 ## 0.3.3-null-safety
  - Breaking Changes:
    - Cache Provider interface definition updated to allow asynchronous getter/setter
