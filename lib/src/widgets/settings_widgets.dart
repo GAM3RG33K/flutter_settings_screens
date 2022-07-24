@@ -518,6 +518,9 @@ class TextInputSettingsTile extends StatefulWidget {
   /// in focus by default, default = true
   final bool autoFocus;
 
+  /// flag which represents if the text will be automatically selected on focus
+  final bool selectAllOnFocus;
+
   /// on change callback for handling the value change
   final OnChanged<String>? onChange;
 
@@ -545,6 +548,7 @@ class TextInputSettingsTile extends StatefulWidget {
     this.enabled = true,
     this.autoValidateMode = AutovalidateMode.onUserInteraction,
     this.autoFocus = true,
+    this.selectAllOnFocus = false,
     this.onChange,
     this.validator,
     this.obscureText = false,
@@ -569,6 +573,11 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
     super.initState();
     _controller = TextEditingController();
     _focusNode = FocusNode();
+    _focusNode.addListener(() {
+      if (widget.selectAllOnFocus) {
+        _controller.selection = TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
+      }
+    });
   }
 
   @override
