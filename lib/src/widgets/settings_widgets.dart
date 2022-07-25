@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:flutter_settings_screens/src/utils/widget_utils.dart';
 
@@ -541,6 +542,12 @@ class TextInputSettingsTile extends StatefulWidget {
   /// [TextInputType] of the [TextFormField] to set the keyboard type to name, phone, etc.
   final TextInputType? keyboardType;
 
+  /// form helper text
+  final String? helperText;
+
+  /// list of inputFormatters
+  final List<TextInputFormatter>? inputFormatters;
+
   TextInputSettingsTile({
     required this.title,
     required this.settingKey,
@@ -557,6 +564,8 @@ class TextInputSettingsTile extends StatefulWidget {
     this.keyboardType,
     this.titleTextStyle,
     this.subtitleTextStyle,
+    this.helperText,
+    this.inputFormatters,
   });
 
   @override
@@ -627,32 +636,37 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
           obscureText: widget.obscureText,
           keyboardType: widget.keyboardType,
           cursorColor: borderColor,
+          inputFormatters: widget.inputFormatters ?? [],
           decoration: InputDecoration(
-              errorStyle: TextStyle(
-                color: errorColor,
+            helperText: widget.helperText,
+            errorMaxLines: 3,
+            helperMaxLines: 3,
+            errorStyle: TextStyle(
+              color: errorColor,
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(5.0),
               ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5.0),
-                ),
-                borderSide: BorderSide(color: errorColor),
+              borderSide: BorderSide(color: errorColor),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(5.0),
               ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5.0),
-                ),
-                borderSide: BorderSide(
-                  color: borderColor,
-                ),
+              borderSide: BorderSide(
+                color: borderColor,
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5.0),
-                ),
-                borderSide: BorderSide(
-                  color: borderColor,
-                ),
-              )),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(5.0),
+              ),
+              borderSide: BorderSide(
+                color: borderColor,
+              ),
+            ),
+          ),
         ),
       ),
     );
