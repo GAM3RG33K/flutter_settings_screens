@@ -589,19 +589,23 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
         WidgetsBinding.instance?.addPostFrameCallback((_) {
           _controller.text = value;
         });
-        return _ModalSettingsTile<String>(
-          title: widget.title,
-          subtitle: widget.obscureText ? '' : value,
-          titleTextStyle: widget.titleTextStyle,
-          subtitleTextStyle: widget.subtitleTextStyle,
-          enabled: widget.enabled,
-          showConfirmation: true,
-          onConfirm: () => _submitText(_controller.text),
-          onCancel: () {
-            _controller.text = Settings.getValue(widget.settingKey) ?? '';
-          },
-          children: <Widget>[
-            _buildTextField(context, value, onChanged),
+        return SettingsContainer(
+          children: [
+            _ModalSettingsTile<String>(
+              title: widget.title,
+              subtitle: widget.obscureText ? '' : value,
+              titleTextStyle: widget.titleTextStyle,
+              subtitleTextStyle: widget.subtitleTextStyle,
+              enabled: widget.enabled,
+              showConfirmation: true,
+              onConfirm: () => _submitText(_controller.text),
+              onCancel: () {
+                _controller.text = Settings.getValue(widget.settingKey) ?? '';
+              },
+              children: <Widget>[
+                _buildTextField(context, value, onChanged),
+              ],
+            ),
           ],
         );
       },
@@ -1728,21 +1732,25 @@ class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
       cacheKey: widget.settingKey,
       defaultValue: selectedValue,
       builder: (BuildContext context, T value, OnChanged<T> onChanged) {
-        return _ModalSettingsTile<T>(
-          title: widget.title,
-          subtitle: widget.subtitle.isNotEmpty ? widget.subtitle : widget.values[value],
-          leading: widget.leading,
-          titleTextStyle: widget.titleTextStyle,
-          subtitleTextStyle: widget.subtitleTextStyle,
-          children: <Widget>[
-            RadioSettingsTile<T>(
-              title: '',
-              showTitles: widget.showTitles,
-              enabled: widget.enabled,
-              values: widget.values,
-              settingKey: widget.settingKey,
-              onChange: (value) => _onRadioChange(value, onChanged),
-              selected: value,
+        return SettingsContainer(
+          children: [
+            _ModalSettingsTile<T>(
+              title: widget.title,
+              subtitle: widget.subtitle.isNotEmpty ? widget.subtitle : widget.values[value],
+              leading: widget.leading,
+              titleTextStyle: widget.titleTextStyle,
+              subtitleTextStyle: widget.subtitleTextStyle,
+              children: <Widget>[
+                RadioSettingsTile<T>(
+                  title: '',
+                  showTitles: widget.showTitles,
+                  enabled: widget.enabled,
+                  values: widget.values,
+                  settingKey: widget.settingKey,
+                  onChange: (value) => _onRadioChange(value, onChanged),
+                  selected: value,
+                ),
+              ],
             ),
           ],
         );
