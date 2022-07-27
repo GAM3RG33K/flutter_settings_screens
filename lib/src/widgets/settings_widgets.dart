@@ -510,7 +510,7 @@ class TextInputSettingsTile extends StatefulWidget {
   /// [AutovalidateMode.disabled] - Never auto validate, equivalent of `autoValidate = false`
   /// [AutovalidateMode.always] - Always auto validate, equivalent of `autoValidate = true`
   /// [AutovalidateMode.onUserInteraction] - Only auto validate if user interacts with it
-  final AutovalidateMode autoValidateMode;
+  final AutovalidateMode autovalidateMode;
 
   /// flag which represents if the text field will be focused by default
   /// or not
@@ -546,7 +546,7 @@ class TextInputSettingsTile extends StatefulWidget {
     required this.settingKey,
     this.initialValue = '',
     this.enabled = true,
-    this.autoValidateMode = AutovalidateMode.onUserInteraction,
+    this.autovalidateMode = AutovalidateMode.onUserInteraction,
     this.autoFocus = true,
     this.selectAllOnFocus = false,
     this.onChange,
@@ -620,7 +620,7 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
           autofocus: widget.autoFocus,
           controller: _controller,
           focusNode: _focusNode,
-          autovalidateMode: autoValidateMode,
+          autovalidateMode: widget.autovalidateMode,
           enabled: widget.enabled,
           validator: widget.enabled ? widget.validator : null,
           onSaved: widget.enabled ? (value) => _onSave(value, onChanged) : null,
@@ -656,11 +656,6 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
         ),
       ),
     );
-  }
-
-  AutovalidateMode get autoValidateMode {
-    final autoValidateMode = widget.autoValidateMode;
-    return autoValidateMode;
   }
 
   bool _submitText(String newValue) {
