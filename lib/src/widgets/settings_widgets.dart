@@ -586,7 +586,7 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
       cacheKey: widget.settingKey,
       defaultValue: widget.initialValue,
       builder: (BuildContext context, String value, OnChanged<String> onChanged) {
-        WidgetsBinding.instance?.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           _controller.text = value;
         });
         return _ModalSettingsTile<String>(
@@ -680,7 +680,7 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
 
   void _onSave(String? newValue, OnChanged<String> onChanged) {
     if (newValue == null) return;
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       onChanged(newValue);
       widget.onChange?.call(newValue);
     });
