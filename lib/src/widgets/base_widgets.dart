@@ -176,7 +176,8 @@ class __SettingsTileState extends State<_SettingsTile> {
             trailing: widget.child,
             dense: true,
             // wrap only if the subtitle is longer than 70 characters
-            isThreeLine: (widget.subtitle?.isNotEmpty ?? false) && widget.subtitle!.length > 70,
+            isThreeLine: (widget.subtitle?.isNotEmpty ?? false) &&
+                widget.subtitle!.length > 70,
           ),
           // Visibility(
           //   visible: widget.showChildBelow,
