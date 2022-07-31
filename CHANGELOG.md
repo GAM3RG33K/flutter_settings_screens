@@ -1,3 +1,11 @@
+## 0.3.3-null-safety+2
+ - add flag to enable textfield content to be autoselected on focus
+ - change capitalization of autovalidateMode
+ - TextInput: expose helperText and inputFormatters
+ - fix: null-safety warning messages
+ - fix: valuechangeobserver dispose accidentally clears the whole _notifier map rather than just its own cachekey
+ - Huge thanks to @nyxkn for all fixes & updates for this release
+
 ## 0.3.3-null-safety+1
  - Fix issue where implementation for setObject in default cache provider always throws exception
  - Custom text style in all widgets
