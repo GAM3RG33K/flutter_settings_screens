@@ -1627,6 +1627,7 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
           value: value,
           leading: widget.leading,
           enabled: widget.enabled,
+          subtitle: widget.subtitle,
           onChanged: (color) => _handleColorChanged(color, onChanged),
           titleTextStyle: widget.titleTextStyle,
           subtitleTextStyle: widget.subtitleTextStyle,

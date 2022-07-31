@@ -124,8 +124,8 @@ class _SettingsTile extends StatefulWidget {
   /// call back for handling the tap event on tile
   final GestureTapCallback? onTap;
 
-  /// flag to show the child below the main tile elements
-  final bool showChildBelow;
+  // /// flag to show the child below the main tile elements
+  // final bool showChildBelow;
 
   _SettingsTile({
     required this.title,
@@ -135,7 +135,7 @@ class _SettingsTile extends StatefulWidget {
     this.subtitleTextStyle,
     this.onTap,
     this.enabled = true,
-    this.showChildBelow = false,
+    // this.showChildBelow = false,
     this.leading,
   });
 
@@ -165,24 +165,23 @@ class __SettingsTileState extends State<_SettingsTile> {
                 ? null
                 : Text(
                     widget.subtitle!,
-                    style:
-                        widget.subtitleTextStyle ?? subtitleTextStyle(context),
+                    style: widget.subtitleTextStyle ?? subtitleTextStyle(context),
                   ),
             enabled: widget.enabled,
             onTap: widget.onTap,
-            trailing: Visibility(
-              visible: !widget.showChildBelow,
-              child: widget.child,
-            ),
+            // trailing: Visibility(
+            //   visible: !widget.showChildBelow,
+            //   child: widget.child,
+            // ),
+            trailing: widget.child,
             dense: true,
             // wrap only if the subtitle is longer than 70 characters
-            isThreeLine: (widget.subtitle?.isNotEmpty ?? false) &&
-                widget.subtitle!.length > 70,
+            isThreeLine: (widget.subtitle?.isNotEmpty ?? false) && widget.subtitle!.length > 70,
           ),
-          Visibility(
-            visible: widget.showChildBelow,
-            child: widget.child,
-          ),
+          // Visibility(
+          //   visible: widget.showChildBelow,
+          //   child: widget.child,
+          // ),
           _SettingsTileDivider(),
         ],
       ),
