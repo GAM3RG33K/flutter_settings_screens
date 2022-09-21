@@ -74,17 +74,22 @@ class SettingsScreen extends StatelessWidget {
   /// Content of the screen, body of the Scaffold.
   final List<Widget> children;
 
+  final bool hasAppBar;
+
   SettingsScreen({
     required this.children,
+    required this.hasAppBar,
     this.title = 'Settings',
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
+      appBar: hasAppBar
+          ? AppBar(
+              title: Text(title),
+            )
+          : null,
       body: ListView.builder(
         shrinkWrap: true,
         itemCount: children.length,
@@ -165,7 +170,8 @@ class __SettingsTileState extends State<_SettingsTile> {
                 ? null
                 : Text(
                     widget.subtitle!,
-                    style: widget.subtitleTextStyle ?? subtitleTextStyle(context),
+                    style:
+                        widget.subtitleTextStyle ?? subtitleTextStyle(context),
                   ),
             enabled: widget.enabled,
             onTap: widget.onTap,

@@ -11,6 +11,7 @@ class _AppSettingsState extends State<AppSettings> {
   Widget build(BuildContext context) {
     return Container(
       child: SettingsScreen(
+        hasAppBar: true,
         title: 'Application Settings',
         children: [
           SettingsGroup(
