@@ -448,7 +448,7 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
             title: Center(
               child: getTitle(),
             ),
-            titlePadding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 2.0),
+            titlePadding: EdgeInsets.fromLTRB(8.0, 10.0, 8.0, 10.0),
             contentPadding: EdgeInsets.zero,
             children: _finalWidgets(dialogContext, children),
           );
