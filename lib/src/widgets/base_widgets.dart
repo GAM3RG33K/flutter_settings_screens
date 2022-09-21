@@ -599,11 +599,14 @@ class _SettingsRadio<T> extends StatelessWidget {
   /// ignore all the user inputs
   final bool enabled;
 
+  final Color? activeColor;
+
   _SettingsRadio({
     required this.groupValue,
     required this.value,
     required this.onChanged,
     required this.enabled,
+    required this.activeColor,
   });
 
   @override
@@ -612,6 +615,7 @@ class _SettingsRadio<T> extends StatelessWidget {
       groupValue: groupValue,
       value: value,
       onChanged: enabled ? onChanged : null,
+      activeColor: activeColor,
     );
   }
 }

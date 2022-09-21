@@ -1102,6 +1102,8 @@ class RadioSettingsTile<T> extends StatefulWidget {
   /// A Widget that will be displayed in the front of the tile
   final Widget? leading;
 
+  final Color? activeColor;
+
   RadioSettingsTile({
     required this.title,
     required this.settingKey,
@@ -1114,6 +1116,7 @@ class RadioSettingsTile<T> extends StatefulWidget {
     this.subtitle = '',
     this.titleTextStyle,
     this.subtitleTextStyle,
+    this.activeColor,
   });
 
   @override
@@ -1154,7 +1157,7 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
                 subtitleTextStyle: widget.subtitleTextStyle,
               ),
             ),
-            _buildRadioTiles(context, value, onChanged)
+            _buildRadioTiles(context, value, onChanged, widget.activeColor)
           ],
         );
       },
@@ -1163,7 +1166,7 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
 
   bool get showTitles => widget.showTitles;
 
-  Widget _buildRadioTiles(BuildContext context, T groupValue, OnChanged<T> onChanged) {
+  Widget _buildRadioTiles(BuildContext context, T groupValue, OnChanged<T> onChanged, Color? activeColor) {
     var radioList = widget.values.entries.map<Widget>((MapEntry<T, String> entry) {
       return _SettingsTile(
         title: entry.value,
@@ -1175,6 +1178,7 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
           onChanged: (newValue) => _onRadioChange(newValue, onChanged),
           enabled: widget.enabled,
           groupValue: groupValue,
+          activeColor: activeColor,
         ),
       );
     }).toList();
@@ -1707,6 +1711,8 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
   /// on change callback for handling the value change
   final OnChanged<T>? onChange;
 
+  final Color? activeColor;
+
   RadioModalSettingsTile({
     required this.title,
     required this.settingKey,
@@ -1719,6 +1725,7 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
     this.leading,
     this.titleTextStyle,
     this.subtitleTextStyle,
+    this.activeColor,
   });
 
   @override
@@ -1764,6 +1771,7 @@ class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
                   settingKey: widget.settingKey,
                   onChange: (value) => _onRadioChange(value, onChanged),
                   selected: value,
+                  activeColor: widget.activeColor,
                 ),
               ],
             ),
