@@ -393,12 +393,15 @@ class SettingsGroup extends StatelessWidget {
   /// List of the widgets which are to be shown under the title as a group
   final List<Widget> children;
 
+  final Alignment titleAlignment;
+
   SettingsGroup({
     required this.title,
     required this.children,
     this.subtitle = '',
     this.titleTextStyle,
     this.subtitleTextStyle,
+    this.titleAlignment = Alignment.centerLeft,
   });
 
   @override
@@ -407,7 +410,7 @@ class SettingsGroup extends StatelessWidget {
       Container(
         padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 22.0),
         child: Align(
-          alignment: Alignment.centerLeft,
+          alignment: titleAlignment,
           child: Text(
             title.toUpperCase(),
             style: titleTextStyle ?? groupStyle(context),
