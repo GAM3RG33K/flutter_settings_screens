@@ -1760,7 +1760,7 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
     this.titleTextStyle,
     this.subtitleTextStyle,
     this.activeColor,
-    this.showDivider = true;
+    this.showDivider = true,
   });
 
   @override
