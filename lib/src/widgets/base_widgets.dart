@@ -78,7 +78,7 @@ class SettingsScreen extends StatelessWidget {
 
   SettingsScreen({
     required this.children,
-    required this.hasAppBar,
+    this.hasAppBar = true,
     this.title = 'Settings',
   });
 
@@ -132,6 +132,8 @@ class _SettingsTile extends StatefulWidget {
   // /// flag to show the child below the main tile elements
   // final bool showChildBelow;
 
+  final bool showDivider;
+
   _SettingsTile({
     required this.title,
     required this.child,
@@ -142,6 +144,7 @@ class _SettingsTile extends StatefulWidget {
     this.enabled = true,
     // this.showChildBelow = false,
     this.leading,
+    this.showDivider = true,
   });
 
   @override
@@ -189,7 +192,7 @@ class __SettingsTileState extends State<_SettingsTile> {
           //   visible: widget.showChildBelow,
           //   child: widget.child,
           // ),
-          //_SettingsTileDivider(),
+          if (widget.showDivider) _SettingsTileDivider(),
         ],
       ),
     );
@@ -288,6 +291,8 @@ class _ExpansionSettingsTile extends StatefulWidget {
   /// A Callback for the change of the Expansion state
   final Function(bool)? onExpansionChanged;
 
+  final bool showDivider;
+
   _ExpansionSettingsTile({
     required this.title,
     required this.child,
@@ -298,6 +303,7 @@ class _ExpansionSettingsTile extends StatefulWidget {
     this.expanded = false,
     this.onExpansionChanged,
     this.leading,
+    this.showDivider = true,
   });
 
   @override
@@ -321,6 +327,7 @@ class _ExpansionSettingsTileState extends State<_ExpansionSettingsTile> {
       subtitle: widget.subtitle,
       enabled: false,
       leading: widget.leading,
+      showDivider: widget.showDivider,
       child: Text(''),
     );
   }
@@ -768,6 +775,8 @@ class _SettingsColorPicker extends StatelessWidget {
   /// ignore all the user inputs
   final bool enabled;
 
+  final bool showDivider;
+
   _SettingsColorPicker({
     required this.value,
     required this.onChanged,
@@ -777,6 +786,7 @@ class _SettingsColorPicker extends StatelessWidget {
     this.leading,
     this.titleTextStyle,
     this.subtitleTextStyle,
+    this.showDivider = true,
   });
 
   @override
@@ -789,6 +799,7 @@ class _SettingsColorPicker extends StatelessWidget {
       onTap: () => _showColorPicker(context, value),
       titleTextStyle: titleTextStyle,
       subtitleTextStyle: subtitleTextStyle,
+      showDivider: showDivider,
       child: FloatingActionButton(
         heroTag: null,
         backgroundColor: ConversionUtils.colorFromString(value),
