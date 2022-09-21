@@ -785,6 +785,8 @@ class SwitchSettingsTile extends StatelessWidget {
   /// state, Any flutter widget can be added in this list
   final List<Widget>? childrenIfEnabled;
 
+  final Color? activeColor;
+
   SwitchSettingsTile({
     required this.title,
     required this.settingKey,
@@ -798,6 +800,7 @@ class SwitchSettingsTile extends StatelessWidget {
     this.subtitle = '',
     this.titleTextStyle,
     this.subtitleTextStyle,
+    this.activeColor,
   });
 
   @override
@@ -818,6 +821,7 @@ class SwitchSettingsTile extends StatelessWidget {
             value: value,
             onChanged: (value) => _onSwitchChange(context, value, onChanged),
             enabled: enabled,
+            activeColor: activeColor,
           ),
         );
 

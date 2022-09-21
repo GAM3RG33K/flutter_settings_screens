@@ -568,10 +568,13 @@ class _SettingsSwitch extends StatelessWidget {
   /// ignore all the user inputs
   final bool enabled;
 
+  final Color? activeColor;
+
   _SettingsSwitch({
     required this.value,
     required this.onChanged,
     required this.enabled,
+    required this.activeColor,
   });
 
   @override
@@ -579,7 +582,7 @@ class _SettingsSwitch extends StatelessWidget {
     return Switch.adaptive(
       value: value,
       onChanged: enabled ? onChanged : null,
-      activeColor: Theme.of(context).colorScheme.secondary,
+      activeColor: activeColor ?? Theme.of(context).colorScheme.secondary,
     );
   }
 }
