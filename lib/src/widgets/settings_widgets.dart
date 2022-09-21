@@ -310,7 +310,7 @@ class SettingsContainer extends StatelessWidget {
     var child = allowScrollInternally ? getList(children) : getColumn(children);
     return Padding(
       padding: EdgeInsets.only(
-        top: 16.0,
+        top: 0.0,
       ),
       child: Material(
         child: Container(
