@@ -1745,6 +1745,8 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
 
   final Color? activeColor;
 
+  final bool showDivider;
+
   RadioModalSettingsTile({
     required this.title,
     required this.settingKey,
@@ -1758,6 +1760,7 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
     this.titleTextStyle,
     this.subtitleTextStyle,
     this.activeColor,
+    this.showDivider = true;
   });
 
   @override
@@ -1804,6 +1807,7 @@ class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
                   onChange: (value) => _onRadioChange(value, onChanged),
                   selected: value,
                   activeColor: widget.activeColor,
+                  showDivider: widget.showDivider,
                 ),
               ],
             ),
