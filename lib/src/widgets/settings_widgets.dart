@@ -53,6 +53,8 @@ class SimpleSettingsTile extends StatelessWidget {
 
   final VoidCallback? onTap;
 
+  final bool showDivider;
+
   SimpleSettingsTile({
     required this.title,
     this.subtitle,
@@ -62,6 +64,7 @@ class SimpleSettingsTile extends StatelessWidget {
     this.enabled = true,
     this.leading,
     this.onTap,
+    this.showDivider = true,
   });
 
   @override
@@ -74,6 +77,7 @@ class SimpleSettingsTile extends StatelessWidget {
       subtitleTextStyle: subtitleTextStyle,
       enabled: enabled,
       onTap: () => _handleTap(context),
+      showDivider: showDivider,
       child: child != null ? getIcon(context) : Text(''),
     );
   }
@@ -241,6 +245,8 @@ class ExpandableSettingsTile extends StatelessWidget {
   /// A Callback for the change of the Expansion state
   final Function(bool)? onExpansionChanged;
 
+  final bool showDivider;
+
   ExpandableSettingsTile({
     required this.title,
     required this.children,
@@ -251,6 +257,7 @@ class ExpandableSettingsTile extends StatelessWidget {
     this.leading,
     this.titleTextStyle,
     this.subtitleTextStyle,
+    this.showDivider = true,
   });
 
   @override
@@ -264,6 +271,7 @@ class ExpandableSettingsTile extends StatelessWidget {
       enabled: enabled,
       expanded: expanded,
       onExpansionChanged: onExpansionChanged,
+      showDivider: showDivider,
       child: SettingsContainer(
         children: children,
       ),
@@ -310,7 +318,7 @@ class SettingsContainer extends StatelessWidget {
     var child = allowScrollInternally ? getList(children) : getColumn(children);
     return Padding(
       padding: EdgeInsets.only(
-        top: 16.0,
+        top: 0.0,
       ),
       child: Material(
         child: Container(
@@ -385,12 +393,15 @@ class SettingsGroup extends StatelessWidget {
   /// List of the widgets which are to be shown under the title as a group
   final List<Widget> children;
 
+  final Alignment titleAlignment;
+
   SettingsGroup({
     required this.title,
     required this.children,
     this.subtitle = '',
     this.titleTextStyle,
     this.subtitleTextStyle,
+    this.titleAlignment = Alignment.centerLeft,
   });
 
   @override
@@ -399,7 +410,7 @@ class SettingsGroup extends StatelessWidget {
       Container(
         padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 22.0),
         child: Align(
-          alignment: Alignment.centerLeft,
+          alignment: titleAlignment,
           child: Text(
             title.toUpperCase(),
             style: titleTextStyle ?? groupStyle(context),
@@ -785,6 +796,10 @@ class SwitchSettingsTile extends StatelessWidget {
   /// state, Any flutter widget can be added in this list
   final List<Widget>? childrenIfEnabled;
 
+  final Color? activeColor;
+
+  final bool showDivider;
+
   SwitchSettingsTile({
     required this.title,
     required this.settingKey,
@@ -798,6 +813,8 @@ class SwitchSettingsTile extends StatelessWidget {
     this.subtitle = '',
     this.titleTextStyle,
     this.subtitleTextStyle,
+    this.activeColor,
+    this.showDivider = true,
   });
 
   @override
@@ -814,10 +831,12 @@ class SwitchSettingsTile extends StatelessWidget {
           enabled: enabled,
           titleTextStyle: titleTextStyle,
           subtitleTextStyle: subtitleTextStyle,
+          showDivider: showDivider,
           child: _SettingsSwitch(
             value: value,
             onChanged: (value) => _onSwitchChange(context, value, onChanged),
             enabled: enabled,
+            activeColor: activeColor,
           ),
         );
 
@@ -947,6 +966,8 @@ class CheckboxSettingsTile extends StatelessWidget {
   /// state, Any flutter widget can be added in this list
   final List<Widget>? childrenIfEnabled;
 
+  final bool showDivider;
+
   CheckboxSettingsTile({
     required this.title,
     required this.settingKey,
@@ -960,6 +981,7 @@ class CheckboxSettingsTile extends StatelessWidget {
     this.subtitle = '',
     this.titleTextStyle,
     this.subtitleTextStyle,
+    this.showDivider = true,
   });
 
   @override
@@ -976,6 +998,7 @@ class CheckboxSettingsTile extends StatelessWidget {
           onTap: () => _onCheckboxChange(!value, onChanged),
           titleTextStyle: titleTextStyle,
           subtitleTextStyle: subtitleTextStyle,
+          showDivider: showDivider,
           child: _SettingsCheckbox(
             value: value,
             onChanged: (value) => _onCheckboxChange(value, onChanged),
@@ -1102,6 +1125,10 @@ class RadioSettingsTile<T> extends StatefulWidget {
   /// A Widget that will be displayed in the front of the tile
   final Widget? leading;
 
+  final Color? activeColor;
+
+  final bool showDivider;
+
   RadioSettingsTile({
     required this.title,
     required this.settingKey,
@@ -1114,6 +1141,8 @@ class RadioSettingsTile<T> extends StatefulWidget {
     this.subtitle = '',
     this.titleTextStyle,
     this.subtitleTextStyle,
+    this.activeColor,
+    this.showDivider = true,
   });
 
   @override
@@ -1154,7 +1183,7 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
                 subtitleTextStyle: widget.subtitleTextStyle,
               ),
             ),
-            _buildRadioTiles(context, value, onChanged)
+            _buildRadioTiles(context, value, onChanged, widget.activeColor)
           ],
         );
       },
@@ -1163,18 +1192,20 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
 
   bool get showTitles => widget.showTitles;
 
-  Widget _buildRadioTiles(BuildContext context, T groupValue, OnChanged<T> onChanged) {
+  Widget _buildRadioTiles(BuildContext context, T groupValue, OnChanged<T> onChanged, Color? activeColor) {
     var radioList = widget.values.entries.map<Widget>((MapEntry<T, String> entry) {
       return _SettingsTile(
         title: entry.value,
         titleTextStyle: widget.titleTextStyle,
         onTap: () => _onRadioChange(entry.key, onChanged),
         enabled: widget.enabled,
+        showDivider: widget.showDivider,
         child: _SettingsRadio<T>(
           value: entry.key,
           onChanged: (newValue) => _onRadioChange(newValue, onChanged),
           enabled: widget.enabled,
           groupValue: groupValue,
+          activeColor: activeColor,
         ),
       );
     }).toList();
@@ -1257,6 +1288,8 @@ class DropDownSettingsTile<T> extends StatefulWidget {
   /// on change callback for handling the value change
   final OnChanged<T>? onChange;
 
+  final bool showDivider;
+
   DropDownSettingsTile({
     required this.title,
     required this.settingKey,
@@ -1269,6 +1302,7 @@ class DropDownSettingsTile<T> extends StatefulWidget {
     this.alignment = AlignmentDirectional.centerEnd,
     this.titleTextStyle,
     this.subtitleTextStyle,
+    this.showDivider = true,
   });
 
   @override
@@ -1299,6 +1333,7 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
               enabled: widget.enabled,
               titleTextStyle: widget.titleTextStyle,
               subtitleTextStyle: widget.subtitleTextStyle,
+              showDivider: widget.showDivider,
               child: _SettingsDropDown<T>(
                 selected: value,
                 alignment: widget.alignment,
@@ -1584,6 +1619,8 @@ class ColorPickerSettingsTile extends StatefulWidget {
   /// on change callback for handling the value change
   final OnChanged<Color>? onChange;
 
+  final bool showDivider;
+
   ColorPickerSettingsTile({
     required this.title,
     required this.settingKey,
@@ -1595,6 +1632,7 @@ class ColorPickerSettingsTile extends StatefulWidget {
     this.leading,
     this.titleTextStyle,
     this.subtitleTextStyle,
+    this.showDivider = true,
   });
 
   @override
@@ -1631,6 +1669,7 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
           onChanged: (color) => _handleColorChanged(color, onChanged),
           titleTextStyle: widget.titleTextStyle,
           subtitleTextStyle: widget.subtitleTextStyle,
+          showDivider: widget.showDivider,
         );
       },
     );
@@ -1707,6 +1746,10 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
   /// on change callback for handling the value change
   final OnChanged<T>? onChange;
 
+  final Color? activeColor;
+
+  final bool showDivider;
+
   RadioModalSettingsTile({
     required this.title,
     required this.settingKey,
@@ -1719,6 +1762,8 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
     this.leading,
     this.titleTextStyle,
     this.subtitleTextStyle,
+    this.activeColor,
+    this.showDivider = true,
   });
 
   @override
@@ -1764,6 +1809,8 @@ class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
                   settingKey: widget.settingKey,
                   onChange: (value) => _onRadioChange(value, onChanged),
                   selected: value,
+                  activeColor: widget.activeColor,
+                  showDivider: widget.showDivider,
                 ),
               ],
             ),
