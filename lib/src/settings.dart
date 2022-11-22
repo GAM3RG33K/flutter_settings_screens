@@ -168,7 +168,8 @@ void _notifyGlobally<T>(String key, T newValue) {
 }
 
 List<ValueChangeNotifier>? _fetchNotifiersForKey<T>(String key) {
-  final finalKey = key.toLowerCase().trim();
+  // FIX: had to remove ToLower - didn't find keys in camelCase
+  final finalKey = key.trim();
   return _notifiers[finalKey];
 }
 

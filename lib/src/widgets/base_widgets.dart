@@ -777,6 +777,9 @@ class _SettingsColorPicker extends StatelessWidget {
 
   final bool showDivider;
 
+  /// list of color swatches
+  final List<ColorSwatch>? colors;
+
   _SettingsColorPicker({
     required this.value,
     required this.onChanged,
@@ -787,6 +790,7 @@ class _SettingsColorPicker extends StatelessWidget {
     this.titleTextStyle,
     this.subtitleTextStyle,
     this.showDivider = true,
+    this.colors,
   });
 
   @override
@@ -812,6 +816,7 @@ class _SettingsColorPicker extends StatelessWidget {
   void _showColorPicker(BuildContext context, String value) {
     Widget dialogContent = MaterialColorPicker(
       shrinkWrap: true,
+      colors: colors,
       selectedColor: ConversionUtils.colorFromString(value),
       onColorChange: (Color? color) {
         if (color == null) return;
