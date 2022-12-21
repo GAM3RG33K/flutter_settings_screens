@@ -5,7 +5,7 @@ import 'cache_provider.dart';
 
 /// A cache access provider class for shared preferences using shared_preferences library.
 ///
-/// This cache provider implementation is used by default, if non is provided explicitly.
+/// This cache provider implementation is used by default, if none is provided explicitly.
 class SharePreferenceCache extends CacheProvider {
   SharedPreferences? _preferences;
 
@@ -68,7 +68,7 @@ class SharePreferenceCache extends CacheProvider {
     } else if (T == String || value is String) {
       await _preferences?.setString(key, value as String);
     } else {
-      throw Exception('No Implementation Found');
+      throw Exception("flutter_settings_screens doesn't handle values of type $T");
     }
   }
 
@@ -108,6 +108,6 @@ class SharePreferenceCache extends CacheProvider {
     if (T == String || defaultValue is String) {
       return _preferences?.getString(key) as T;
     }
-    throw Exception('No Implementation Found');
+    throw Exception("flutter_settings_screens doesn't handle values of type $T");
   }
 }
