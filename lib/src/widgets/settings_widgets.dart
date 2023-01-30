@@ -595,7 +595,8 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
     _focusNode = FocusNode();
     _focusNode.addListener(() {
       if (widget.selectAllOnFocus) {
-        _controller.selection = TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
+        _controller.selection =
+            TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
       }
     });
   }
@@ -605,7 +606,8 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
     return ValueChangeObserver<String>(
       cacheKey: widget.settingKey,
       defaultValue: widget.initialValue,
-      builder: (BuildContext context, String value, OnChanged<String> onChanged) {
+      builder:
+          (BuildContext context, String value, OnChanged<String> onChanged) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _controller.text = value;
         });
@@ -632,7 +634,8 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
     );
   }
 
-  Widget _buildTextField(BuildContext context, String value, OnChanged<String> onChanged) {
+  Widget _buildTextField(
+      BuildContext context, String value, OnChanged<String> onChanged) {
     final borderColor = widget.borderColor ?? Colors.blue;
     final errorColor = widget.errorColor ?? Colors.red;
 
@@ -851,7 +854,8 @@ class SwitchSettingsTile extends StatelessWidget {
     );
   }
 
-  Future<void> _onSwitchChange(BuildContext context, bool? value, OnChanged<bool> onChanged) async {
+  Future<void> _onSwitchChange(
+      BuildContext context, bool? value, OnChanged<bool> onChanged) async {
     if (value == null) return;
     onChanged(value);
     onChange?.call(value);
@@ -871,7 +875,8 @@ class SwitchSettingsTile extends StatelessWidget {
     return label;
   }
 
-  Widget getFinalWidget(BuildContext context, Widget mainWidget, bool currentValue, List<Widget>? childrenIfEnabled) {
+  Widget getFinalWidget(BuildContext context, Widget mainWidget,
+      bool currentValue, List<Widget>? childrenIfEnabled) {
     if (childrenIfEnabled == null || !currentValue) {
       return SettingsContainer(
         children: [mainWidget],
@@ -1038,7 +1043,8 @@ class CheckboxSettingsTile extends StatelessWidget {
     return label;
   }
 
-  Widget getFinalWidget(BuildContext context, Widget mainWidget, bool currentValue, List<Widget>? childrenIfEnabled) {
+  Widget getFinalWidget(BuildContext context, Widget mainWidget,
+      bool currentValue, List<Widget>? childrenIfEnabled) {
     if (childrenIfEnabled == null || !currentValue) {
       return SettingsContainer(
         children: [mainWidget],
@@ -1177,7 +1183,9 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
               visible: showTitles,
               child: _SimpleHeaderTile(
                 title: widget.title,
-                subtitle: widget.subtitle.isNotEmpty ? widget.subtitle : widget.values[selectedValue],
+                subtitle: widget.subtitle.isNotEmpty
+                    ? widget.subtitle
+                    : widget.values[selectedValue],
                 leading: widget.leading,
                 titleTextStyle: widget.titleTextStyle,
                 subtitleTextStyle: widget.subtitleTextStyle,
@@ -1192,8 +1200,10 @@ class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
 
   bool get showTitles => widget.showTitles;
 
-  Widget _buildRadioTiles(BuildContext context, T groupValue, OnChanged<T> onChanged, Color? activeColor) {
-    var radioList = widget.values.entries.map<Widget>((MapEntry<T, String> entry) {
+  Widget _buildRadioTiles(BuildContext context, T groupValue,
+      OnChanged<T> onChanged, Color? activeColor) {
+    var radioList =
+        widget.values.entries.map<Widget>((MapEntry<T, String> entry) {
       return _SettingsTile(
         title: entry.value,
         titleTextStyle: widget.titleTextStyle,
@@ -1306,7 +1316,8 @@ class DropDownSettingsTile<T> extends StatefulWidget {
   });
 
   @override
-  _DropDownSettingsTileState<T> createState() => _DropDownSettingsTileState<T>();
+  _DropDownSettingsTileState<T> createState() =>
+      _DropDownSettingsTileState<T>();
 }
 
 class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
@@ -1338,7 +1349,8 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
                 selected: value,
                 alignment: widget.alignment,
                 values: widget.values.keys.toList().cast<T>(),
-                onChanged: (newValue) => _handleDropDownChange(newValue, onChanged),
+                onChanged: (newValue) =>
+                    _handleDropDownChange(newValue, onChanged),
                 enabled: widget.enabled,
                 itemBuilder: (T value) {
                   return Text(widget.values[value]!);
@@ -1513,21 +1525,27 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
     return ValueChangeObserver<double>(
       cacheKey: widget.settingKey,
       defaultValue: currentValue,
-      builder: (BuildContext context, double value, OnChanged<double> onChanged) {
+      builder:
+          (BuildContext context, double value, OnChanged<double> onChanged) {
         // debugPrint('creating settings Tile: ${widget.settingKey}');
         return SettingsContainer(
           children: <Widget>[
             _SimpleHeaderTile(
               title: widget.title,
-              subtitle: widget.subtitle.isNotEmpty ? widget.subtitle : value.toStringAsFixed(widget.decimalPrecision),
+              subtitle: widget.subtitle.isNotEmpty
+                  ? widget.subtitle
+                  : value.toStringAsFixed(widget.decimalPrecision),
               leading: widget.leading,
               titleTextStyle: widget.titleTextStyle,
               subtitleTextStyle: widget.subtitleTextStyle,
             ),
             _SettingsSlider(
-              onChanged: (newValue) => _handleSliderChanged(newValue, onChanged),
-              onChangeStart: (newValue) => _handleSliderChangeStart(newValue, onChanged),
-              onChangeEnd: (newValue) => _handleSliderChangeEnd(newValue, onChanged),
+              onChanged: (newValue) =>
+                  _handleSliderChanged(newValue, onChanged),
+              onChangeStart: (newValue) =>
+                  _handleSliderChangeStart(newValue, onChanged),
+              onChangeEnd: (newValue) =>
+                  _handleSliderChangeEnd(newValue, onChanged),
               enabled: widget.enabled,
               eagerUpdate: widget.eagerUpdate,
               value: value,
@@ -1557,7 +1575,8 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
     widget.onChangeStart?.call(newValue);
   }
 
-  Future<void> _handleSliderChangeEnd(double newValue, OnChanged<double> onChanged) async {
+  Future<void> _handleSliderChangeEnd(
+      double newValue, OnChanged<double> onChanged) async {
     _updateWidget(newValue, onChanged);
     widget.onChangeEnd?.call(newValue);
   }
@@ -1616,6 +1635,9 @@ class ColorPickerSettingsTile extends StatefulWidget {
   /// ignore all the user inputs, default = true
   final bool enabled;
 
+  /// list of color swatches to use
+  final List<ColorSwatch>? colors;
+
   /// on change callback for handling the value change
   final OnChanged<Color>? onChange;
 
@@ -1633,10 +1655,12 @@ class ColorPickerSettingsTile extends StatefulWidget {
     this.titleTextStyle,
     this.subtitleTextStyle,
     this.showDivider = true,
+    this.colors,
   });
 
   @override
-  _ColorPickerSettingsTileState createState() => _ColorPickerSettingsTileState();
+  _ColorPickerSettingsTileState createState() =>
+      _ColorPickerSettingsTileState();
 }
 
 class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
@@ -1658,14 +1682,16 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
     return ValueChangeObserver<String>(
       cacheKey: widget.settingKey,
       defaultValue: currentValue,
-      builder: (BuildContext context, String value, OnChanged<String> onChanged) {
+      builder:
+          (BuildContext context, String value, OnChanged<String> onChanged) {
         // debugPrint('creating settings Tile: ${widget.settingKey}');
         return _SettingsColorPicker(
           title: widget.title,
+          subtitle: widget.subtitle,
           value: value,
           leading: widget.leading,
           enabled: widget.enabled,
-          subtitle: widget.subtitle,
+          colors: widget.colors,
           onChanged: (color) => _handleColorChanged(color, onChanged),
           titleTextStyle: widget.titleTextStyle,
           subtitleTextStyle: widget.subtitleTextStyle,
@@ -1675,7 +1701,8 @@ class _ColorPickerSettingsTileState extends State<ColorPickerSettingsTile> {
     );
   }
 
-  Future<void> _handleColorChanged(String color, OnChanged<String> onChanged) async {
+  Future<void> _handleColorChanged(
+      String color, OnChanged<String> onChanged) async {
     currentValue = color;
     onChanged(color);
     final colorFromString = ConversionUtils.colorFromString(color);
@@ -1767,7 +1794,8 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
   });
 
   @override
-  _RadioModalSettingsTileState<T> createState() => _RadioModalSettingsTileState<T>();
+  _RadioModalSettingsTileState<T> createState() =>
+      _RadioModalSettingsTileState<T>();
 }
 
 class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
@@ -1796,7 +1824,9 @@ class _RadioModalSettingsTileState<T> extends State<RadioModalSettingsTile<T>> {
           children: [
             _ModalSettingsTile<T>(
               title: widget.title,
-              subtitle: widget.subtitle.isNotEmpty ? widget.subtitle : widget.values[value],
+              subtitle: widget.subtitle.isNotEmpty
+                  ? widget.subtitle
+                  : widget.values[value],
               leading: widget.leading,
               titleTextStyle: widget.titleTextStyle,
               subtitleTextStyle: widget.subtitleTextStyle,
@@ -1929,7 +1959,8 @@ class SliderModalSettingsTile extends StatefulWidget {
   });
 
   @override
-  _SliderModalSettingsTileState createState() => _SliderModalSettingsTileState();
+  _SliderModalSettingsTileState createState() =>
+      _SliderModalSettingsTileState();
 }
 
 class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
@@ -1946,21 +1977,27 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
     return ValueChangeObserver<double>(
       cacheKey: widget.settingKey,
       defaultValue: currentValue,
-      builder: (BuildContext context, double value, OnChanged<double> onChanged) {
+      builder:
+          (BuildContext context, double value, OnChanged<double> onChanged) {
         // debugPrint('creating settings Tile: ${widget.settingKey}');
         return SettingsContainer(
           children: <Widget>[
             _ModalSettingsTile<double>(
               title: widget.title,
-              subtitle: widget.subtitle.isNotEmpty ? widget.subtitle : value.toString(),
+              subtitle: widget.subtitle.isNotEmpty
+                  ? widget.subtitle
+                  : value.toString(),
               leading: widget.leading,
               titleTextStyle: widget.titleTextStyle,
               subtitleTextStyle: widget.subtitleTextStyle,
               children: <Widget>[
                 _SettingsSlider(
-                  onChanged: (double newValue) => _handleSliderChanged(newValue, onChanged),
-                  onChangeStart: (double newValue) => _handleSliderChangeStart(newValue, onChanged),
-                  onChangeEnd: (double newValue) => _handleSliderChangeEnd(newValue, onChanged),
+                  onChanged: (double newValue) =>
+                      _handleSliderChanged(newValue, onChanged),
+                  onChangeStart: (double newValue) =>
+                      _handleSliderChangeStart(newValue, onChanged),
+                  onChangeEnd: (double newValue) =>
+                      _handleSliderChangeEnd(newValue, onChanged),
                   enabled: widget.enabled,
                   eagerUpdate: widget.eagerUpdate,
                   value: value,
