@@ -102,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
       children: <Widget>[
         Text('Shared Pref'),
         Switch(
-            activeColor: Theme.of(context).colorScheme.secondary,
+            activeColor: Theme.of(context).colorScheme.primary,
             value: _isUsingHive,
             onChanged: (newVal) {
               if (kIsWeb) {
@@ -124,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
       children: <Widget>[
         Text('Light Theme'),
         Switch(
-            activeColor: Theme.of(context).colorScheme.secondary,
+            activeColor: Theme.of(context).colorScheme.primary,
             value: _isDarkTheme,
             onChanged: (newVal) {
               _isDarkTheme = newVal;
