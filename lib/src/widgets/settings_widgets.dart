@@ -1446,7 +1446,7 @@ class SliderSettingsTile extends StatefulWidget {
   /// callback used to create a subtitle from a slider value.  This allows
   /// for complete customization of value formatting (as opposed to just setting
   /// the [decimalPrecision]).
-  final OnFormatterCallback? subtitleFormatterCallback;
+  final OnFormatterCallback<double>? subtitleFormatterCallback;
 
   /// callback for fetching the value slider movement starts
   final Widget? leading;
