@@ -1393,6 +1393,9 @@ class SliderSettingsTile extends StatefulWidget {
   /// subtitle for the settings tile, default = ''
   final String subtitle;
 
+  /// units to append to value for in semantics, default = ''
+  final String units;
+
   /// title text style
   final TextStyle? titleTextStyle;
 
@@ -1439,6 +1442,11 @@ class SliderSettingsTile extends StatefulWidget {
 
   /// callback for fetching the value slider movement ends
   final OnChanged<double>? onChangeEnd;
+
+  /// callback used to create a subtitle from a slider value.  This allows
+  /// for complete customization of value formatting (as opposed to just setting
+  /// the [decimalPrecision]).
+  final OnFormatterCallback? subtitleFormatterCallback;
 
   /// callback for fetching the value slider movement starts
   final Widget? leading;
@@ -1493,6 +1501,8 @@ class SliderSettingsTile extends StatefulWidget {
     this.decimalPrecision = 2,
     this.titleTextStyle,
     this.subtitleTextStyle,
+    this.units = '',
+    this.subtitleFormatterCallback,
   });
 
   @override
@@ -1519,7 +1529,8 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
           children: <Widget>[
             _SimpleHeaderTile(
               title: widget.title,
-              subtitle: widget.subtitle.isNotEmpty ? widget.subtitle : value.toStringAsFixed(widget.decimalPrecision),
+              subtitle: widget.subtitle.isNotEmpty ? widget.subtitle :
+                    (widget.units.isNotEmpty ? _handleSubtitleFormatterCallback(value)+widget.units : _handleSubtitleFormatterCallback(value)),
               leading: widget.leading,
               titleTextStyle: widget.titleTextStyle,
               subtitleTextStyle: widget.subtitleTextStyle,
@@ -1560,6 +1571,10 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
   Future<void> _handleSliderChangeEnd(double newValue, OnChanged<double> onChanged) async {
     _updateWidget(newValue, onChanged);
     widget.onChangeEnd?.call(newValue);
+  }
+
+  String _handleSubtitleFormatterCallback(double newValue) {
+    return widget.subtitleFormatterCallback!=null ? widget.subtitleFormatterCallback!.call(newValue) : newValue.toStringAsFixed(widget.decimalPrecision);
   }
 }
 
