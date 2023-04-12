@@ -1260,7 +1260,7 @@ class DropDownSettingsTile<T> extends StatefulWidget {
   /// Selected value in the radio button group otherwise known as group value
   final T selected;
 
-  /// A map containing unique values which could use a String of a Widget as the display value
+  /// A map containing unique values which could use a String or a Widget as the display value
   final Map<T, dynamic> values;
 
   /// title for the settings tile
