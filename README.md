@@ -27,10 +27,11 @@ Inspired by the [shared_preferences_settings](https://pub.dev/packages/shared_pr
       - ExpandableSettingsTile
           > A settings widget which can hold a set of widgets in a section which is collapsible
       - SettingsContainer
-      > A Settings widget that helps any flutter widget fitting in the settings page
+      > A Settings widget that helps any flutter widget fit into the settings page
       - SettingsGroup
       > A Container widget that creates a section with a title to separate settings inside this from other settings
-  - Settings saved via Library of your choice
+  - Settings saved via "CacheProvider" library of your choice
+    - default version uses SharedPreferences.
   - Widgets with conditional visibility of some other settings.
     - for example, A set of settings is only visible if a switch or a checkbox is enabled.
 
@@ -57,13 +58,13 @@ It is recommended that `Settings.init()` should be called before `runApp()` is c
 
 
 ### Cache Provider Interface
-Cache Provider is an interface using which the plugin accesses the underlying caching storage.
+Cache Provider is an interface by which the plugin accesses the underlying caching storage.
 
-This plugin includes an implementation of the `CacheProvider` using the `SharedPreferences` library by flutter. if `cacheProvider` parameter is not given explicitly then the default implementation will be used to store the settings.
+This plugin includes an implementation of the `CacheProvider` using the `SharedPreferences` library by flutter. If `cacheProvider` parameter is not given explicitly then the default implementation will be used to store the settings.
 
-However, If you wish to use other means for storing the data,  You can implement one by your self.
+However, if you wish to use other means for storing the data,  you can implement one by yourself.
 
-All you have to do is create a class as following:
+All you have to do is create a class as follows:
 ```dart
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
@@ -92,7 +93,7 @@ class HiveCache extends CacheProvider {
 }
 ```
 
-once you implement the class, use an instance of this class to initialize the Settings class.
+Once you implement the class, use an instance of this class to initialize the Settings class.
 
 
 ## Accessing/Retrieving data
