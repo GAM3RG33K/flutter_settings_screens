@@ -68,7 +68,8 @@ class SharePreferenceCache extends CacheProvider {
     } else if (T == String || value is String) {
       await _preferences?.setString(key, value as String);
     } else {
-      throw Exception("flutter_settings_screens doesn't handle values of type $T");
+      throw Exception(
+          "flutter_settings_screens doesn't handle values of type $T");
     }
   }
 
@@ -108,6 +109,7 @@ class SharePreferenceCache extends CacheProvider {
     if (T == String || defaultValue is String) {
       return _preferences?.getString(key) as T;
     }
-    throw Exception("flutter_settings_screens doesn't handle values of type $T");
+    throw Exception(
+        "flutter_settings_screens doesn't handle values of type $T");
   }
 }

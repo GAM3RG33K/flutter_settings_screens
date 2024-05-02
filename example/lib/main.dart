@@ -66,13 +66,103 @@ class _MyHomePageState extends State<MyHomePage> {
                   colorScheme: _darkTheme.colorScheme.copyWith(
                     secondary: color,
                   ),
-                  toggleableActiveColor: color,
+                  checkboxTheme: CheckboxThemeData(
+                    fillColor: MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.disabled)) {
+                        return null;
+                      }
+                      if (states.contains(MaterialState.selected)) {
+                        return color;
+                      }
+                      return null;
+                    }),
+                  ),
+                  radioTheme: RadioThemeData(
+                    fillColor: MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.disabled)) {
+                        return null;
+                      }
+                      if (states.contains(MaterialState.selected)) {
+                        return color;
+                      }
+                      return null;
+                    }),
+                  ),
+                  switchTheme: SwitchThemeData(
+                    thumbColor: MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.disabled)) {
+                        return null;
+                      }
+                      if (states.contains(MaterialState.selected)) {
+                        return color;
+                      }
+                      return null;
+                    }),
+                    trackColor: MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.disabled)) {
+                        return null;
+                      }
+                      if (states.contains(MaterialState.selected)) {
+                        return color;
+                      }
+                      return null;
+                    }),
+                  ),
                 )
               : _lightTheme.copyWith(
                   colorScheme: _darkTheme.colorScheme.copyWith(
                     secondary: color,
                   ),
-                  toggleableActiveColor: color,
+                  checkboxTheme: CheckboxThemeData(
+                    fillColor: MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.disabled)) {
+                        return null;
+                      }
+                      if (states.contains(MaterialState.selected)) {
+                        return color;
+                      }
+                      return null;
+                    }),
+                  ),
+                  radioTheme: RadioThemeData(
+                    fillColor: MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.disabled)) {
+                        return null;
+                      }
+                      if (states.contains(MaterialState.selected)) {
+                        return color;
+                      }
+                      return null;
+                    }),
+                  ),
+                  switchTheme: SwitchThemeData(
+                    thumbColor: MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.disabled)) {
+                        return null;
+                      }
+                      if (states.contains(MaterialState.selected)) {
+                        return color;
+                      }
+                      return null;
+                    }),
+                    trackColor: MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.disabled)) {
+                        return null;
+                      }
+                      if (states.contains(MaterialState.selected)) {
+                        return color;
+                      }
+                      return null;
+                    }),
+                  ),
                 ),
           home: Scaffold(
             appBar: AppBar(
