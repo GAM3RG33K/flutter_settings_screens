@@ -55,7 +55,8 @@ class SimpleSettingsTile extends StatelessWidget {
 
   final bool showDivider;
 
-  SimpleSettingsTile({
+  const SimpleSettingsTile({
+    super.key,
     required this.title,
     this.subtitle,
     this.titleTextStyle,
@@ -78,13 +79,13 @@ class SimpleSettingsTile extends StatelessWidget {
       enabled: enabled,
       onTap: () => _handleTap(context),
       showDivider: showDivider,
-      child: child != null ? getIcon(context) : Text(''),
+      child: child != null ? getIcon(context) : const Text(''),
     );
   }
 
   Widget getIcon(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.navigate_next),
+      icon: const Icon(Icons.navigate_next),
       onPressed: enabled ? () => _handleTap(context) : null,
     );
   }
@@ -155,7 +156,8 @@ class ModalSettingsTile<T> extends StatelessWidget {
   final VoidCallback? onCancel;
   final OnConfirmedCallback? onConfirm;
 
-  ModalSettingsTile({
+  const ModalSettingsTile({
+    super.key,
     required this.title,
     required this.children,
     this.subtitle = '',
@@ -247,7 +249,8 @@ class ExpandableSettingsTile extends StatelessWidget {
 
   final bool showDivider;
 
-  ExpandableSettingsTile({
+  const ExpandableSettingsTile({
+    super.key,
     required this.title,
     required this.children,
     this.subtitle = '',
@@ -303,7 +306,8 @@ class SettingsContainer extends StatelessWidget {
 
   final double leftPadding;
 
-  SettingsContainer({
+  const SettingsContainer({
+    super.key,
     required this.children,
     this.allowScrollInternally = false,
     this.leftPadding = 0.0,
@@ -317,7 +321,7 @@ class SettingsContainer extends StatelessWidget {
   Widget _buildChild() {
     var child = allowScrollInternally ? getList(children) : getColumn(children);
     return Padding(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         top: 0.0,
       ),
       child: Material(
@@ -395,7 +399,8 @@ class SettingsGroup extends StatelessWidget {
 
   final Alignment titleAlignment;
 
-  SettingsGroup({
+  const SettingsGroup({
+    super.key,
     required this.title,
     required this.children,
     this.subtitle = '',
@@ -559,7 +564,8 @@ class TextInputSettingsTile extends StatefulWidget {
   /// list of inputFormatters
   final List<TextInputFormatter>? inputFormatters;
 
-  TextInputSettingsTile({
+  const TextInputSettingsTile({
+    super.key,
     required this.title,
     required this.settingKey,
     this.initialValue = '',
@@ -580,7 +586,7 @@ class TextInputSettingsTile extends StatefulWidget {
   });
 
   @override
-  _TextInputSettingsTileState createState() => _TextInputSettingsTileState();
+  State<TextInputSettingsTile> createState() => _TextInputSettingsTileState();
 }
 
 class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
@@ -663,13 +669,13 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
               color: errorColor,
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(
+              borderRadius: const BorderRadius.all(
                 Radius.circular(5.0),
               ),
               borderSide: BorderSide(color: errorColor),
             ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(
+              borderRadius: const BorderRadius.all(
                 Radius.circular(5.0),
               ),
               borderSide: BorderSide(
@@ -677,7 +683,7 @@ class _TextInputSettingsTileState extends State<TextInputSettingsTile> {
               ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(
+              borderRadius: const BorderRadius.all(
                 Radius.circular(5.0),
               ),
               borderSide: BorderSide(
@@ -803,7 +809,8 @@ class SwitchSettingsTile extends StatelessWidget {
 
   final bool showDivider;
 
-  SwitchSettingsTile({
+  const SwitchSettingsTile({
+    super.key,
     required this.title,
     required this.settingKey,
     this.defaultValue = false,
@@ -882,11 +889,11 @@ class SwitchSettingsTile extends StatelessWidget {
         children: [mainWidget],
       );
     }
-    var _children = getPaddedParentChildrenList(childrenIfEnabled);
-    _children.insert(0, mainWidget);
+    final children = getPaddedParentChildrenList(childrenIfEnabled);
+    children.insert(0, mainWidget);
 
     return SettingsContainer(
-      children: _children,
+      children: children,
     );
   }
 }
@@ -973,7 +980,8 @@ class CheckboxSettingsTile extends StatelessWidget {
 
   final bool showDivider;
 
-  CheckboxSettingsTile({
+  const CheckboxSettingsTile({
+    super.key,
     required this.title,
     required this.settingKey,
     this.defaultValue = false,
@@ -1050,11 +1058,11 @@ class CheckboxSettingsTile extends StatelessWidget {
         children: [mainWidget],
       );
     }
-    var _children = getPaddedParentChildrenList(childrenIfEnabled);
-    _children.insert(0, mainWidget);
+    final children = getPaddedParentChildrenList(childrenIfEnabled);
+    children.insert(0, mainWidget);
 
     return SettingsContainer(
-      children: _children,
+      children: children,
     );
   }
 }
@@ -1135,7 +1143,8 @@ class RadioSettingsTile<T> extends StatefulWidget {
 
   final bool showDivider;
 
-  RadioSettingsTile({
+  const RadioSettingsTile({
+    super.key,
     required this.title,
     required this.settingKey,
     required this.selected,
@@ -1152,7 +1161,7 @@ class RadioSettingsTile<T> extends StatefulWidget {
   });
 
   @override
-  _RadioSettingsTileState<T> createState() => _RadioSettingsTileState<T>();
+  State<RadioSettingsTile<T>> createState() => _RadioSettingsTileState<T>();
 }
 
 class _RadioSettingsTileState<T> extends State<RadioSettingsTile<T>> {
@@ -1300,7 +1309,8 @@ class DropDownSettingsTile<T> extends StatefulWidget {
 
   final bool showDivider;
 
-  DropDownSettingsTile({
+  const DropDownSettingsTile({
+    super.key,
     required this.title,
     required this.settingKey,
     required this.selected,
@@ -1316,7 +1326,7 @@ class DropDownSettingsTile<T> extends StatefulWidget {
   });
 
   @override
-  _DropDownSettingsTileState<T> createState() =>
+  State<DropDownSettingsTile<T>> createState() =>
       _DropDownSettingsTileState<T>();
 }
 
@@ -1488,7 +1498,8 @@ class SliderSettingsTile extends StatefulWidget {
   ///     display value: 5.25
   final int decimalPrecision;
 
-  SliderSettingsTile({
+  const SliderSettingsTile({
+    super.key,
     required this.title,
     required this.settingKey,
     required this.min,
@@ -1508,7 +1519,7 @@ class SliderSettingsTile extends StatefulWidget {
   });
 
   @override
-  _SliderSettingsTileState createState() => _SliderSettingsTileState();
+  State<SliderSettingsTile> createState() => _SliderSettingsTileState();
 }
 
 class _SliderSettingsTileState extends State<SliderSettingsTile> {
@@ -1640,7 +1651,8 @@ class ColorPickerSettingsTile extends StatefulWidget {
 
   final bool showDivider;
 
-  ColorPickerSettingsTile({
+  const ColorPickerSettingsTile({
+    super.key,
     required this.title,
     required this.settingKey,
     this.defaultValue,
@@ -1655,7 +1667,7 @@ class ColorPickerSettingsTile extends StatefulWidget {
   });
 
   @override
-  _ColorPickerSettingsTileState createState() =>
+  State<ColorPickerSettingsTile> createState() =>
       _ColorPickerSettingsTileState();
 }
 
@@ -1772,7 +1784,8 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
 
   final bool showDivider;
 
-  RadioModalSettingsTile({
+  const RadioModalSettingsTile({
+    super.key,
     required this.title,
     required this.settingKey,
     required this.selected,
@@ -1789,7 +1802,7 @@ class RadioModalSettingsTile<T> extends StatefulWidget {
   });
 
   @override
-  _RadioModalSettingsTileState<T> createState() =>
+  State<RadioModalSettingsTile<T>> createState() =>
       _RadioModalSettingsTileState<T>();
 }
 
@@ -1935,7 +1948,8 @@ class SliderModalSettingsTile extends StatefulWidget {
   /// callback for fetching the value slider movement ends
   final OnChanged<double>? onChangeEnd;
 
-  SliderModalSettingsTile({
+  const SliderModalSettingsTile({
+    super.key,
     required this.title,
     required this.settingKey,
     required this.min,
@@ -1954,7 +1968,7 @@ class SliderModalSettingsTile extends StatefulWidget {
   });
 
   @override
-  _SliderModalSettingsTileState createState() =>
+  State<SliderModalSettingsTile> createState() =>
       _SliderModalSettingsTileState();
 }
 
@@ -2085,7 +2099,8 @@ class SimpleRadioSettingsTile extends StatelessWidget {
   /// on change callback for handling the value change
   final OnChanged<String>? onChange;
 
-  SimpleRadioSettingsTile({
+  const SimpleRadioSettingsTile({
+    super.key,
     required this.title,
     required this.settingKey,
     required this.selected,
@@ -2115,10 +2130,10 @@ class SimpleRadioSettingsTile extends StatelessWidget {
   }
 
   Map<String, String> getValues(List<String> values) {
-    var valueMap = <String, String>{};
-    values.forEach((String value) {
+    final valueMap = <String, String>{};
+    for (var value in values) {
       valueMap[value] = value;
-    });
+    }
     return valueMap;
   }
 }
@@ -2181,7 +2196,8 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
   /// on change callback for handling the value change
   final OnChanged<String>? onChange;
 
-  SimpleDropDownSettingsTile({
+  const SimpleDropDownSettingsTile({
+    super.key,
     required this.title,
     required this.settingKey,
     required this.selected,
@@ -2211,10 +2227,10 @@ class SimpleDropDownSettingsTile extends StatelessWidget {
   }
 
   Map<String, String> getValues(List<String> values) {
-    var valueMap = <String, String>{};
-    values.forEach((String value) {
+    final valueMap = <String, String>{};
+    for (var value in values) {
       valueMap[value] = value;
-    });
+    }
     return valueMap;
   }
 }
