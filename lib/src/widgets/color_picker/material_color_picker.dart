@@ -19,7 +19,7 @@ class MaterialColorPicker extends StatefulWidget {
   final double? elevation;
 
   const MaterialColorPicker({
-    Key? key,
+    super.key,
     this.selectedColor,
     this.onColorChange,
     this.onMainColorChange,
@@ -33,10 +33,10 @@ class MaterialColorPicker extends StatefulWidget {
     this.spacing = 9.0,
     this.onBack,
     this.elevation,
-  }) : super(key: key);
+  });
 
   @override
-  _MaterialColorPickerState createState() => _MaterialColorPickerState();
+  State<MaterialColorPicker> createState() => _MaterialColorPickerState();
 }
 
 class _MaterialColorPickerState extends State<MaterialColorPicker> {
@@ -183,7 +183,7 @@ class _MaterialColorPickerState extends State<MaterialColorPicker> {
     // Number of circle per line, depend on width and circleSize
     final nbrCircleLine = width ~/ (widget.circleSize + widget.spacing);
 
-    return Container(
+    return SizedBox(
       width: width,
       child: GridView.count(
         shrinkWrap: widget.shrinkWrap,

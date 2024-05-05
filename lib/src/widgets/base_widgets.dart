@@ -76,7 +76,8 @@ class SettingsScreen extends StatelessWidget {
 
   final bool hasAppBar;
 
-  SettingsScreen({
+  const SettingsScreen({
+    super.key,
     required this.children,
     this.hasAppBar = true,
     this.title = 'Settings',
@@ -134,7 +135,7 @@ class _SettingsTile extends StatefulWidget {
 
   final bool showDivider;
 
-  _SettingsTile({
+  const _SettingsTile({
     required this.title,
     required this.child,
     this.subtitle = '',
@@ -218,13 +219,12 @@ class _SimpleHeaderTile extends StatefulWidget {
   final Widget? leading;
 
   const _SimpleHeaderTile({
-    Key? key,
     this.title,
     this.subtitle = '',
     this.leading,
     this.titleTextStyle,
     this.subtitleTextStyle,
-  }) : super(key: key);
+  });
 
   @override
   __SimpleHeaderTileState createState() => __SimpleHeaderTileState();
@@ -293,7 +293,7 @@ class _ExpansionSettingsTile extends StatefulWidget {
 
   final bool showDivider;
 
-  _ExpansionSettingsTile({
+  const _ExpansionSettingsTile({
     required this.title,
     required this.child,
     this.subtitle = '',
@@ -328,7 +328,7 @@ class _ExpansionSettingsTileState extends State<_ExpansionSettingsTile> {
       enabled: false,
       leading: widget.leading,
       showDivider: widget.showDivider,
-      child: Text(''),
+      child: const Text(''),
     );
   }
 
@@ -345,7 +345,7 @@ class _ExpansionSettingsTileState extends State<_ExpansionSettingsTile> {
           style: widget.subtitleTextStyle ?? subtitleTextStyle(context),
         ),
         initiallyExpanded: widget.expanded,
-        childrenPadding: EdgeInsets.only(left: 8.0),
+        childrenPadding: const EdgeInsets.only(left: 8.0),
         children: <Widget>[widget.child],
       ),
     );
@@ -406,7 +406,7 @@ class _ModalSettingsTile<T> extends StatefulWidget {
   /// the values from the callback & updating
   final OnConfirmedCallback? onConfirm;
 
-  _ModalSettingsTile({
+  const _ModalSettingsTile({
     required this.title,
     required this.children,
     this.subtitle = '',
@@ -455,7 +455,7 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
             title: Center(
               child: getTitle(),
             ),
-            titlePadding: EdgeInsets.fromLTRB(8.0, 10.0, 8.0, 10.0),
+            titlePadding: const EdgeInsets.fromLTRB(8.0, 10.0, 8.0, 10.0),
             contentPadding: EdgeInsets.zero,
             children: _finalWidgets(dialogContext, children),
           );
@@ -529,7 +529,7 @@ class __ModalSettingsTileState extends State<_ModalSettingsTile> {
 class _SettingsTileDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Divider(
+    return const Divider(
       height: 0.0,
     );
   }
@@ -547,7 +547,7 @@ class _SettingsCheckbox extends StatelessWidget {
   /// ignore all the user inputs
   final bool enabled;
 
-  _SettingsCheckbox({
+  const _SettingsCheckbox({
     required this.value,
     required this.onChanged,
     required this.enabled,
@@ -577,7 +577,7 @@ class _SettingsSwitch extends StatelessWidget {
 
   final Color? activeColor;
 
-  _SettingsSwitch({
+  const _SettingsSwitch({
     required this.value,
     required this.onChanged,
     required this.enabled,
@@ -611,7 +611,7 @@ class _SettingsRadio<T> extends StatelessWidget {
 
   final Color? activeColor;
 
-  _SettingsRadio({
+  const _SettingsRadio({
     required this.groupValue,
     required this.value,
     required this.onChanged,
@@ -651,7 +651,7 @@ class _SettingsDropDown<T> extends StatelessWidget {
   /// ignore all the user inputs
   final bool enabled;
 
-  _SettingsDropDown({
+  const _SettingsDropDown({
     required this.selected,
     required this.values,
     required this.onChanged,
@@ -719,7 +719,7 @@ class _SettingsSlider extends StatelessWidget {
   /// ignored & will not be executed
   final bool eagerUpdate;
 
-  _SettingsSlider({
+  const _SettingsSlider({
     required this.value,
     required this.min,
     required this.max,
@@ -777,7 +777,7 @@ class _SettingsColorPicker extends StatelessWidget {
 
   final bool showDivider;
 
-  _SettingsColorPicker({
+  const _SettingsColorPicker({
     required this.value,
     required this.onChanged,
     required this.enabled,
@@ -823,7 +823,7 @@ class _SettingsColorPicker extends StatelessWidget {
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
-          title: Text('Pick a Color'),
+          title: const Text('Pick a Color'),
           content: dialogContent,
         );
       },

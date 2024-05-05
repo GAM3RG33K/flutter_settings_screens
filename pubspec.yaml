@@ -2,15 +2,10 @@ name: flutter_settings_screens
 description: A Simple plugin to implement settings UI screens for your flutter apps. Customize what you want, From UI elements, behaviour or underlying storage library.
 repository: https://github.com/GAM3RG33K/flutter_settings_screens
 homepage: https://github.com/GAM3RG33K/flutter_settings_screens
-version: 0.3.3-null-safety+2
-
+version: 0.3.4
 
 environment:
-  sdk: ">=2.15.0 <3.0.0"
-
-  # Flutter versions prior to 1.12 did not support the
-  # flutter.plugin.platforms map.
-  flutter: ">=1.12.0"
+  sdk: '>=3.2.4 <4.0.0'
 
 dependencies:
   flutter:
@@ -25,12 +20,12 @@ dependencies:
   # library to store the preference/settings using shared_preferences library
   shared_preferences: ^2.0.15
 
-  # to enforce dart coding standard
-  pedantic: ^1.11.1
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  # to enforce dart coding standard
+  flutter_lints: ^3.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
