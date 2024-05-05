@@ -589,7 +589,8 @@ class _SettingsSwitch extends StatelessWidget {
     return Switch.adaptive(
       value: value,
       onChanged: enabled ? onChanged : null,
-      activeColor: activeColor ?? Theme.of(context).colorScheme.secondary,
+      thumbColor: MaterialStateProperty.all(activeColor ?? Theme.of(context).colorScheme.primary),
+      inactiveThumbColor: Theme.of(context).colorScheme.secondary,
     );
   }
 }
