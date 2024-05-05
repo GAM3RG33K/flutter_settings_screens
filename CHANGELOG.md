@@ -1,3 +1,9 @@
+## 0.3.4
+- Finalised release of 0.3.3-null-safety+2 with Null-safety, Material 3 & flutter 3 changes
+- Huge thanks to @nyxkn for all fixes & updates for this release
+- Huge thanks to @romanbsd for all updates to Flutter 3 changes
+
+
 ## 0.3.3-null-safety+2
  - add flag to enable textfield content to be autoselected on focus
  - change capitalization of autovalidateMode

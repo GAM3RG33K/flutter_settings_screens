@@ -1431,7 +1431,6 @@ class SliderSettingsTile extends StatefulWidget {
   /// If this flag is enabled then [onChangeStart] & [onChangeEnd] callbacks are
   /// ignored & will not be executed
   ///
-  /// If this flag is disabled only then the [onConfirm] will be executed
   final bool eagerUpdate;
 
   /// minimum allowed value for the slider, in other terms a start value
@@ -1917,7 +1916,6 @@ class SliderModalSettingsTile extends StatefulWidget {
   /// If this flag is enabled then [onChangeStart] & [onChangeEnd] callbacks are
   /// ignored & will not be executed
   ///
-  /// If this flag is disabled only then the [onConfirm] will be executed
   final bool eagerUpdate;
 
   /// minimum allowed value for the slider, in other terms a start value
