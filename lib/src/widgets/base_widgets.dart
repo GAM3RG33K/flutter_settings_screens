@@ -589,9 +589,7 @@ class _SettingsSwitch extends StatelessWidget {
     return Switch.adaptive(
       value: value,
       onChanged: enabled ? onChanged : null,
-      thumbColor: MaterialStateProperty.all(
-          activeColor ?? Theme.of(context).colorScheme.primary),
-      inactiveThumbColor: Theme.of(context).colorScheme.secondary,
+      activeColor: activeColor ?? Theme.of(context).colorScheme.secondary,
     );
   }
 }
@@ -721,12 +719,17 @@ class _SettingsSlider extends StatelessWidget {
   /// ignored & will not be executed
   final bool eagerUpdate;
 
+  final Color? activeColor;
+  final Color? inActiveColor;
+
   const _SettingsSlider({
     required this.value,
     required this.min,
     required this.max,
     required this.step,
     required this.enabled,
+    required this.activeColor,
+    required this.inActiveColor,
     this.onChangeStart,
     this.onChanged,
     this.onChangeEnd,
@@ -746,6 +749,8 @@ class _SettingsSlider extends StatelessWidget {
       onChanged: enabled ? (value) => onChanged?.call(value) : null,
       onChangeEnd:
           enabled && !eagerUpdate ? (value) => onChangeEnd?.call(value) : null,
+      activeColor: activeColor,
+      inactiveColor: inActiveColor,
     );
   }
 }
