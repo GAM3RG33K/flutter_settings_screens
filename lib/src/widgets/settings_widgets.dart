@@ -1497,6 +1497,8 @@ class SliderSettingsTile extends StatefulWidget {
   ///     display value: 5.25
   final int decimalPrecision;
 
+  final Color? activeColor;
+
   const SliderSettingsTile({
     super.key,
     required this.title,
@@ -1515,6 +1517,7 @@ class SliderSettingsTile extends StatefulWidget {
     this.decimalPrecision = 2,
     this.titleTextStyle,
     this.subtitleTextStyle,
+    this.activeColor,
   });
 
   @override
@@ -1562,6 +1565,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
               max: widget.max,
               min: widget.min,
               step: widget.step,
+              activeColor: widget.activeColor,
             ),
             _SettingsTileDivider(),
           ],
@@ -1946,6 +1950,8 @@ class SliderModalSettingsTile extends StatefulWidget {
   /// callback for fetching the value slider movement ends
   final OnChanged<double>? onChangeEnd;
 
+  final Color? activeColor;
+
   const SliderModalSettingsTile({
     super.key,
     required this.title,
@@ -1963,6 +1969,7 @@ class SliderModalSettingsTile extends StatefulWidget {
     this.eagerUpdate = true,
     this.titleTextStyle,
     this.subtitleTextStyle,
+    this.activeColor,
   });
 
   @override
@@ -2011,6 +2018,7 @@ class _SliderModalSettingsTileState extends State<SliderModalSettingsTile> {
                   max: widget.max,
                   min: widget.min,
                   step: widget.step,
+                  activeColor: widget.activeColor,
                 )
               ],
             ),
