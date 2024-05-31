@@ -3,7 +3,7 @@ description: Demonstrates flutter_settings_screens plugin features.
 publish_to: 'none'
 
 environment:
-  sdk: ">=2.15.0 <3.0.0"
+  sdk: '>=3.2.4 <4.0.0'
 
 dependencies:
   flutter:

@@ -96,9 +96,9 @@ class Settings {
     ensureCacheProvider();
     final containsKey = _cacheProvider?.containsKey(key);
     if (containsKey ?? false) {
-      final _prefValue =
+      final prefValue =
           _cacheProvider?.getValue<T>(key, defaultValue: defaultValue);
-      return _prefValue ?? defaultValue;
+      return prefValue ?? defaultValue;
     }
     return defaultValue;
   }
@@ -158,13 +158,14 @@ void _notifyGlobally<T>(String key, T newValue) {
   final notifiers = _fetchNotifiersForKey(key);
   if (notifiers == null || notifiers.isEmpty) return;
 
-  notifiers.forEach((notifier) {
+  for (var notifier in notifiers) {
     final currentValue = notifier.value;
     if (currentValue != newValue) {
       notifier.value = newValue;
+      // ignore: avoid_print
       print(': _notifyGlobally: updating $key notifier');
     }
-  });
+  }
 }
 
 List<ValueChangeNotifier>? _fetchNotifiersForKey<T>(String key) {
@@ -191,13 +192,14 @@ class ValueChangeObserver<T> extends StatefulWidget {
   final InternalWidgetBuilder<T> builder;
 
   const ValueChangeObserver({
+    super.key,
     required this.cacheKey,
     required this.defaultValue,
     required this.builder,
   });
 
   @override
-  _ValueChangeObserverState<T> createState() => _ValueChangeObserverState<T>();
+  State<ValueChangeObserver<T>> createState() => _ValueChangeObserverState<T>();
 }
 
 class _ValueChangeObserverState<T> extends State<ValueChangeObserver<T>> {

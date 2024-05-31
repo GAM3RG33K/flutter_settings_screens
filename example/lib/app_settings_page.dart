@@ -312,11 +312,11 @@ class _AppSettingsState extends State<AppSettings> {
                       '\n==========\n');
                   Future.delayed(Duration(seconds: 1), () {
                     // Reset value only if the current value is not 20
-                    if (Settings.getValue('key-slider-volume') != 20) {
+                    if (Settings.getValue<double>('key-slider-volume') != 20) {
                       debugPrint('\n===== on change end =====\n'
                           'Resetting value to 20'
                           '\n==========\n');
-                      Settings.setValue('key-slider-volume', 20.0,
+                      Settings.setValue<double>('key-slider-volume', 20.0,
                           notify: true);
                     }
                   });
