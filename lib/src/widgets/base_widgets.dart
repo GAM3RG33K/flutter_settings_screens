@@ -720,6 +720,7 @@ class _SettingsSlider extends StatelessWidget {
   final bool eagerUpdate;
 
   final Color? activeColor;
+  final Color? inActiveColor;
 
   const _SettingsSlider({
     required this.value,
@@ -728,6 +729,7 @@ class _SettingsSlider extends StatelessWidget {
     required this.step,
     required this.enabled,
     required this.activeColor,
+    required this.inActiveColor,
     this.onChangeStart,
     this.onChanged,
     this.onChangeEnd,
@@ -748,6 +750,7 @@ class _SettingsSlider extends StatelessWidget {
       onChangeEnd:
           enabled && !eagerUpdate ? (value) => onChangeEnd?.call(value) : null,
       activeColor: activeColor,
+      inactiveColor: inActiveColor,
     );
   }
 }
