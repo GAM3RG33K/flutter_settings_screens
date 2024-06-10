@@ -1279,8 +1279,8 @@ class DropDownSettingsTile<T> extends StatefulWidget {
   /// Selected value in the radio button group otherwise known as group value
   final T selected;
 
-  /// A map containing unique values along with the display name
-  final Map<T, String> values;
+  /// A map containing unique values which could use a String or a Widget as the display value
+  final Map<T, dynamic> values;
 
   /// title for the settings tile
   final String title;
@@ -1363,7 +1363,9 @@ class _DropDownSettingsTileState<T> extends State<DropDownSettingsTile<T>> {
                     _handleDropDownChange(newValue, onChanged),
                 enabled: widget.enabled,
                 itemBuilder: (T value) {
-                  return Text(widget.values[value]!);
+                  var val = widget.values[value]!;
+                  if(val is String) return Text(val);
+                  return val;
                 },
               ),
             )
