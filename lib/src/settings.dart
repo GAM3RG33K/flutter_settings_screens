@@ -214,7 +214,7 @@ class _ValueChangeObserverState<T> extends State<ValueChangeObserver<T>> {
   @override
   void dispose() {
     if (!mounted) {
-      _notifiers.remove(cacheKey);
+      _notifiers[cacheKey]?.remove(notifier);
     }
     super.dispose();
   }
