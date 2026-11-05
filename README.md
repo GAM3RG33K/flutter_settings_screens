@@ -1,5 +1,11 @@
 # flutter_settings_screens
 
+> [!WARNING]
+> **This package is discontinued and no longer maintained.**
+> Please use [settings_ui](https://pub.dev/packages/settings_ui) instead.
+> `settings_ui` covers the settings screen UI. If you used this package's pluggable storage, keep your own storage layer (for example `shared_preferences`).
+> Existing versions stay available on pub.dev, and the source stays here read-only.
+
 [![pub package](https://img.shields.io/pub/v/flutter_settings_screens.svg)](https://pub.dev/packages/flutter_settings_screens)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
