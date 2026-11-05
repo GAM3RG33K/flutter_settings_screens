@@ -1,3 +1,10 @@
+## 0.3.5
+- **This package is discontinued and will receive no further updates.**
+- Use [settings_ui](https://pub.dev/packages/settings_ui) instead for settings screens.
+- No code changes in this release. Existing versions remain available on pub.dev.
+- If you relied on the pluggable storage layer, keep your own storage (for example shared_preferences) and bind it to your settings UI.
+- Thank you to everyone who used, reported issues on, and contributed to this package, including @nyxkn and @romanbsd.
+
 ## 0.3.4
 - Finalised release of 0.3.3-null-safety+2 with Null-safety, Material 3 & flutter 3 changes
 - Huge thanks to @nyxkn for all fixes & updates for this release
